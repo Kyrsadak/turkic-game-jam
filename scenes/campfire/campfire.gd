@@ -21,7 +21,7 @@ var noise_time: float = 0.0
 var is_burned_out: bool = false
 
 # Анимация костра
-@export var animation_fps: float = 10.0
+@export var animation_frame_delay: float = 0.35 # Время отображения одного кадра в секундах (350 ms)
 var campfire_textures: Array[Texture2D] = []
 var current_frame: int = 0
 var animation_time: float = 0.0
@@ -33,9 +33,9 @@ func _ready() -> void:
 	label_status.visible = false
 	setup_tooltip_style(label_status)
 	
-	# Загружаем анимированные кадры (campfire1.png - campfire6.png)
+	# Загружаем анимированные кадры (campfire1.png - campfire6.png) из отдельной директории
 	for i in range(1, 7):
-		var path = "res://assets/textures/campfire%d.png" % i
+		var path = "res://assets/textures/campfire/campfire%d.png" % i
 		if FileAccess.file_exists(path):
 			var tex = load(path)
 			if tex:
@@ -97,11 +97,10 @@ func _process(delta: float) -> void:
 		# Анимация спрайта костра
 		if campfire_textures.size() > 0 and campfire_sprite:
 			animation_time += delta
-			var frame_duration = 1.0 / animation_fps
-			if animation_time >= frame_duration:
+			if animation_time >= animation_frame_delay:
 				current_frame = (current_frame + 1) % campfire_textures.size()
 				campfire_sprite.texture = campfire_textures[current_frame]
-				animation_time = fmod(animation_time, frame_duration)
+				animation_time = fmod(animation_time, animation_frame_delay)
 		
 		# Эффект мерцания света костра
 		noise_time += delta * 15.0

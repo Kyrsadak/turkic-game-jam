@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cphkxpfg7brfk"
-path="res://.godot/imported/дом_после.jpg-0b8161b3a73f207a8e1596714725a4a3.ctex"
+uid="uid://cc6csph7iyeke"
+path="res://.godot/imported/campfire5.png-07107bf6f55f0b94d3255c54fa2997ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://План/Концепт/дом_после.jpg"
-dest_files=["res://.godot/imported/дом_после.jpg-0b8161b3a73f207a8e1596714725a4a3.ctex"]
+source_file="res://assets/textures/campfire5.png"
+dest_files=["res://.godot/imported/campfire5.png-07107bf6f55f0b94d3255c54fa2997ba.ctex"]
 
 [params]
 
