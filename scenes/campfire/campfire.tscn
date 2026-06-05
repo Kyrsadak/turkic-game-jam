@@ -1,0 +1,107 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/campfire/campfire.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
+
+[sub_resource type="Gradient" id="Gradient_flame"]
+offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
+colors = PackedColorArray(1, 0.9, 0.2, 1, 1, 0.5, 0, 1, 0.8, 0.1, 0, 0.8, 0.5, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_sparks"]
+offsets = PackedFloat32Array(0, 0.7, 1)
+colors = PackedColorArray(1, 0.8, 0.2, 1, 1, 0.3, 0, 1, 0.5, 0.1, 0, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 60.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_status"]
+font_size = 9
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Campfire" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Logs" type="Node2D" parent="."]
+
+[node name="Log1" type="Line2D" parent="Logs"]
+points = PackedVector2Array(-16, 2, 16, -6)
+width = 5.0
+default_color = Color(0.38, 0.22, 0.12, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Log2" type="Line2D" parent="Logs"]
+points = PackedVector2Array(-12, -6, 12, 2)
+width = 5.0
+default_color = Color(0.32, 0.18, 0.10, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -4)
+color = Color(1, 0.56, 0.2, 1)
+energy = 1.2
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.6)
+texture = ExtResource("2_light_texture")
+texture_scale = 6.0
+
+[node name="ParticlesFlame" type="CPUParticles2D" parent="."]
+position = Vector2(0, -2)
+amount = 35
+lifetime = 0.8
+preprocess = 0.5
+randomness = 0.2
+direction = Vector2(0, -1)
+spread = 12.0
+gravity = Vector2(0, -30)
+initial_velocity_min = 40.0
+initial_velocity_max = 70.0
+angular_velocity_min = -60.0
+angular_velocity_max = 60.0
+draw_order = 1
+scale_amount_min = 3.0
+scale_amount_max = 6.0
+color_ramp = SubResource("Gradient_flame")
+
+[node name="ParticlesSparks" type="CPUParticles2D" parent="."]
+position = Vector2(0, -4)
+emitting = false
+amount = 15
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.8
+direction = Vector2(0, -1)
+spread = 35.0
+gravity = Vector2(0, -15)
+initial_velocity_min = 60.0
+initial_velocity_max = 120.0
+scale_amount_min = 1.5
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_sparks")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 1
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_1")
+
+[node name="LabelStatus" type="Label" parent="."]
+z_index = 5
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -45.0
+offset_right = 100.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Нажмите [E] чтобы подбросить дрова"
+label_settings = SubResource("LabelSettings_status")
+horizontal_alignment = 1
+vertical_alignment = 1

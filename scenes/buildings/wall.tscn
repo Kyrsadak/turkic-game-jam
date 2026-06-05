@@ -1,0 +1,199 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/buildings/wall.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(16, 70)
+
+[sub_resource type="LabelSettings" id="LabelSettings_status"]
+font_size = 9
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Wall" type="StaticBody2D"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -35)
+shape = SubResource("RectangleShape2D_1")
+
+[node name="VisualSite" type="Node2D" parent="."]
+
+[node name="Peg1" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(-6, 0, -6, -14)
+width = 2.0
+default_color = Color(0.4, 0.3, 0.2, 1)
+
+[node name="Peg2" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(6, 0, 6, -14)
+width = 2.0
+default_color = Color(0.4, 0.3, 0.2, 1)
+
+[node name="Rope" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(-6, -10, 6, -10)
+width = 1.0
+default_color = Color(0.5, 0.5, 0.4, 1)
+
+[node name="VisualLvl1" type="Node2D" parent="."]
+visible = false
+
+[node name="Log1" type="ColorRect" parent="VisualLvl1"]
+offset_left = -7.0
+offset_top = -55.0
+offset_right = -2.0
+color = Color(0.48, 0.3, 0.16, 1)
+
+[node name="Log1Tip" type="Polygon2D" parent="VisualLvl1/Log1"]
+color = Color(0.48, 0.3, 0.16, 1)
+polygon = PackedVector2Array(0, 0, 2.5, -4, 5, 0)
+
+[node name="Log2" type="ColorRect" parent="VisualLvl1"]
+offset_left = -2.0
+offset_top = -60.0
+offset_right = 3.0
+color = Color(0.52, 0.33, 0.18, 1)
+
+[node name="Log2Tip" type="Polygon2D" parent="VisualLvl1/Log2"]
+color = Color(0.52, 0.33, 0.18, 1)
+polygon = PackedVector2Array(0, 0, 2.5, -4, 5, 0)
+
+[node name="Log3" type="ColorRect" parent="VisualLvl1"]
+offset_left = 3.0
+offset_top = -53.0
+offset_right = 8.0
+color = Color(0.45, 0.28, 0.15, 1)
+
+[node name="Log3Tip" type="Polygon2D" parent="VisualLvl1/Log3"]
+color = Color(0.45, 0.28, 0.15, 1)
+polygon = PackedVector2Array(0, 0, 2.5, -4, 5, 0)
+
+[node name="CrossBeam1" type="ColorRect" parent="VisualLvl1"]
+offset_left = -8.0
+offset_top = -42.0
+offset_right = 9.0
+offset_bottom = -38.0
+color = Color(0.38, 0.22, 0.1, 1)
+
+[node name="CrossBeam2" type="ColorRect" parent="VisualLvl1"]
+offset_left = -8.0
+offset_top = -16.0
+offset_right = 9.0
+offset_bottom = -12.0
+color = Color(0.38, 0.22, 0.1, 1)
+
+[node name="VisualLvl2" type="Node2D" parent="."]
+visible = false
+
+[node name="StoneBlock" type="ColorRect" parent="VisualLvl2"]
+offset_left = -8.0
+offset_top = -65.0
+offset_right = 8.0
+color = Color(0.4, 0.4, 0.42, 1)
+
+[node name="Joint1" type="ColorRect" parent="VisualLvl2/StoneBlock"]
+layout_mode = 0
+offset_top = 15.0
+offset_right = 16.0
+offset_bottom = 17.0
+color = Color(0.25, 0.25, 0.27, 1)
+
+[node name="Joint2" type="ColorRect" parent="VisualLvl2/StoneBlock"]
+layout_mode = 0
+offset_top = 35.0
+offset_right = 16.0
+offset_bottom = 37.0
+color = Color(0.25, 0.25, 0.27, 1)
+
+[node name="Joint3" type="ColorRect" parent="VisualLvl2/StoneBlock"]
+layout_mode = 0
+offset_top = 50.0
+offset_right = 16.0
+offset_bottom = 52.0
+color = Color(0.25, 0.25, 0.27, 1)
+
+[node name="StoneCap" type="ColorRect" parent="VisualLvl2"]
+offset_left = -10.0
+offset_top = -70.0
+offset_right = 10.0
+offset_bottom = -65.0
+color = Color(0.5, 0.5, 0.52, 1)
+
+[node name="VisualLvl3" type="Node2D" parent="."]
+visible = false
+
+[node name="StoneBlock" type="ColorRect" parent="VisualLvl3"]
+offset_left = -9.0
+offset_top = -70.0
+offset_right = 9.0
+color = Color(0.3, 0.3, 0.32, 1)
+
+[node name="Joint1" type="ColorRect" parent="VisualLvl3/StoneBlock"]
+layout_mode = 0
+offset_top = 18.0
+offset_right = 18.0
+offset_bottom = 20.0
+color = Color(0.18, 0.18, 0.2, 1)
+
+[node name="Joint2" type="ColorRect" parent="VisualLvl3/StoneBlock"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 18.0
+offset_bottom = 42.0
+color = Color(0.18, 0.18, 0.2, 1)
+
+[node name="StoneCap" type="ColorRect" parent="VisualLvl3"]
+offset_left = -11.0
+offset_top = -75.0
+offset_right = 11.0
+offset_bottom = -70.0
+color = Color(0.42, 0.42, 0.45, 1)
+
+[node name="SpikesLeft" type="Node2D" parent="VisualLvl3"]
+position = Vector2(-9, 0)
+
+[node name="Spike1" type="Polygon2D" parent="VisualLvl3/SpikesLeft"]
+color = Color(0.7, 0.7, 0.72, 1)
+polygon = PackedVector2Array(0, -55, -8, -50, 0, -45)
+
+[node name="Spike2" type="Polygon2D" parent="VisualLvl3/SpikesLeft"]
+color = Color(0.7, 0.7, 0.72, 1)
+polygon = PackedVector2Array(0, -35, -8, -30, 0, -25)
+
+[node name="Spike3" type="Polygon2D" parent="VisualLvl3/SpikesLeft"]
+color = Color(0.7, 0.7, 0.72, 1)
+polygon = PackedVector2Array(0, -15, -8, -10, 0, -5)
+
+[node name="SpikesRight" type="Node2D" parent="VisualLvl3"]
+position = Vector2(9, 0)
+
+[node name="Spike1" type="Polygon2D" parent="VisualLvl3/SpikesRight"]
+color = Color(0.7, 0.7, 0.72, 1)
+polygon = PackedVector2Array(0, -55, 8, -50, 0, -45)
+
+[node name="Spike2" type="Polygon2D" parent="VisualLvl3/SpikesRight"]
+color = Color(0.7, 0.7, 0.72, 1)
+polygon = PackedVector2Array(0, -35, 8, -30, 0, -25)
+
+[node name="Spike3" type="Polygon2D" parent="VisualLvl3/SpikesRight"]
+color = Color(0.7, 0.7, 0.72, 1)
+polygon = PackedVector2Array(0, -15, 8, -10, 0, -5)
+
+[node name="LabelStatus" type="Label" parent="."]
+z_index = 5
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -95.0
+offset_right = 100.0
+offset_bottom = -65.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Строительство стены"
+label_settings = SubResource("LabelSettings_status")
+horizontal_alignment = 1
+vertical_alignment = 1

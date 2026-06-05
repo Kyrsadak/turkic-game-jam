@@ -1,0 +1,108 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/units/lumberjack.gd" id="1_script"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 7.0
+height = 24.0
+
+[node name="Lumberjack" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 1
+z_index = 1
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12)
+shape = SubResource("CapsuleShape2D_1")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="LegLeft" type="ColorRect" parent="Body"]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = -1.0
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="LegRight" type="ColorRect" parent="Body"]
+offset_left = 1.0
+offset_top = -4.0
+offset_right = 4.0
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="Shirt" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -18.0
+offset_right = 5.0
+offset_bottom = -4.0
+color = Color(0.22, 0.48, 0.28, 1)
+
+[node name="Head" type="ColorRect" parent="Body"]
+offset_left = -4.0
+offset_top = -26.0
+offset_right = 4.0
+offset_bottom = -18.0
+color = Color(0.88, 0.72, 0.58, 1)
+
+[node name="Hair" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -28.0
+offset_right = 5.0
+offset_bottom = -25.0
+color = Color(0.42, 0.25, 0.13, 1)
+
+[node name="Axe" type="Node2D" parent="Body"]
+position = Vector2(5, -11)
+
+[node name="Shaft" type="Line2D" parent="Body/Axe"]
+points = PackedVector2Array(0, 8, 0, -8)
+width = 1.5
+default_color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="AxeHead" type="Polygon2D" parent="Body/Axe"]
+color = Color(0.65, 0.65, 0.68, 1)
+polygon = PackedVector2Array(0, -8, 6, -11, 6, -5, 0, -4)
+
+[node name="WoodPile" type="Node2D" parent="."]
+position = Vector2(0, -31)
+
+[node name="Wood1" type="ColorRect" parent="WoodPile"]
+offset_left = -7.0
+offset_top = -3.0
+offset_right = 7.0
+color = Color(0.55, 0.35, 0.2, 1)
+
+[node name="Wood2" type="ColorRect" parent="WoodPile"]
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = -3.0
+color = Color(0.58, 0.38, 0.22, 1)
+
+[node name="Wood3" type="ColorRect" parent="WoodPile"]
+offset_left = -7.0
+offset_top = -9.0
+offset_right = 7.0
+offset_bottom = -6.0
+color = Color(0.55, 0.35, 0.2, 1)
+
+[node name="Wood4" type="ColorRect" parent="WoodPile"]
+offset_left = -7.0
+offset_top = -12.0
+offset_right = 7.0
+offset_bottom = -9.0
+color = Color(0.58, 0.38, 0.22, 1)
+
+[node name="Wood5" type="ColorRect" parent="WoodPile"]
+offset_left = -7.0
+offset_top = -15.0
+offset_right = 7.0
+offset_bottom = -12.0
+color = Color(0.55, 0.35, 0.2, 1)
+
+[node name="Wood6" type="ColorRect" parent="WoodPile"]
+offset_left = -7.0
+offset_top = -18.0
+offset_right = 7.0
+offset_bottom = -15.0
+color = Color(0.58, 0.38, 0.22, 1)

@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/tree/tree.gd" id="1_script"]
+[ext_resource type="Shader" path="res://assets/shaders/wind_sway.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sway"]
+shader = ExtResource("2_shader")
+shader_parameter/speed = 1.5
+shader_parameter/strength = 0.05
+shader_parameter/detail = 0.5
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(18, 30)
+
+[sub_resource type="Gradient" id="Gradient_chips"]
+colors = PackedColorArray(0.48, 0.29, 0.16, 1, 0.32, 0.18, 0.1, 0.6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tree"]
+font_size = 9
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Tree" type="StaticBody2D"]
+collision_layer = 0
+collision_mask = 0
+z_index = -1
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -15)
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Trunk" type="ColorRect" parent="Visual"]
+offset_left = -6.0
+offset_top = -65.0
+offset_right = 6.0
+color = Color(0.42, 0.24, 0.13, 1)
+
+[node name="Crown" type="Polygon2D" parent="Visual"]
+material = SubResource("ShaderMaterial_sway")
+color = Color(0.18, 0.44, 0.24, 1)
+polygon = PackedVector2Array(0, -140, -48, -110, -36, -55, 36, -55, 48, -110)
+
+[node name="CrownHighlight" type="Polygon2D" parent="Visual"]
+material = SubResource("ShaderMaterial_sway")
+color = Color(0.25, 0.55, 0.32, 1)
+polygon = PackedVector2Array(0, -135, -30, -110, -24, -70, 24, -70, 30, -110)
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+position = Vector2(0, -35)
+emitting = false
+amount = 10
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.85
+direction = Vector2(0, -1)
+spread = 60.0
+gravity = Vector2(0, 180)
+initial_velocity_min = 35.0
+initial_velocity_max = 70.0
+scale_amount_min = 1.5
+scale_amount_max = 3.5
+color_ramp = SubResource("Gradient_chips")
+
+
+[node name="LabelHealth" type="Label" parent="."]
+z_index = 5
+offset_left = -60.0
+offset_top = -155.0
+offset_right = 60.0
+offset_bottom = -140.0
+text = "Рубить дерево [E]"
+label_settings = SubResource("LabelSettings_tree")
+horizontal_alignment = 1
+vertical_alignment = 1
