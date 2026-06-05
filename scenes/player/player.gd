@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal wood_count_changed(count)
 
-@export var speed: float = 160.0
+@export var speed: float = 110.0
 @export var jump_velocity: float = -320.0
 @export var max_wood_carry: int = 5
 

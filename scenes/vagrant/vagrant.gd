@@ -18,6 +18,7 @@ func _ready() -> void:
 	spawn_x = global_position.x
 	choose_new_wander_target()
 	label_status.visible = false
+	setup_tooltip_style(label_status)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -40,13 +41,8 @@ func _physics_process(delta: float) -> void:
 				velocity.x = move_toward(velocity.x, 0, speed * 0.3)
 				body.scale = Vector2(1, 1)
 				
-		# Показываем статус игроку
-		var player = get_closest_player()
-		if player and global_position.distance_to(player.global_position) < 80.0:
-			label_status.visible = true
-			label_status.text = "Свободный рабочий\nИдите к дому лесоруба/казарме"
-		else:
-			label_status.visible = false
+		# Нанятые рабочие ходят за игроком молча, не создавая надписей
+		label_status.visible = false
 	else:
 		# Бродим у костра
 		wander_timer -= delta
@@ -104,3 +100,21 @@ func get_closest_player() -> Node2D:
 	if players.size() > 0:
 		return players[0]
 	return null
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)

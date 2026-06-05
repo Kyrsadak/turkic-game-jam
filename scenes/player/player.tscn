@@ -97,38 +97,22 @@ visible = false
 [node name="TorchLight" type="PointLight2D" parent="."]
 position = Vector2(10, -16)
 color = Color(1, 0.75, 0.45, 1)
-energy = 0.6
+energy = 0.9
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.5)
 texture = ExtResource("2_light_texture")
-texture_scale = 2.0
+texture_scale = 3.2
 
 [node name="HitCooldown" type="Timer" parent="."]
 wait_time = 0.25
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(0, -40)
-limit_top = -200
-limit_bottom = 400
+position = Vector2(0, -80)
+limit_top = -500
+limit_bottom = 100
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="Control"]
-z_index = 5
-layout_mode = 0
-offset_left = -40.0
-offset_top = -65.0
-offset_right = 40.0
-offset_bottom = -50.0
-text = "Игрок (Король)"
-label_settings = SubResource("LabelSettings_instructions")
-horizontal_alignment = 1
 
 [connection signal="timeout" from="HitCooldown" to="." method="_on_hit_cooldown_timeout"]

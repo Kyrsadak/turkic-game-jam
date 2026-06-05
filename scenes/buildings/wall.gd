@@ -20,38 +20,39 @@ func _ready() -> void:
 	add_to_group("buildings")
 	add_to_group("wall")
 	update_visuals()
+	setup_tooltip_style(label_status)
 
 func _process(delta: float) -> void:
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		var player = players[0]
 		var dist = global_position.distance_to(player.global_position)
-		if dist < 60.0:
+		if dist < 55.0:
 			label_status.visible = true
 			if level == 0:
 				if player.wood_count > 0:
-					label_status.text = "Деревянная стена [E]\nПостройка (%d/%d дров)" % [current_construction_wood, build_cost]
+					label_status.text = "[E] Построить стену (%d/%d)" % [current_construction_wood, build_cost]
 				else:
-					label_status.text = "Стена (Требуется %d дров)\nНужны дрова" % build_cost
+					label_status.text = "Стена (Нужно %d дров)" % build_cost
 			else:
 				# Проверяем прочность
 				if health < max_health:
 					if player.wood_count > 0:
-						label_status.text = "Починить стену [E]\nПрочность: %d/%d" % [int(health), int(max_health)]
+						label_status.text = "[E] Починить (HP: %d/%d)" % [int(health), int(max_health)]
 					else:
-						label_status.text = "Стена повреждена!\nПрочность: %d/%d" % [int(health), int(max_health)]
+						label_status.text = "Повреждена (HP: %d/%d)" % [int(health), int(max_health)]
 				elif level == 1:
 					if player.wood_count > 0:
-						label_status.text = "Каменное улучшение [E]\nСтоимость (%d/%d дров)" % [current_construction_wood, lvl2_cost]
+						label_status.text = "[E] Каменное улучшение (%d/%d)" % [current_construction_wood, lvl2_cost]
 					else:
-						label_status.text = "Каменная стена\nНужно %d дров для улучшения" % lvl2_cost
+						label_status.text = "Каменная стена (Нужно %d дров)" % lvl2_cost
 				elif level == 2:
 					if player.wood_count > 0:
-						label_status.text = "Шипастое улучшение [E]\nСтоимость (%d/%d дров)" % [current_construction_wood, lvl3_cost]
+						label_status.text = "[E] Шипастое улучшение (%d/%d)" % [current_construction_wood, lvl3_cost]
 					else:
-						label_status.text = "Шипастая стена\nНужно %d дров для улучшения" % lvl3_cost
+						label_status.text = "Шипастая стена (Нужно %d дров)" % lvl3_cost
 				elif level == 3:
-					label_status.text = "Шипастая стена (макс.)\nПрочность: %d/%d" % [int(health), int(max_health)]
+					label_status.text = "Шипастая стена (HP: %d/%d)" % [int(health), int(max_health)]
 		else:
 			label_status.visible = false
 
@@ -146,3 +147,21 @@ func get_current_visual() -> Node2D:
 	if level == 2: return visual_lvl2
 	if level == 3: return visual_lvl3
 	return null
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)
