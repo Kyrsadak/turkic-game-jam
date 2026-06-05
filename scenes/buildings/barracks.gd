@@ -13,7 +13,6 @@ var current_construction_wood: int = 0
 var spearman_scene = preload("res://scenes/units/spearman.tscn")
 
 func _ready() -> void:
-	scale = Vector2(4.0, 4.0)
 	add_to_group("buildings")
 	add_to_group("barracks")
 	update_visuals()
@@ -24,7 +23,7 @@ func _process(delta: float) -> void:
 	if players.size() > 0:
 		var player = players[0]
 		var dist = global_position.distance_to(player.global_position)
-		if dist < 200.0:
+		if dist < 55.0:
 			label_status.visible = true
 			if not is_built:
 				if player.wood_count > 0:
@@ -79,8 +78,8 @@ func spawn_spearman() -> void:
 	
 	# Эффект спавна
 	var tween = create_tween()
-	sm.scale = Vector2(1.75, 5.25)  # 0.5x и 1.5x от 3.5
-	tween.tween_property(sm, "scale", Vector2(3.5, 3.5), 0.2)
+	sm.scale = Vector2(0.5, 1.5)
+	tween.tween_property(sm, "scale", Vector2(1.0, 1.0), 0.2)
 
 func update_visuals() -> void:
 	visual_site.visible = not is_built

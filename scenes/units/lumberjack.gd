@@ -3,11 +3,11 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 enum State { IDLE, WALKING_TO_TREE, CHOPPING, WALKING_TO_HOUSE }
 
-@export var speed: float = 185.0
+@export var speed: float = 85.0
 @export var chop_damage: float = 10.0
 @export var chop_cooldown: float = 1.1
 
-var gravity: float = 2000.0
+var gravity: float = 900.0
 var wood_count: int = 0
 var max_wood_carry: int = 6
 var current_state: State = State.IDLE
@@ -20,7 +20,6 @@ var chop_timer: float = 0.0
 @onready var wood_pile: Node2D = $WoodPile
 
 func _ready() -> void:
-	scale = Vector2(3.5, 3.5)
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
@@ -49,7 +48,7 @@ func _physics_process(delta: float) -> void:
 				if target_tree:
 					var dist_x = target_tree.global_position.x - global_position.x
 					# Останавливаемся чуть сбоку от дерева
-					if abs(dist_x) > 70.0:
+					if abs(dist_x) > 28.0:
 						velocity.x = sign(dist_x) * speed
 						body.scale.x = sign(dist_x)
 						animate_walk()
@@ -77,7 +76,7 @@ func _physics_process(delta: float) -> void:
 		State.WALKING_TO_HOUSE:
 			if is_instance_valid(home_house):
 				var dist_x = home_house.global_position.x - global_position.x
-				if abs(dist_x) > 40.0:
+				if abs(dist_x) > 16.0:
 					velocity.x = sign(dist_x) * speed
 					body.scale.x = sign(dist_x)
 					animate_walk()

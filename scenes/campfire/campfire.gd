@@ -21,7 +21,6 @@ var noise_time: float = 0.0
 var is_burned_out: bool = false
 
 func _ready() -> void:
-	scale = Vector2(3.0, 3.0)
 	add_to_group("campfire")
 	emit_signal("fuel_changed", current_fuel, max_fuel)
 	label_status.visible = false
@@ -70,7 +69,7 @@ func _process(delta: float) -> void:
 		if players.size() > 0:
 			var player = players[0]
 			var dist = global_position.distance_to(player.global_position)
-			if dist < 140.0 and player.wood_count > 0:
+			if dist < 60.0 and player.wood_count > 0:
 				label_status.visible = true
 				if current_fuel >= max_fuel - 2.0:
 					label_status.text = "[Костер полон]"

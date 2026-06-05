@@ -22,7 +22,6 @@ var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 @onready var label_health: Label = $LabelHealth
 
 func _ready() -> void:
-	scale = Vector2(1.8, 1.8)
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0
@@ -42,7 +41,7 @@ func _process(delta: float) -> void:
 		if players.size() > 0:
 			var player = players[0]
 			var dist = global_position.distance_to(player.global_position)
-			if dist < 90.0:
+			if dist < 55.0:
 				label_health.visible = true
 				if health == max_health:
 					label_health.text = "[E] Рубить дерево"
@@ -115,10 +114,10 @@ func spawn_wood(fall_dir: float) -> void:
 	get_parent().add_child(wood)
 	
 	# Спавним чуть выше корней
-	wood.global_position = global_position + Vector2(0, -40)
+	wood.global_position = global_position + Vector2(0, -16)
 	
 	# Разбрасываем дрова
-	var target_x = global_position.x + fall_dir * randf_range(75.0, 200.0) + randf_range(-25.0, 25.0)
+	var target_x = global_position.x + fall_dir * randf_range(30, 80) + randf_range(-10, 10)
 	wood.launch(target_x, global_position.y)
 
 func regrow() -> void:

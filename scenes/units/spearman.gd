@@ -3,11 +3,11 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 enum State { WALKING_TO_POST, DEFENDING, ATTACKING }
 
-@export var speed: float = 200.0
+@export var speed: float = 90.0
 @export var damage: float = 14.0
 @export var attack_cooldown: float = 0.75
 
-var gravity: float = 2000.0
+var gravity: float = 900.0
 var current_state: State = State.WALKING_TO_POST
 var target_enemy: Node2D = null
 var attack_timer: float = 0.0
@@ -18,7 +18,6 @@ var target_post_x: float = 0.0
 @onready var spear: Node2D = $Body/Spear
 
 func _ready() -> void:
-	scale = Vector2(3.5, 3.5)
 	add_to_group("spearman")
 	
 	# Определяем фланг по положению спавна относительно костра
@@ -34,13 +33,13 @@ func _physics_process(delta: float) -> void:
 		velocity.y += gravity * delta
 
 	# Поиск врагов поблизости
-	target_enemy = find_closest_enemy(225.0)
+	target_enemy = find_closest_enemy(90.0)
 
 	match current_state:
 		State.WALKING_TO_POST:
 			choose_post_position()
 			var dist_x = target_post_x - global_position.x
-			if abs(dist_x) > 37.5:
+			if abs(dist_x) > 15.0:
 				velocity.x = sign(dist_x) * speed
 				body.scale.x = sign(dist_x)
 				animate_walk()
@@ -57,11 +56,11 @@ func _physics_process(delta: float) -> void:
 				attack_timer = 0.1
 			else:
 				choose_post_position()
-				if abs(target_post_x - global_position.x) > 50.0:
+				if abs(target_post_x - global_position.x) > 20.0:
 					current_state = State.WALKING_TO_POST
 
 		State.ATTACKING:
-			if not is_instance_valid(target_enemy) or global_position.distance_to(target_enemy.global_position) > 275.0:
+			if not is_instance_valid(target_enemy) or global_position.distance_to(target_enemy.global_position) > 110.0:
 				current_state = State.DEFENDING
 			else:
 				# Поворачиваемся к врагу
@@ -94,10 +93,10 @@ func choose_post_position() -> void:
 				
 	if flank_wall:
 		# Встаем чуть позади стены, чтобы бить сквозь нее
-		target_post_x = flank_wall.global_position.x - flank * 60.0
+		target_post_x = flank_wall.global_position.x - flank * 24.0
 	else:
 		# Пост по умолчанию, если стены нет
-		target_post_x = campfire_x + flank * 600.0
+		target_post_x = campfire_x + flank * 240.0
 
 func stab_enemy() -> void:
 	if is_instance_valid(target_enemy):

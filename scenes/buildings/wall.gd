@@ -18,7 +18,6 @@ var health: float = 120.0
 @onready var visual_lvl3: Node2D = $VisualLvl3
 
 func _ready() -> void:
-	scale = Vector2(3.0, 3.0)
 	add_to_group("buildings")
 	add_to_group("wall")
 	update_visuals()
@@ -29,7 +28,7 @@ func _process(delta: float) -> void:
 	if players.size() > 0:
 		var player = players[0]
 		var dist = global_position.distance_to(player.global_position)
-		if dist < 165.0:
+		if dist < 55.0:
 			label_status.visible = true
 			if level == 0:
 				if player.wood_count > 0:
