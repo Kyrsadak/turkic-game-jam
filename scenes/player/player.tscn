@@ -114,21 +114,5 @@ limit_bottom = 400
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="Control"]
-z_index = 5
-layout_mode = 0
-offset_left = -40.0
-offset_top = -65.0
-offset_right = 40.0
-offset_bottom = -50.0
-text = "Игрок (Король)"
-label_settings = SubResource("LabelSettings_instructions")
-horizontal_alignment = 1
 
 [connection signal="timeout" from="HitCooldown" to="." method="_on_hit_cooldown_timeout"]

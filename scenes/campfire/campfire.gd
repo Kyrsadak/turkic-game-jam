@@ -23,6 +23,7 @@ func _ready() -> void:
 	add_to_group("campfire")
 	emit_signal("fuel_changed", current_fuel, max_fuel)
 	label_status.visible = false
+	setup_tooltip_style(label_status)
 
 func _process(delta: float) -> void:
 	if is_burned_out:
@@ -61,20 +62,17 @@ func _process(delta: float) -> void:
 		particles_flame.initial_velocity_min = 40.0 * (0.5 + 0.5 * fuel_ratio)
 		particles_flame.initial_velocity_max = 70.0 * (0.5 + 0.5 * fuel_ratio)
 		
-		# Показываем статус при подходе игрока (если есть дрова в руках)
+		# Показываем статус при подходе игрока (только если есть дрова в руках)
 		var players = get_tree().get_nodes_in_group("player")
 		if players.size() > 0:
 			var player = players[0]
 			var dist = global_position.distance_to(player.global_position)
-			if dist < 80.0:
+			if dist < 60.0 and player.wood_count > 0:
 				label_status.visible = true
-				if player.wood_count > 0:
-					if current_fuel >= max_fuel - 2.0:
-						label_status.text = "[Костер полон]"
-					else:
-						label_status.text = "Нажмите [E] чтобы подбросить дрова\n(Костер: %d%%)" % int(fuel_ratio * 100)
+				if current_fuel >= max_fuel - 2.0:
+					label_status.text = "[Костер полон]"
 				else:
-					label_status.text = "Костер: %d%%\n(Нужны дрова)" % int(fuel_ratio * 100)
+					label_status.text = "[E] Подбросить дрова (%d%%)" % int(fuel_ratio * 100)
 			else:
 				label_status.visible = false
 	else:
@@ -101,3 +99,21 @@ func add_wood() -> bool:
 		
 		return true
 	return false
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)

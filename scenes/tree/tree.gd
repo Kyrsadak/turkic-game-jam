@@ -25,6 +25,7 @@ func _ready() -> void:
 	health = max_health
 	visual.modulate.a = 1.0
 	label_health.visible = false
+	setup_tooltip_style(label_health)
 
 func _process(delta: float) -> void:
 	if is_felled:
@@ -38,10 +39,10 @@ func _process(delta: float) -> void:
 		if players.size() > 0:
 			var player = players[0]
 			var dist = global_position.distance_to(player.global_position)
-			if dist < 65.0:
+			if dist < 55.0:
 				label_health.visible = true
 				if health == max_health:
-					label_health.text = "Рубить дерево [E]"
+					label_health.text = "[E] Рубить дерево"
 				else:
 					label_health.text = "Срубить: %d / %d" % [int(health), int(max_health)]
 			else:
@@ -121,3 +122,21 @@ func regrow() -> void:
 	# Плавное появление
 	var tween = create_tween()
 	tween.tween_property(visual, "modulate:a", 1.0, 1.5)
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)

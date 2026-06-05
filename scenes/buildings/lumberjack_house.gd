@@ -18,29 +18,28 @@ func _ready() -> void:
 	add_to_group("buildings")
 	add_to_group("lumberjack_house")
 	update_visuals()
+	setup_tooltip_style(label_status)
 
 func _process(delta: float) -> void:
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		var player = players[0]
 		var dist = global_position.distance_to(player.global_position)
-		if dist < 65.0:
+		if dist < 55.0:
 			label_status.visible = true
 			if not is_built:
 				if player.wood_count > 0:
-					label_status.text = "Дом лесоруба (Не построен)\nОтдайте дрова [E] (%d/%d)" % [current_construction_wood, build_cost]
+					label_status.text = "[E] Построить дом лесоруба (%d/%d)" % [current_construction_wood, build_cost]
 				else:
-					label_status.text = "Дом лесоруба (%d/%d дров)\nНужны дрова для постройки" % [current_construction_wood, build_cost]
+					label_status.text = "Дом лесоруба (%d/%d дров)" % [current_construction_wood, build_cost]
 			else:
-				# Проверяем, есть ли следующие граждане рядом
 				var follow_citizen = get_closest_citizen(120.0)
-				
 				if wood_stored > 0 and player.wood_count < player.max_wood_carry:
-					label_status.text = "Забрать дрова [E] (%d/%d)\n(Или обучить рабочего)" % [wood_stored, max_storage]
+					label_status.text = "[E] Забрать дрова (%d/%d)" % [wood_stored, max_storage]
 				elif follow_citizen:
-					label_status.text = "Нанять Лесоруба [E]\n(Обучить рабочего)"
+					label_status.text = "[E] Обучить лесоруба"
 				else:
-					label_status.text = "Дом Лесоруба\nСклад: %d/%d" % [wood_stored, max_storage]
+					label_status.text = "Дом лесоруба (Склад: %d/%d)" % [wood_stored, max_storage]
 		else:
 			label_status.visible = false
 
@@ -126,3 +125,21 @@ func get_closest_citizen(max_dist: float) -> Node2D:
 				min_dist = dist
 				closest = cit
 	return closest
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)

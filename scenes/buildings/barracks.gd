@@ -15,25 +15,26 @@ func _ready() -> void:
 	add_to_group("buildings")
 	add_to_group("barracks")
 	update_visuals()
+	setup_tooltip_style(label_status)
 
 func _process(delta: float) -> void:
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		var player = players[0]
 		var dist = global_position.distance_to(player.global_position)
-		if dist < 65.0:
+		if dist < 55.0:
 			label_status.visible = true
 			if not is_built:
 				if player.wood_count > 0:
-					label_status.text = "Казарма (Не построена)\nОтдайте дрова [E] (%d/%d)" % [current_construction_wood, build_cost]
+					label_status.text = "[E] Построить казарму (%d/%d)" % [current_construction_wood, build_cost]
 				else:
-					label_status.text = "Казарма (%d/%d дров)\nНужны дрова для постройки" % [current_construction_wood, build_cost]
+					label_status.text = "Казарма (%d/%d дров)" % [current_construction_wood, build_cost]
 			else:
 				var follow_citizen = get_closest_citizen(120.0)
 				if follow_citizen:
-					label_status.text = "Нанять Копейщика [E]\n(Обучить рабочего)"
+					label_status.text = "[E] Обучить копейщика"
 				else:
-					label_status.text = "Казарма копейщиков\n(Обученных: %d)" % get_spearmen_count()
+					label_status.text = "Казарма (%d воинов)" % get_spearmen_count()
 		else:
 			label_status.visible = false
 
@@ -100,3 +101,21 @@ func get_spearmen_count() -> int:
 	var sm_nodes = get_tree().get_nodes_in_group("spearman")
 	# Подсчитываем тех копейщиков, что привязаны к этой казарме или просто всех
 	return sm_nodes.size()
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)
