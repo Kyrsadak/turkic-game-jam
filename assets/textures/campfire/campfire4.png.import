@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d316r263ldkei"
-path="res://.godot/imported/campfire6.png-947e5ce187dc615d6f2b1b9c23ec558b.ctex"
+uid="uid://bb436227s5fjs"
+path="res://.godot/imported/campfire4.png-c605bf59b0078161acddf49671d2b4fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/campfire6.png"
-dest_files=["res://.godot/imported/campfire6.png-947e5ce187dc615d6f2b1b9c23ec558b.ctex"]
+source_file="res://assets/textures/campfire/campfire4.png"
+dest_files=["res://.godot/imported/campfire4.png-c605bf59b0078161acddf49671d2b4fc.ctex"]
 
 [params]
 
