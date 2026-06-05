@@ -1,4 +1,5 @@
 extends StaticBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 @export var build_cost: int = 4
 @export var lvl2_cost: int = 8
@@ -141,6 +142,19 @@ func update_visuals() -> void:
 	visual_lvl1.visible = (level == 1)
 	visual_lvl2.visible = (level == 2)
 	visual_lvl3.visible = (level == 3)
+	
+	# Проверяем текстуру для текущего уровня стены
+	var texture_name = "wall_lvl" + str(level) + ".png"
+	if level == 0:
+		texture_name = "wall_construction.png"
+	
+	var path = "res://assets/textures/" + texture_name
+	var sprite = TextureLoader.try_apply_texture(self, path, Vector2(0, -30))
+	if sprite:
+		visual_site.visible = false
+		visual_lvl1.visible = false
+		visual_lvl2.visible = false
+		visual_lvl3.visible = false
 
 func get_current_visual() -> Node2D:
 	if level == 1: return visual_lvl1

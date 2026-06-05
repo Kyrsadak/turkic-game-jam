@@ -1,4 +1,5 @@
 extends CharacterBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 enum State { WALKING_TO_POST, DEFENDING, ATTACKING }
 
@@ -25,6 +26,7 @@ func _ready() -> void:
 	flank = 1.0 if global_position.x > campfire_x else -1.0
 	
 	choose_post_position()
+	TextureLoader.try_apply_texture(self, "res://assets/textures/spearman.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():

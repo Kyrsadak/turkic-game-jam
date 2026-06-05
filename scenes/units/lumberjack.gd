@@ -1,4 +1,5 @@
 extends CharacterBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 enum State { IDLE, WALKING_TO_TREE, CHOPPING, WALKING_TO_HOUSE }
 
@@ -22,6 +23,7 @@ func _ready() -> void:
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
+	TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():

@@ -1,4 +1,5 @@
 extends StaticBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal tree_felled(wood_count)
 
@@ -26,6 +27,7 @@ func _ready() -> void:
 	visual.modulate.a = 1.0
 	label_health.visible = false
 	setup_tooltip_style(label_health)
+	TextureLoader.try_apply_texture(self, "res://assets/textures/tree.png", Vector2(0, -70))
 
 func _process(delta: float) -> void:
 	if is_felled:

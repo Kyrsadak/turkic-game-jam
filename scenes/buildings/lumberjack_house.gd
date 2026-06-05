@@ -1,4 +1,5 @@
 extends StaticBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 @export var build_cost: int = 5
 @export var max_storage: int = 20
@@ -106,6 +107,11 @@ func update_visuals() -> void:
 	visual_site.visible = not is_built
 	visual_built.visible = is_built
 	update_storage_visuals()
+	
+	if is_built:
+		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack_house.png", Vector2(0, -35))
+		if sprite:
+			visual_built.visible = false
 
 func update_storage_visuals() -> void:
 	if not is_built:

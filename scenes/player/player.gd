@@ -1,4 +1,5 @@
 extends CharacterBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal wood_count_changed(count)
 
@@ -17,6 +18,7 @@ var is_hitting: bool = false
 func _ready() -> void:
 	add_to_group("player")
 	update_wood_visuals()
+	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
 
 func _physics_process(delta: float) -> void:
 	# Гравитация

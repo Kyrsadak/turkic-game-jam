@@ -1,4 +1,5 @@
 extends StaticBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 @export var build_cost: int = 8
 
@@ -83,6 +84,11 @@ func spawn_spearman() -> void:
 func update_visuals() -> void:
 	visual_site.visible = not is_built
 	visual_built.visible = is_built
+	
+	if is_built:
+		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/barracks.png", Vector2(0, -35))
+		if sprite:
+			visual_built.visible = false
 
 func get_closest_citizen(max_dist: float) -> Node2D:
 	var citizens = get_tree().get_nodes_in_group("citizen")
