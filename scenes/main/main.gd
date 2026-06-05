@@ -39,10 +39,15 @@ func _ready() -> void:
 	campfire.connect("fuel_changed", Callable(self, "_on_campfire_fuel_changed"))
 	player.connect("wood_count_changed", Callable(self, "_on_player_wood_changed"))
 	
-	# Генерируем леса и пещеры
-	generate_forests()
-	create_cave_at(-7300.0, false)
-	create_cave_at(7300.0, true)
+	# Генерируем леса и пещеры, только если они не добавлены вручную в редакторе
+	var has_left_trees = $ForestLeft and $ForestLeft.get_child_count() > 0
+	var has_right_trees = $ForestRight and $ForestRight.get_child_count() > 0
+	if not has_left_trees and not has_right_trees:
+		generate_forests()
+		
+	if not has_node("CaveLeft") and not has_node("CaveRight"):
+		create_cave_at(-7300.0, false)
+		create_cave_at(7300.0, true)
 	
 	# Начальные значения интерфейса
 	_on_player_wood_changed(player.wood_count)
@@ -160,6 +165,11 @@ func spawn_wolf() -> void:
 	var spawn_side = 1.0 if randf() > 0.5 else -1.0
 	var spawn_x = spawn_side * 7300.0
 	
+	var cave_name = "CaveRight" if spawn_side > 0 else "CaveLeft"
+	var cave = get_node_or_null(cave_name)
+	if cave:
+		spawn_x = cave.global_position.x
+	
 	var wolf = wolf_scene.instantiate()
 	add_child(wolf)
 	wolf.global_position = Vector2(spawn_x, -10)
@@ -172,6 +182,11 @@ func spawn_bear() -> void:
 	# Медведи спавнятся из пещер по краям карты
 	var spawn_side = 1.0 if randf() > 0.5 else -1.0
 	var spawn_x = spawn_side * 7300.0
+	
+	var cave_name = "CaveRight" if spawn_side > 0 else "CaveLeft"
+	var cave = get_node_or_null(cave_name)
+	if cave:
+		spawn_x = cave.global_position.x
 	
 	var bear = bear_scene.instantiate()
 	add_child(bear)
