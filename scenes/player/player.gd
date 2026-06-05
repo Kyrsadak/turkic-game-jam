@@ -19,11 +19,14 @@ var is_hitting: bool = false
 var shake_strength: float = 0.0
 var shake_decay: float = 12.0
 var footstep_timer: float = 0.0
+var footstep_base_volume_db: float = -4.5
+var footstep_fadeout_speed_db: float = 42.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
 	add_to_group("player")
 	update_wood_visuals()
+	footstep_audio.volume_db = footstep_base_volume_db
 	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
 
 func _physics_process(delta: float) -> void:
@@ -176,11 +179,18 @@ func apply_camera_shake(strength: float) -> void:
 func update_footsteps(delta: float) -> void:
 	var is_walking = is_on_floor() and abs(velocity.x) > 5.0 and not is_hitting
 	if is_walking:
+		footstep_audio.volume_db = move_toward(footstep_audio.volume_db, footstep_base_volume_db, footstep_fadeout_speed_db * delta)
 		footstep_timer -= delta
 		if footstep_timer <= 0.0:
-			# Для короля используем один удар шага и повторяем его по таймеру.
 			footstep_audio.stop()
+			footstep_audio.volume_db = footstep_base_volume_db
+			footstep_audio.pitch_scale = randf_range(0.92, 0.98)
 			footstep_audio.play()
-			footstep_timer = 0.34
+			footstep_timer = 0.36
 	else:
 		footstep_timer = 0.0
+		if footstep_audio.playing:
+			footstep_audio.volume_db = move_toward(footstep_audio.volume_db, -40.0, footstep_fadeout_speed_db * delta)
+			if footstep_audio.volume_db <= -39.0:
+				footstep_audio.stop()
+				footstep_audio.volume_db = footstep_base_volume_db

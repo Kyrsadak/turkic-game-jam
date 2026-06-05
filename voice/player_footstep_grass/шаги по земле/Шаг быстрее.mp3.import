@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c4x06b66o0ver"
+path="res://.godot/imported/Шаг быстрее.mp3-9924f1e966d83cb40e3da780c7616112.mp3str"
+
+[deps]
+
+source_file="res://voice/player_footstep_grass/шаги по земле/Шаг быстрее.mp3"
+dest_files=["res://.godot/imported/Шаг быстрее.mp3-9924f1e966d83cb40e3da780c7616112.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

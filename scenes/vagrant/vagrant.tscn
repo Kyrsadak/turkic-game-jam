@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/vagrant/vagrant.gd" id="1_script"]
-[ext_resource type="AudioStream" path="res://voice/player_footstep_grass/человек идет по земле и сухими листьям.mp3" id="2_footstep"]
+[ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="2_footstep"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 7.0
@@ -77,4 +77,4 @@ vertical_alignment = 1
 
 [node name="FootstepAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_footstep")
-volume_db = -11.0
+volume_db = -14.0

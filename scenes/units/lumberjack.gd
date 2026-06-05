@@ -21,12 +21,15 @@ var chop_timer: float = 0.0
 @onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
 
 var footstep_timer: float = 0.0
+var footstep_base_volume_db: float = -14.0
+var footstep_fadeout_speed_db: float = 38.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
+	footstep_audio.volume_db = footstep_base_volume_db
 	TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
@@ -158,11 +161,18 @@ func animate_walk() -> void:
 func update_footsteps(delta: float) -> void:
 	var is_walking = is_on_floor() and abs(velocity.x) > 5.0
 	if is_walking:
+		footstep_audio.volume_db = move_toward(footstep_audio.volume_db, footstep_base_volume_db, footstep_fadeout_speed_db * delta)
 		footstep_timer -= delta
 		if footstep_timer <= 0.0:
 			footstep_audio.stop()
-			footstep_audio.pitch_scale = randf_range(0.93, 1.02)
+			footstep_audio.volume_db = footstep_base_volume_db
+			footstep_audio.pitch_scale = randf_range(0.88, 0.94)
 			footstep_audio.play()
-			footstep_timer = 0.3
+			footstep_timer = 0.34
 	else:
 		footstep_timer = 0.0
+		if footstep_audio.playing:
+			footstep_audio.volume_db = move_toward(footstep_audio.volume_db, -40.0, footstep_fadeout_speed_db * delta)
+			if footstep_audio.volume_db <= -39.0:
+				footstep_audio.stop()
+				footstep_audio.volume_db = footstep_base_volume_db

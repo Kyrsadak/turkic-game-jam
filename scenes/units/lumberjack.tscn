@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scenes/units/lumberjack.gd" id="1_script"]
-[ext_resource type="AudioStream" path="res://voice/player_footstep_grass/идет по проселочной дороге.mp3" id="2_footstep"]
+[ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="2_footstep"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 7.0
@@ -110,4 +110,4 @@ color = Color(0.58, 0.38, 0.22, 1)
 
 [node name="FootstepAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_footstep")
-volume_db = -10.5
+volume_db = -14.0

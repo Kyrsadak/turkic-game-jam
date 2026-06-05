@@ -16,12 +16,15 @@ var spawn_x: float = 0.0
 @onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
 
 var footstep_timer: float = 0.0
+var footstep_base_volume_db: float = -14.0
+var footstep_fadeout_speed_db: float = 36.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
 	add_to_group("vagrant")
 	spawn_x = global_position.x
 	choose_new_wander_target()
+	footstep_audio.volume_db = footstep_base_volume_db
 	label_status.visible = false
 	setup_tooltip_style(label_status)
 	TextureLoader.try_apply_texture(self, "res://assets/textures/vagrant.png", Vector2(0, -14))
@@ -129,11 +132,18 @@ func setup_tooltip_style(label: Label) -> void:
 func update_footsteps(delta: float) -> void:
 	var is_walking = is_on_floor() and abs(velocity.x) > 5.0
 	if is_walking:
+		footstep_audio.volume_db = move_toward(footstep_audio.volume_db, footstep_base_volume_db, footstep_fadeout_speed_db * delta)
 		footstep_timer -= delta
 		if footstep_timer <= 0.0:
 			footstep_audio.stop()
-			footstep_audio.pitch_scale = randf_range(0.95, 1.05)
+			footstep_audio.volume_db = footstep_base_volume_db
+			footstep_audio.pitch_scale = randf_range(0.90, 0.97)
 			footstep_audio.play()
-			footstep_timer = 0.36
+			footstep_timer = 0.4
 	else:
 		footstep_timer = 0.0
+		if footstep_audio.playing:
+			footstep_audio.volume_db = move_toward(footstep_audio.volume_db, -40.0, footstep_fadeout_speed_db * delta)
+			if footstep_audio.volume_db <= -39.0:
+				footstep_audio.stop()
+				footstep_audio.volume_db = footstep_base_volume_db
