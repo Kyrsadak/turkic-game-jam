@@ -18,16 +18,36 @@ var feller_was_lumberjack: bool = false
 
 var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 
+@onready var label_health: Label = $LabelHealth
+
 func _ready() -> void:
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0
+	label_health.visible = false
 
 func _process(delta: float) -> void:
 	if is_felled:
+		label_health.visible = false
 		regrow_timer -= delta
 		if regrow_timer <= 0:
 			regrow()
+	else:
+		# Отображаем подсказку при приближении игрока
+		var players = get_tree().get_nodes_in_group("player")
+		if players.size() > 0:
+			var player = players[0]
+			var dist = global_position.distance_to(player.global_position)
+			if dist < 65.0:
+				label_health.visible = true
+				if health == max_health:
+					label_health.text = "Рубить дерево [E]"
+				else:
+					label_health.text = "Срубить: %d / 10" % int(health)
+			else:
+				label_health.visible = false
+		else:
+			label_health.visible = false
 
 func hit_tree(hitter_x: float, damage: float = 1.0) -> void:
 	if is_felled:

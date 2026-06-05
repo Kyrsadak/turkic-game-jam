@@ -57,8 +57,9 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Обработка клавиши E для взаимодействия
-	if Input.is_key_pressed(KEY_E) and not is_hitting:
+	# Обработка клавиши E или клика мыши для взаимодействия
+	var wants_to_interact = Input.is_key_pressed(KEY_E) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	if wants_to_interact and not is_hitting:
 		perform_interaction()
 
 func perform_interaction() -> void:
@@ -82,7 +83,7 @@ func perform_interaction() -> void:
 				return
 
 	# 2. Проверяем, есть ли рядом дерево для рубки
-	var tree = get_closest_in_group("tree", 45.0)
+	var tree = get_closest_in_group("tree", 65.0)
 	if tree and not tree.is_felled:
 		start_hit_animation()
 		tree.hit_tree(global_position.x)
