@@ -4,7 +4,6 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 signal wood_count_changed(count)
 
 @export var speed: float = 110.0
-@export var jump_velocity: float = -320.0
 @export var max_wood_carry: int = 5
 
 var gravity: float = 900.0
@@ -25,15 +24,6 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Прыжок (W, Space, Up или ui_accept)
-	var wants_to_jump = Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
-	if wants_to_jump and is_on_floor():
-		velocity.y = jump_velocity
-		
-		# Эффект сплющивания при прыжке
-		var tween = create_tween()
-		tween.tween_property(body, "scale", Vector2(0.8, 1.2), 0.1)
-		tween.tween_property(body, "scale", Vector2(1.0, 1.0), 0.15)
 
 	# Движение влево-вправо (A/D или Стрелки)
 	var direction = 0.0
