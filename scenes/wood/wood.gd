@@ -23,7 +23,7 @@ func launch(target_x: float, ground_y: float) -> void:
 	tween.tween_property(self, "global_position:x", target_x, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	
 	# Арка по вертикали
-	var y_tween = create_tween().set_sequence(true)
+	var y_tween = create_tween()
 	y_tween.tween_property(self, "global_position:y", start_pos.y - peak_height, duration * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	y_tween.tween_property(self, "global_position:y", ground_y, duration * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	

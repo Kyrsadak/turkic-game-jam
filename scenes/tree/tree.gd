@@ -2,10 +2,10 @@ extends StaticBody2D
 
 signal tree_felled(wood_count)
 
-@export var max_health: float = 10.0
-@export var regrow_time: float = 25.0
+@export var max_health: float = 30.0
+@export var regrow_time: float = 180.0
 
-var health: float = 10.0
+var health: float = 30.0
 var is_felled: bool = false
 var regrow_timer: float = 0.0
 var feller_was_lumberjack: bool = false
@@ -18,16 +18,37 @@ var feller_was_lumberjack: bool = false
 
 var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 
+@onready var label_health: Label = $LabelHealth
+
 func _ready() -> void:
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0
+	label_health.visible = false
+	setup_tooltip_style(label_health)
 
 func _process(delta: float) -> void:
 	if is_felled:
+		label_health.visible = false
 		regrow_timer -= delta
 		if regrow_timer <= 0:
 			regrow()
+	else:
+		# Отображаем подсказку при приближении игрока
+		var players = get_tree().get_nodes_in_group("player")
+		if players.size() > 0:
+			var player = players[0]
+			var dist = global_position.distance_to(player.global_position)
+			if dist < 55.0:
+				label_health.visible = true
+				if health == max_health:
+					label_health.text = "[E] Рубить дерево"
+				else:
+					label_health.text = "Срубить: %d / %d" % [int(health), int(max_health)]
+			else:
+				label_health.visible = false
+		else:
+			label_health.visible = false
 
 func hit_tree(hitter_x: float, damage: float = 1.0) -> void:
 	if is_felled:
@@ -85,7 +106,7 @@ func spawn_wood(fall_dir: float) -> void:
 	get_parent().add_child(wood)
 	
 	# Спавним чуть выше корней
-	wood.global_position = global_position + Vector2(0, -12)
+	wood.global_position = global_position + Vector2(0, -16)
 	
 	# Разбрасываем дрова
 	var target_x = global_position.x + fall_dir * randf_range(30, 80) + randf_range(-10, 10)
@@ -101,3 +122,21 @@ func regrow() -> void:
 	# Плавное появление
 	var tween = create_tween()
 	tween.tween_property(visual, "modulate:a", 1.0, 1.5)
+
+func setup_tooltip_style(label: Label) -> void:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	label.add_theme_stylebox_override("normal", style)

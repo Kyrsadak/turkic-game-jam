@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal wood_count_changed(count)
 
-@export var speed: float = 160.0
+@export var speed: float = 110.0
 @export var jump_velocity: float = -320.0
 @export var max_wood_carry: int = 5
 
@@ -23,8 +23,9 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Прыжок
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	# Прыжок (W, Space, Up или ui_accept)
+	var wants_to_jump = Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
+	if wants_to_jump and is_on_floor():
 		velocity.y = jump_velocity
 		
 		# Эффект сплющивания при прыжке
@@ -32,9 +33,14 @@ func _physics_process(delta: float) -> void:
 		tween.tween_property(body, "scale", Vector2(0.8, 1.2), 0.1)
 		tween.tween_property(body, "scale", Vector2(1.0, 1.0), 0.15)
 
-	# Движение влево-вправо
-	var direction = Input.get_axis("ui_left", "ui_right")
-	if direction != 0:
+	# Движение влево-вправо (A/D или Стрелки)
+	var direction = 0.0
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		direction -= 1.0
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		direction += 1.0
+		
+	if direction != 0.0:
 		velocity.x = direction * speed
 		body.scale.x = sign(direction) # Поворачиваем лицо игрока
 		
@@ -51,8 +57,9 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Обработка клавиши E для взаимодействия
-	if Input.is_key_pressed(KEY_E) and not is_hitting:
+	# Обработка клавиши E или клика мыши для взаимодействия
+	var wants_to_interact = Input.is_key_pressed(KEY_E) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	if wants_to_interact and not is_hitting:
 		perform_interaction()
 
 func perform_interaction() -> void:
@@ -76,7 +83,7 @@ func perform_interaction() -> void:
 				return
 
 	# 2. Проверяем, есть ли рядом дерево для рубки
-	var tree = get_closest_in_group("tree", 45.0)
+	var tree = get_closest_in_group("tree", 65.0)
 	if tree and not tree.is_felled:
 		start_hit_animation()
 		tree.hit_tree(global_position.x)
@@ -98,11 +105,11 @@ func perform_interaction() -> void:
 		if building.has_method("interact") and building.interact(self):
 			return
 
-	# 4. Проверяем бродяг для найма (цена 2 дерева)
+	# 4. Проверяем бродяг для найма (цена 1 дерево)
 	var vagrant = get_closest_in_group("vagrant", 50.0)
-	if vagrant and not vagrant.is_hired and wood_count >= 2:
+	if vagrant and not vagrant.is_hired and wood_count >= 1:
 		if vagrant.hire():
-			wood_count -= 2
+			wood_count -= 1
 			emit_signal("wood_count_changed", wood_count)
 			update_wood_visuals()
 			
