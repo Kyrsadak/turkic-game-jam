@@ -18,6 +18,9 @@ var chop_timer: float = 0.0
 @onready var body: Node2D = $Body
 @onready var axe: Node2D = $Body/Axe
 @onready var wood_pile: Node2D = $WoodPile
+@onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
+
+var footstep_timer: float = 0.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
@@ -107,6 +110,7 @@ func _physics_process(delta: float) -> void:
 					current_state = State.IDLE
 
 	move_and_slide()
+	update_footsteps(delta)
 
 func chop_tree() -> void:
 	if is_instance_valid(target_tree):
@@ -150,3 +154,15 @@ func find_closest_tree() -> Node2D:
 func animate_walk() -> void:
 	var pulse = sin(Time.get_ticks_msec() * 0.02) * 0.08
 	body.scale.y = 1.0 + pulse
+
+func update_footsteps(delta: float) -> void:
+	var is_walking = is_on_floor() and abs(velocity.x) > 5.0
+	if is_walking:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			footstep_audio.stop()
+			footstep_audio.pitch_scale = randf_range(0.93, 1.02)
+			footstep_audio.play()
+			footstep_timer = 0.3
+	else:
+		footstep_timer = 0.0

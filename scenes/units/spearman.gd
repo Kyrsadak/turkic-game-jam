@@ -16,8 +16,10 @@ var target_post_x: float = 0.0
 
 @onready var body: Node2D = $Body
 @onready var spear: Node2D = $Body/Spear
+@onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
 
 static var spearman_count: int = 0
+var footstep_timer: float = 0.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
@@ -78,6 +80,7 @@ func _physics_process(delta: float) -> void:
 					attack_timer = attack_cooldown
 
 	move_and_slide()
+	update_footsteps(delta)
 
 func choose_post_position() -> void:
 	var walls = get_tree().get_nodes_in_group("wall")
@@ -127,3 +130,15 @@ func find_closest_enemy(max_dist: float) -> Node2D:
 func animate_walk() -> void:
 	var pulse = sin(Time.get_ticks_msec() * 0.022) * 0.08
 	body.scale.y = 1.0 + pulse
+
+func update_footsteps(delta: float) -> void:
+	var is_walking = is_on_floor() and abs(velocity.x) > 5.0
+	if is_walking:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			footstep_audio.stop()
+			footstep_audio.pitch_scale = randf_range(1.05, 1.15)
+			footstep_audio.play()
+			footstep_timer = 0.22
+	else:
+		footstep_timer = 0.0

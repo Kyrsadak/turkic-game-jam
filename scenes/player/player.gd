@@ -14,9 +14,11 @@ var is_hitting: bool = false
 @onready var wood_pile: Node2D = $WoodPile
 @onready var hit_cooldown: Timer = $HitCooldown
 @onready var camera: Camera2D = $Camera2D
+@onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
 
 var shake_strength: float = 0.0
 var shake_decay: float = 12.0
+var footstep_timer: float = 0.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
@@ -63,6 +65,7 @@ func _physics_process(delta: float) -> void:
 			body.position = Vector2(0, 0)
 
 	move_and_slide()
+	update_footsteps(delta)
 
 	# Обработка клавиши E или клика мыши для взаимодействия
 	var wants_to_interact = Input.is_key_pressed(KEY_E) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
@@ -169,3 +172,15 @@ func _on_hit_cooldown_timeout() -> void:
 
 func apply_camera_shake(strength: float) -> void:
 	shake_strength = strength
+
+func update_footsteps(delta: float) -> void:
+	var is_walking = is_on_floor() and abs(velocity.x) > 5.0 and not is_hitting
+	if is_walking:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			# Для короля используем один удар шага и повторяем его по таймеру.
+			footstep_audio.stop()
+			footstep_audio.play()
+			footstep_timer = 0.34
+	else:
+		footstep_timer = 0.0

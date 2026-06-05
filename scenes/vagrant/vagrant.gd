@@ -13,6 +13,9 @@ var spawn_x: float = 0.0
 @onready var body: Node2D = $Body
 @onready var robe: ColorRect = $Body/Robe
 @onready var label_status: Label = $LabelStatus
+@onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
+
+var footstep_timer: float = 0.0
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
@@ -74,6 +77,7 @@ func _physics_process(delta: float) -> void:
 			label_status.visible = false
 
 	move_and_slide()
+	update_footsteps(delta)
 
 func choose_new_wander_target() -> void:
 	var campfire = get_tree().get_first_node_in_group("campfire")
@@ -121,3 +125,15 @@ func setup_tooltip_style(label: Label) -> void:
 	style.content_margin_top = 4
 	style.content_margin_bottom = 4
 	label.add_theme_stylebox_override("normal", style)
+
+func update_footsteps(delta: float) -> void:
+	var is_walking = is_on_floor() and abs(velocity.x) > 5.0
+	if is_walking:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			footstep_audio.stop()
+			footstep_audio.pitch_scale = randf_range(0.95, 1.05)
+			footstep_audio.play()
+			footstep_timer = 0.36
+	else:
+		footstep_timer = 0.0
