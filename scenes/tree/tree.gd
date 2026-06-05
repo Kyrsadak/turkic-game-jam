@@ -2,10 +2,10 @@ extends StaticBody2D
 
 signal tree_felled(wood_count)
 
-@export var max_health: float = 10.0
+@export var max_health: float = 30.0
 @export var regrow_time: float = 180.0
 
-var health: float = 10.0
+var health: float = 30.0
 var is_felled: bool = false
 var regrow_timer: float = 0.0
 var feller_was_lumberjack: bool = false
@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 				if health == max_health:
 					label_health.text = "Рубить дерево [E]"
 				else:
-					label_health.text = "Срубить: %d / 10" % int(health)
+					label_health.text = "Срубить: %d / %d" % [int(health), int(max_health)]
 			else:
 				label_health.visible = false
 		else:
@@ -105,7 +105,7 @@ func spawn_wood(fall_dir: float) -> void:
 	get_parent().add_child(wood)
 	
 	# Спавним чуть выше корней
-	wood.global_position = global_position + Vector2(0, -12)
+	wood.global_position = global_position + Vector2(0, -16)
 	
 	# Разбрасываем дрова
 	var target_x = global_position.x + fall_dir * randf_range(30, 80) + randf_range(-10, 10)

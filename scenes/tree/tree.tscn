@@ -10,7 +10,7 @@ shader_parameter/strength = 0.05
 shader_parameter/detail = 0.5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(12, 20)
+size = Vector2(18, 30)
 
 [sub_resource type="Gradient" id="Gradient_chips"]
 colors = PackedColorArray(0.48, 0.29, 0.16, 1, 0.32, 0.18, 0.1, 0.6)
@@ -27,29 +27,29 @@ z_index = -1
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(0, -15)
 shape = SubResource("RectangleShape2D_1")
 
 [node name="Visual" type="Node2D" parent="."]
 
 [node name="Trunk" type="ColorRect" parent="Visual"]
-offset_left = -4.0
-offset_top = -45.0
-offset_right = 4.0
+offset_left = -6.0
+offset_top = -65.0
+offset_right = 6.0
 color = Color(0.42, 0.24, 0.13, 1)
 
 [node name="Crown" type="Polygon2D" parent="Visual"]
 material = SubResource("ShaderMaterial_sway")
 color = Color(0.18, 0.44, 0.24, 1)
-polygon = PackedVector2Array(0, -100, -32, -80, -24, -40, 24, -40, 32, -80)
+polygon = PackedVector2Array(0, -140, -48, -110, -36, -55, 36, -55, 48, -110)
 
 [node name="CrownHighlight" type="Polygon2D" parent="Visual"]
 material = SubResource("ShaderMaterial_sway")
 color = Color(0.25, 0.55, 0.32, 1)
-polygon = PackedVector2Array(0, -95, -20, -80, -16, -50, 16, -50, 20, -80)
+polygon = PackedVector2Array(0, -135, -30, -110, -24, -70, 24, -70, 30, -110)
 
 [node name="Particles" type="CPUParticles2D" parent="."]
-position = Vector2(0, -25)
+position = Vector2(0, -35)
 emitting = false
 amount = 10
 lifetime = 0.5
@@ -68,9 +68,9 @@ color_ramp = SubResource("Gradient_chips")
 [node name="LabelHealth" type="Label" parent="."]
 z_index = 5
 offset_left = -60.0
-offset_top = -115.0
+offset_top = -155.0
 offset_right = 60.0
-offset_bottom = -100.0
+offset_bottom = -140.0
 text = "Рубить дерево [E]"
 label_settings = SubResource("LabelSettings_tree")
 horizontal_alignment = 1

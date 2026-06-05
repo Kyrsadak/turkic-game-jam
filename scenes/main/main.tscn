@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/vagrant/vagrant.tscn" id="8_vagrant"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
-size = Vector2(2500, 40)
+size = Vector2(15000, 40)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_script")
@@ -54,14 +54,14 @@ position = Vector2(0, 20)
 shape = SubResource("RectangleShape2D_ground")
 
 [node name="Visual" type="ColorRect" parent="Ground"]
-offset_left = -1250.0
-offset_right = 1250.0
+offset_left = -7500.0
+offset_right = 7500.0
 offset_bottom = 60.0
 color = Color(0.18, 0.2, 0.24, 1)
 
 [node name="GrassBorder" type="ColorRect" parent="Ground"]
-offset_left = -1250.0
-offset_right = 1250.0
+offset_left = -7500.0
+offset_right = 7500.0
 offset_bottom = 3.0
 color = Color(0.25, 0.35, 0.3, 1)
 
@@ -84,43 +84,7 @@ position = Vector2(130, 0)
 
 [node name="ForestLeft" type="Node2D" parent="."]
 
-[node name="Tree1" parent="ForestLeft" instance=ExtResource("4_tree")]
-position = Vector2(-360, 0)
-
-[node name="Tree2" parent="ForestLeft" instance=ExtResource("4_tree")]
-position = Vector2(-470, 0)
-
-[node name="Tree3" parent="ForestLeft" instance=ExtResource("4_tree")]
-position = Vector2(-580, 0)
-
-[node name="Tree4" parent="ForestLeft" instance=ExtResource("4_tree")]
-position = Vector2(-700, 0)
-
-[node name="Tree5" parent="ForestLeft" instance=ExtResource("4_tree")]
-position = Vector2(-840, 0)
-
-[node name="Tree6" parent="ForestLeft" instance=ExtResource("4_tree")]
-position = Vector2(-1000, 0)
-
 [node name="ForestRight" type="Node2D" parent="."]
-
-[node name="Tree1" parent="ForestRight" instance=ExtResource("4_tree")]
-position = Vector2(360, 0)
-
-[node name="Tree2" parent="ForestRight" instance=ExtResource("4_tree")]
-position = Vector2(470, 0)
-
-[node name="Tree3" parent="ForestRight" instance=ExtResource("4_tree")]
-position = Vector2(580, 0)
-
-[node name="Tree4" parent="ForestRight" instance=ExtResource("4_tree")]
-position = Vector2(700, 0)
-
-[node name="Tree5" parent="ForestRight" instance=ExtResource("4_tree")]
-position = Vector2(840, 0)
-
-[node name="Tree6" parent="ForestRight" instance=ExtResource("4_tree")]
-position = Vector2(1000, 0)
 
 [node name="InitialVagrants" type="Node2D" parent="."]
 

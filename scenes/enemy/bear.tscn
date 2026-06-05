@@ -1,0 +1,103 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/enemy/bear.gd" id="1_script"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 9.0
+height = 32.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(36, 28)
+
+[sub_resource type="LabelSettings" id="LabelSettings_status"]
+font_size = 8
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Bear" type="CharacterBody2D"]
+collision_layer = 16
+collision_mask = 17
+z_index = 1
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -9)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_1")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="LegLeftBack" type="ColorRect" parent="Body"]
+offset_left = -12.0
+offset_top = -6.0
+offset_right = -9.0
+color = Color(0.2, 0.12, 0.08, 1)
+
+[node name="LegLeftFront" type="ColorRect" parent="Body"]
+offset_left = 9.0
+offset_top = -6.0
+offset_right = 12.0
+color = Color(0.2, 0.12, 0.08, 1)
+
+[node name="LegRightBack" type="ColorRect" parent="Body"]
+offset_left = -9.0
+offset_top = -6.0
+offset_right = -6.0
+color = Color(0.14, 0.08, 0.05, 1)
+
+[node name="LegRightFront" type="ColorRect" parent="Body"]
+offset_left = 6.0
+offset_top = -6.0
+offset_right = 9.0
+color = Color(0.14, 0.08, 0.05, 1)
+
+[node name="Torso" type="ColorRect" parent="Body"]
+offset_left = -15.0
+offset_top = -22.0
+offset_right = 11.0
+offset_bottom = -6.0
+color = Color(0.32, 0.2, 0.14, 1)
+
+[node name="Head" type="ColorRect" parent="Body"]
+offset_left = 9.0
+offset_top = -27.0
+offset_right = 19.0
+offset_bottom = -16.0
+color = Color(0.32, 0.2, 0.14, 1)
+
+[node name="Snout" type="Polygon2D" parent="Body"]
+color = Color(0.25, 0.15, 0.1, 1)
+polygon = PackedVector2Array(19, -23, 26, -21, 26, -17, 19, -17)
+
+[node name="Ears" type="Polygon2D" parent="Body"]
+color = Color(0.2, 0.12, 0.08, 1)
+polygon = PackedVector2Array(9, -27, 11, -32, 14, -27)
+
+[node name="EyeYellow" type="ColorRect" parent="Body"]
+offset_left = 13.0
+offset_top = -23.0
+offset_right = 15.0
+offset_bottom = -21.0
+color = Color(1, 0.75, 0.1, 1)
+
+[node name="Tail" type="Line2D" parent="Body"]
+points = PackedVector2Array(-15, -18, -21, -14)
+width = 3.0
+default_color = Color(0.25, 0.15, 0.1, 1)
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 27
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(18, -18)
+shape = SubResource("RectangleShape2D_detect")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -42.0
+offset_right = 20.0
+offset_bottom = -30.0
+text = "Медведь"
+label_settings = SubResource("LabelSettings_status")
+horizontal_alignment = 1

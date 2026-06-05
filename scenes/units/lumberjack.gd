@@ -3,7 +3,7 @@ extends CharacterBody2D
 enum State { IDLE, WALKING_TO_TREE, CHOPPING, WALKING_TO_HOUSE }
 
 @export var speed: float = 85.0
-@export var chop_damage: float = 3.4
+@export var chop_damage: float = 10.0
 @export var chop_cooldown: float = 1.1
 
 var gravity: float = 900.0
