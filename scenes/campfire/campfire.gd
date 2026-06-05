@@ -1,4 +1,5 @@
 extends Node2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal burned_out
 signal fuel_changed(current_fuel, max_fuel)
@@ -24,6 +25,7 @@ func _ready() -> void:
 	emit_signal("fuel_changed", current_fuel, max_fuel)
 	label_status.visible = false
 	setup_tooltip_style(label_status)
+	TextureLoader.try_apply_texture(self, "res://assets/textures/campfire.png", Vector2(0, -5))
 
 func _process(delta: float) -> void:
 	if is_burned_out:

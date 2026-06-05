@@ -1,4 +1,5 @@
 extends StaticBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal tree_felled(wood_count)
 
@@ -26,6 +27,7 @@ func _ready() -> void:
 	visual.modulate.a = 1.0
 	label_health.visible = false
 	setup_tooltip_style(label_health)
+	TextureLoader.try_apply_texture(self, "res://assets/textures/tree.png", Vector2(0, -70))
 
 func _process(delta: float) -> void:
 	if is_felled:
@@ -90,6 +92,12 @@ func fell_tree(feller_x: float) -> void:
 	# Поворачиваем вокруг основания (ось X=0, Y=0 локально находится у корней)
 	tween.tween_property(visual, "rotation", fall_dir * (PI / 2.2), 1.2).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(visual, "modulate:a", 0.0, 1.2)
+	
+	# Тряска камеры при ударе дерева об землю
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		var p = players[0]
+		tween.finished.connect(func(): p.apply_camera_shake(3.5))
 	
 	# Количество выпадающих дров: лесоруб -> 6, игрок -> 4-5
 	var drop_count = 6 if feller_was_lumberjack else randi_range(4, 5)

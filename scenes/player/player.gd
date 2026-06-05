@@ -1,9 +1,9 @@
 extends CharacterBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal wood_count_changed(count)
 
 @export var speed: float = 110.0
-@export var jump_velocity: float = -320.0
 @export var max_wood_carry: int = 5
 
 var gravity: float = 900.0
@@ -13,25 +13,31 @@ var is_hitting: bool = false
 @onready var body: Node2D = $Body
 @onready var wood_pile: Node2D = $WoodPile
 @onready var hit_cooldown: Timer = $HitCooldown
+@onready var camera: Camera2D = $Camera2D
+
+var shake_strength: float = 0.0
+var shake_decay: float = 12.0
 
 func _ready() -> void:
 	add_to_group("player")
 	update_wood_visuals()
+	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
 
 func _physics_process(delta: float) -> void:
 	# Гравитация
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Прыжок (W, Space, Up или ui_accept)
-	var wants_to_jump = Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_SPACE) or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)
-	if wants_to_jump and is_on_floor():
-		velocity.y = jump_velocity
-		
-		# Эффект сплющивания при прыжке
-		var tween = create_tween()
-		tween.tween_property(body, "scale", Vector2(0.8, 1.2), 0.1)
-		tween.tween_property(body, "scale", Vector2(1.0, 1.0), 0.15)
+	# Затухание тряски камеры
+	if shake_strength > 0.0:
+		shake_strength = move_toward(shake_strength, 0.0, shake_decay * delta)
+		camera.offset = Vector2(
+			randf_range(-shake_strength, shake_strength),
+			randf_range(-shake_strength, shake_strength)
+		)
+	else:
+		camera.offset = Vector2.ZERO
+
 
 	# Движение влево-вправо (A/D или Стрелки)
 	var direction = 0.0
@@ -77,6 +83,7 @@ func perform_interaction() -> void:
 				tween.tween_property(wood_pile, "position:y", -5.0, 0.1)
 				tween.tween_property(wood_pile, "position:y", 0.0, 0.1)
 				
+				apply_camera_shake(1.2)
 				is_hitting = true
 				await get_tree().create_timer(0.25).timeout
 				is_hitting = false
@@ -98,6 +105,7 @@ func perform_interaction() -> void:
 				emit_signal("wood_count_changed", wood_count)
 				update_wood_visuals()
 				
+				apply_camera_shake(1.2)
 				is_hitting = true
 				await get_tree().create_timer(0.2).timeout
 				is_hitting = false
@@ -119,6 +127,7 @@ func perform_interaction() -> void:
 func start_hit_animation() -> void:
 	is_hitting = true
 	hit_cooldown.start()
+	apply_camera_shake(1.8)
 	
 	# Эффект удара (наклон тела)
 	var tween = create_tween()
@@ -156,3 +165,6 @@ func get_closest_in_group(group_name: String, max_dist: float) -> Node:
 
 func _on_hit_cooldown_timeout() -> void:
 	pass
+
+func apply_camera_shake(strength: float) -> void:
+	shake_strength = strength

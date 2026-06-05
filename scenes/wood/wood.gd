@@ -1,4 +1,5 @@
 extends Area2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 var is_on_ground: bool = false
 var is_flying_to_target: bool = false
@@ -9,6 +10,7 @@ var fly_speed: float = 14.0
 
 func _ready() -> void:
 	add_to_group("wood_drop")
+	TextureLoader.try_apply_texture(self, "res://assets/textures/wood.png", Vector2(0, 0))
 
 func launch(target_x: float, ground_y: float) -> void:
 	var start_pos = global_position

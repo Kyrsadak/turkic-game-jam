@@ -1,4 +1,5 @@
 extends CharacterBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal enemy_died
 
@@ -19,6 +20,7 @@ func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("bear")
 	health = max_health
+	TextureLoader.try_apply_texture(self, "res://assets/textures/bear.png", Vector2(0, -12))
 
 func _physics_process(delta: float) -> void:
 	if is_dead:

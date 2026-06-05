@@ -1,4 +1,5 @@
 extends CharacterBody2D
+const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 @export var speed: float = 70.0
 @export var walk_range: float = 140.0
@@ -19,6 +20,7 @@ func _ready() -> void:
 	choose_new_wander_target()
 	label_status.visible = false
 	setup_tooltip_style(label_status)
+	TextureLoader.try_apply_texture(self, "res://assets/textures/vagrant.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
