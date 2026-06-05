@@ -22,6 +22,7 @@ var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 @onready var label_health: Label = $LabelHealth
 
 func _ready() -> void:
+	scale = Vector2(2.5, 2.5)
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0

@@ -17,6 +17,7 @@ var attack_timer: float = 0.0
 @onready var detection_area: Area2D = $DetectionArea
 
 func _ready() -> void:
+	scale = Vector2(2.5, 2.5)
 	add_to_group("enemy")
 	health = max_health
 	TextureLoader.try_apply_texture(self, "res://assets/textures/wolf.png", Vector2(0, -9))

@@ -17,13 +17,15 @@ var target_post_x: float = 0.0
 @onready var body: Node2D = $Body
 @onready var spear: Node2D = $Body/Spear
 
+static var spearman_count: int = 0
+
 func _ready() -> void:
+	scale = Vector2(2.5, 2.5)
 	add_to_group("spearman")
 	
-	# Определяем фланг по положению спавна относительно костра
-	var campfire = get_tree().get_first_node_in_group("campfire")
-	var campfire_x = campfire.global_position.x if campfire else 0.0
-	flank = 1.0 if global_position.x > campfire_x else -1.0
+	# Чередуем фланги: нечётные → правый (+1), чётные → левый (-1)
+	spearman_count += 1
+	flank = 1.0 if (spearman_count % 2 == 1) else -1.0
 	
 	choose_post_position()
 	TextureLoader.try_apply_texture(self, "res://assets/textures/spearman.png", Vector2(0, -14))

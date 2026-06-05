@@ -19,6 +19,7 @@ var shake_strength: float = 0.0
 var shake_decay: float = 12.0
 
 func _ready() -> void:
+	scale = Vector2(2.5, 2.5)
 	add_to_group("player")
 	update_wood_visuals()
 	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
