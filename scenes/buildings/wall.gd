@@ -126,6 +126,14 @@ func take_damage(amount: float) -> void:
 		shake_tween.tween_property(current_vis, "position:x", -3.0, 0.04)
 		shake_tween.tween_property(current_vis, "position:x", 0.0, 0.04)
 		
+		# Тряска камеры при ударе по стене (зависит от близости игрока)
+		var players = get_tree().get_nodes_in_group("player")
+		if players.size() > 0:
+			var p = players[0]
+			var dist = global_position.distance_to(p.global_position)
+			if dist < 400.0:
+				p.apply_camera_shake(remap(dist, 0.0, 400.0, 3.0, 0.5))
+		
 	if health <= 0:
 		destroy_wall()
 

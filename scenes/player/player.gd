@@ -13,6 +13,10 @@ var is_hitting: bool = false
 @onready var body: Node2D = $Body
 @onready var wood_pile: Node2D = $WoodPile
 @onready var hit_cooldown: Timer = $HitCooldown
+@onready var camera: Camera2D = $Camera2D
+
+var shake_strength: float = 0.0
+var shake_decay: float = 12.0
 
 func _ready() -> void:
 	add_to_group("player")
@@ -23,6 +27,16 @@ func _physics_process(delta: float) -> void:
 	# Гравитация
 	if not is_on_floor():
 		velocity.y += gravity * delta
+
+	# Затухание тряски камеры
+	if shake_strength > 0.0:
+		shake_strength = move_toward(shake_strength, 0.0, shake_decay * delta)
+		camera.offset = Vector2(
+			randf_range(-shake_strength, shake_strength),
+			randf_range(-shake_strength, shake_strength)
+		)
+	else:
+		camera.offset = Vector2.ZERO
 
 
 	# Движение влево-вправо (A/D или Стрелки)
@@ -69,6 +83,7 @@ func perform_interaction() -> void:
 				tween.tween_property(wood_pile, "position:y", -5.0, 0.1)
 				tween.tween_property(wood_pile, "position:y", 0.0, 0.1)
 				
+				apply_camera_shake(1.2)
 				is_hitting = true
 				await get_tree().create_timer(0.25).timeout
 				is_hitting = false
@@ -90,6 +105,7 @@ func perform_interaction() -> void:
 				emit_signal("wood_count_changed", wood_count)
 				update_wood_visuals()
 				
+				apply_camera_shake(1.2)
 				is_hitting = true
 				await get_tree().create_timer(0.2).timeout
 				is_hitting = false
@@ -111,6 +127,7 @@ func perform_interaction() -> void:
 func start_hit_animation() -> void:
 	is_hitting = true
 	hit_cooldown.start()
+	apply_camera_shake(1.8)
 	
 	# Эффект удара (наклон тела)
 	var tween = create_tween()
@@ -148,3 +165,6 @@ func get_closest_in_group(group_name: String, max_dist: float) -> Node:
 
 func _on_hit_cooldown_timeout() -> void:
 	pass
+
+func apply_camera_shake(strength: float) -> void:
+	shake_strength = strength
