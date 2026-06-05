@@ -1,14 +1,14 @@
 extends Node2D
 
-@export var day_duration: float = 60.0
-@export var night_duration: float = 30.0
+@export var day_duration: float = 180.0
+@export var night_duration: float = 90.0
 
 var current_day: int = 1
 var is_day: bool = true
 var time_in_state: float = 0.0
 var game_over_active: bool = false
 
-var vagrant_spawn_timer: float = 12.0
+var vagrant_spawn_timer: float = 30.0
 var wolf_spawn_queue: int = 0
 var wolf_spawn_timer: float = 0.0
 
@@ -27,7 +27,7 @@ var wolf_scene = preload("res://scenes/enemy/enemy.tscn")
 # Цвета для дня и ночи
 var day_color = Color(1.0, 1.0, 1.0, 1.0)
 var night_color = Color(0.12, 0.12, 0.25, 1.0)
-var transition_duration: float = 8.0
+var transition_duration: float = 24.0
 
 func _ready() -> void:
 	game_over_screen.visible = false
@@ -78,7 +78,7 @@ func _process(delta: float) -> void:
 		vagrant_spawn_timer -= delta
 		if vagrant_spawn_timer <= 0:
 			spawn_vagrant_if_needed()
-			vagrant_spawn_timer = randf_range(12.0, 18.0)
+			vagrant_spawn_timer = randf_range(45.0, 75.0)
 
 	# Спавн волков (ночью)
 	if not is_day and wolf_spawn_queue > 0:
@@ -86,7 +86,7 @@ func _process(delta: float) -> void:
 		if wolf_spawn_timer <= 0:
 			spawn_wolf()
 			wolf_spawn_queue -= 1
-			wolf_spawn_timer = randf_range(1.5, 3.5)
+			wolf_spawn_timer = randf_range(3.0, 6.0)
 
 	update_hud_text()
 
@@ -106,15 +106,22 @@ func start_night() -> void:
 	time_in_state = 0.0
 	
 	# Вычисляем размер волны волков
-	wolf_spawn_queue = current_day * 2 + 1
-	wolf_spawn_timer = 2.0 # Небольшая задержка перед первой атакой
+	if current_day == 1:
+		wolf_spawn_queue = 2
+	elif current_day == 2:
+		wolf_spawn_queue = 3
+	elif current_day == 3:
+		wolf_spawn_queue = 5
+	else:
+		wolf_spawn_queue = int(current_day * 1.8 + 1)
+	wolf_spawn_timer = 3.0 # Небольшая задержка перед первой атакой
 
 func spawn_vagrant_if_needed() -> void:
 	var total_vagrants = get_tree().get_nodes_in_group("vagrant").size()
 	var total_citizens = get_tree().get_nodes_in_group("citizen").size()
 	
 	# Ограничиваем количество свободных жителей в мире
-	if total_vagrants + total_citizens < 5:
+	if total_vagrants + total_citizens < 10:
 		# Выбираем случайную сторону спавна бродяг (далеко от костра)
 		var spawn_side = 1.0 if randf() > 0.5 else -1.0
 		var spawn_x = campfire.global_position.x + spawn_side * randf_range(500.0, 750.0)
@@ -138,9 +145,9 @@ func spawn_wolf() -> void:
 	wolf.global_position = Vector2(spawn_x, -10)
 	
 	# Делаем волков чуть сильнее с каждым днем
-	wolf.max_health = 25.0 + current_day * 5.0
+	wolf.max_health = 20.0 + current_day * 4.0
 	wolf.health = wolf.max_health
-	wolf.speed = 95.0 + current_day * 3.0
+	wolf.speed = 90.0 + current_day * 2.0
 
 func _on_campfire_burned_out() -> void:
 	game_over_active = true

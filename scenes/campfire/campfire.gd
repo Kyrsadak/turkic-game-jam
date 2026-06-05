@@ -3,11 +3,11 @@ extends Node2D
 signal burned_out
 signal fuel_changed(current_fuel, max_fuel)
 
-@export var max_fuel: float = 120.0
+@export var max_fuel: float = 450.0
 @export var fuel_burn_rate: float = 1.0
-@export var wood_fuel_value: float = 15.0
+@export var wood_fuel_value: float = 50.0
 
-var current_fuel: float = 60.0  # Начинаем с половины
+var current_fuel: float = 200.0  # Начинаем с половины
 
 @onready var light_2d: PointLight2D = $PointLight2D
 @onready var particles_flame: CPUParticles2D = $ParticlesFlame

@@ -6,8 +6,8 @@ extends StaticBody2D
 
 var current_construction_wood: int = 0
 var level: int = 0 # 0 = не построена, 1 = дерево, 2 = камень, 3 = шипы
-var max_health: float = 80.0
-var health: float = 80.0
+var max_health: float = 120.0
+var health: float = 120.0
 
 @onready var label_status: Label = $LabelStatus
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -87,13 +87,13 @@ func upgrade_wall() -> void:
 	current_construction_wood = 0
 	
 	if level == 1:
-		max_health = 90.0
+		max_health = 120.0
 		health = max_health
 	elif level == 2:
-		max_health = 220.0
+		max_health = 300.0
 		health = max_health
 	elif level == 3:
-		max_health = 450.0
+		max_health = 600.0
 		health = max_health
 		
 	update_visuals()

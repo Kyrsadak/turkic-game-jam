@@ -67,10 +67,10 @@ func _physics_process(delta: float) -> void:
 		var player = get_closest_player()
 		if player and global_position.distance_to(player.global_position) < 50.0:
 			label_status.visible = true
-			if player.wood_count >= 2:
-				label_status.text = "Нанять: [E]\n(2 дерева)"
+			if player.wood_count >= 1:
+				label_status.text = "Нанять: [E]\n(1 дерево)"
 			else:
-				label_status.text = "Требуется 2 дерева"
+				label_status.text = "Требуется 1 дерево"
 		else:
 			label_status.visible = false
 

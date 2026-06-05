@@ -105,11 +105,11 @@ func perform_interaction() -> void:
 		if building.has_method("interact") and building.interact(self):
 			return
 
-	# 4. Проверяем бродяг для найма (цена 2 дерева)
+	# 4. Проверяем бродяг для найма (цена 1 дерево)
 	var vagrant = get_closest_in_group("vagrant", 50.0)
-	if vagrant and not vagrant.is_hired and wood_count >= 2:
+	if vagrant and not vagrant.is_hired and wood_count >= 1:
 		if vagrant.hire():
-			wood_count -= 2
+			wood_count -= 1
 			emit_signal("wood_count_changed", wood_count)
 			update_wood_visuals()
 			

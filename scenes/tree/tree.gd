@@ -3,7 +3,7 @@ extends StaticBody2D
 signal tree_felled(wood_count)
 
 @export var max_health: float = 10.0
-@export var regrow_time: float = 25.0
+@export var regrow_time: float = 180.0
 
 var health: float = 10.0
 var is_felled: bool = false
