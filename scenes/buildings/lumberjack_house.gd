@@ -109,8 +109,9 @@ func update_visuals() -> void:
 	update_storage_visuals()
 	
 	if is_built:
-		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack_house.png", Vector2(0, -108))
+		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack_house.png", Vector2(0, -54))
 		if sprite:
+			sprite.scale = Vector2(0.5, 0.5)
 			visual_built.visible = false
 
 func update_storage_visuals() -> void:
