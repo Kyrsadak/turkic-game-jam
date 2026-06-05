@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7b88nhmgo0uv"
-path="res://.godot/imported/lumberjack_house.png-bb467f3c6671d8850e8d89abd8fb33e1.ctex"
+uid="uid://ddk5s61o1uba2"
+path="res://.godot/imported/campfire1.png-c106512751e1332a79e43d75dbbcaa4d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/lumberjack_house.png"
-dest_files=["res://.godot/imported/lumberjack_house.png-bb467f3c6671d8850e8d89abd8fb33e1.ctex"]
+source_file="res://assets/textures/campfire1.png"
+dest_files=["res://.godot/imported/campfire1.png-c106512751e1332a79e43d75dbbcaa4d.ctex"]
 
 [params]
 
