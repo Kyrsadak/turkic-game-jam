@@ -1,10 +1,10 @@
 extends CharacterBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
 
-@export var speed: float = 70.0
-@export var walk_range: float = 140.0
+@export var speed: float = 150.0
+@export var walk_range: float = 350.0
 
-var gravity: float = 900.0
+var gravity: float = 2000.0
 var is_hired: bool = false
 var target_position: Vector2
 var wander_timer: float = 0.0
@@ -15,6 +15,7 @@ var spawn_x: float = 0.0
 @onready var label_status: Label = $LabelStatus
 
 func _ready() -> void:
+	scale = Vector2(3.5, 3.5)
 	add_to_group("vagrant")
 	spawn_x = global_position.x
 	choose_new_wander_target()

@@ -3,10 +3,10 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal wood_count_changed(count)
 
-@export var speed: float = 110.0
+@export var speed: float = 240.0
 @export var max_wood_carry: int = 5
 
-var gravity: float = 900.0
+var gravity: float = 2000.0
 var wood_count: int = 0
 var is_hitting: bool = false
 
@@ -19,6 +19,7 @@ var shake_strength: float = 0.0
 var shake_decay: float = 12.0
 
 func _ready() -> void:
+	scale = Vector2(3.5, 3.5)
 	add_to_group("player")
 	update_wood_visuals()
 	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
@@ -70,7 +71,7 @@ func _physics_process(delta: float) -> void:
 
 func perform_interaction() -> void:
 	# 1. Проверяем, есть ли рядом костер и хотим ли закинуть дерево
-	var campfire = get_closest_in_group("campfire", 60.0)
+	var campfire = get_closest_in_group("campfire", 140.0)
 	if campfire and wood_count > 0:
 		if campfire.current_fuel < campfire.max_fuel - 2.0:
 			if campfire.add_wood():
@@ -90,14 +91,14 @@ func perform_interaction() -> void:
 				return
 
 	# 2. Проверяем, есть ли рядом дерево для рубки
-	var tree = get_closest_in_group("tree", 65.0)
+	var tree = get_closest_in_group("tree", 200.0)
 	if tree and not tree.is_felled:
 		start_hit_animation()
 		tree.hit_tree(global_position.x)
 		return
 
 	# 3. Проверяем здания для сдачи дров / найма
-	var building = get_closest_in_group("buildings", 55.0)
+	var building = get_closest_in_group("buildings", 280.0)
 	if building:
 		if wood_count > 0 and building.has_method("deposit_wood"):
 			if building.deposit_wood():
@@ -114,7 +115,7 @@ func perform_interaction() -> void:
 			return
 
 	# 4. Проверяем бродяг для найма (цена 1 дерево)
-	var vagrant = get_closest_in_group("vagrant", 50.0)
+	var vagrant = get_closest_in_group("vagrant", 200.0)
 	if vagrant and not vagrant.is_hired and wood_count >= 1:
 		if vagrant.hire():
 			wood_count -= 1

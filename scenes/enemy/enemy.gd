@@ -3,12 +3,12 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal enemy_died
 
-@export var speed: float = 100.0
+@export var speed: float = 200.0
 @export var max_health: float = 30.0
 @export var damage: float = 10.0
 @export var attack_cooldown: float = 0.95
 
-var gravity: float = 900.0
+var gravity: float = 2000.0
 var health: float = 30.0
 var is_dead: bool = false
 var attack_timer: float = 0.0
@@ -17,6 +17,7 @@ var attack_timer: float = 0.0
 @onready var detection_area: Area2D = $DetectionArea
 
 func _ready() -> void:
+	scale = Vector2(3.5, 3.5)
 	add_to_group("enemy")
 	health = max_health
 	TextureLoader.try_apply_texture(self, "res://assets/textures/wolf.png", Vector2(0, -9))
@@ -43,7 +44,7 @@ func _physics_process(delta: float) -> void:
 		var target_x = campfire.global_position.x if campfire else 0.0
 		var dist_x = target_x - global_position.x
 		
-		if abs(dist_x) > 20.0:
+		if abs(dist_x) > 50.0:
 			velocity.x = sign(dist_x) * speed
 			body.scale.x = sign(dist_x)
 			

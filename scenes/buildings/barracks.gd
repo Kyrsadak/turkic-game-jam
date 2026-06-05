@@ -13,6 +13,7 @@ var current_construction_wood: int = 0
 var spearman_scene = preload("res://scenes/units/spearman.tscn")
 
 func _ready() -> void:
+	scale = Vector2(4.0, 4.0)
 	add_to_group("buildings")
 	add_to_group("barracks")
 	update_visuals()
@@ -23,7 +24,7 @@ func _process(delta: float) -> void:
 	if players.size() > 0:
 		var player = players[0]
 		var dist = global_position.distance_to(player.global_position)
-		if dist < 55.0:
+		if dist < 200.0:
 			label_status.visible = true
 			if not is_built:
 				if player.wood_count > 0:

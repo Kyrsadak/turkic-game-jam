@@ -182,17 +182,17 @@ func spawn_bear() -> void:
 	bear.speed = 40.0 + current_day * 1.5
 
 func generate_forests() -> void:
-	# Левый лес: от -7200 до -350
-	var current_x = -350.0
+	# Левый лес: от -7200 до -650
+	var current_x = -650.0
 	while current_x > -7200.0:
 		spawn_tree_at(current_x, $ForestLeft)
-		current_x -= randf_range(50.0, 95.0)
+		current_x -= randf_range(80.0, 130.0)
 		
-	# Правый лес: от 350 до 7200
-	current_x = 350.0
+	# Правый лес: от 650 до 7200
+	current_x = 650.0
 	while current_x < 7200.0:
 		spawn_tree_at(current_x, $ForestRight)
-		current_x += randf_range(50.0, 95.0)
+		current_x += randf_range(80.0, 130.0)
 
 func spawn_tree_at(x_pos: float, container: Node2D) -> void:
 	var tree_instance = tree_scene.instantiate()
