@@ -1,0 +1,90 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/buildings/barracks.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(50, 20)
+
+[sub_resource type="LabelSettings" id="LabelSettings_status"]
+font_size = 9
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Barracks" type="StaticBody2D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_1")
+
+[node name="VisualSite" type="Node2D" parent="."]
+
+[node name="PoleLeft" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(-22, 0, -22, -24)
+width = 2.0
+default_color = Color(0.38, 0.3, 0.24, 1)
+
+[node name="PoleRight" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(22, 0, 22, -24)
+width = 2.0
+default_color = Color(0.38, 0.3, 0.24, 1)
+
+[node name="Sign" type="ColorRect" parent="VisualSite"]
+offset_left = -10.0
+offset_top = -14.0
+offset_right = 10.0
+offset_bottom = -5.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CrossLines" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(-22, -20, 22, -20)
+width = 1.0
+default_color = Color(0.48, 0.45, 0.35, 1)
+
+[node name="VisualBuilt" type="Node2D" parent="."]
+visible = false
+
+[node name="TentWall" type="ColorRect" parent="VisualBuilt"]
+offset_left = -22.0
+offset_top = -26.0
+offset_right = 22.0
+color = Color(0.32, 0.32, 0.35, 1)
+
+[node name="TentDoor" type="ColorRect" parent="VisualBuilt"]
+offset_left = -6.0
+offset_top = -16.0
+offset_right = 6.0
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="TentRoof" type="Polygon2D" parent="VisualBuilt"]
+color = Color(0.15, 0.35, 0.65, 1)
+polygon = PackedVector2Array(-26, -26, 0, -45, 26, -26, 20, -23, 0, -38, -20, -23)
+
+[node name="FlagPole" type="Line2D" parent="VisualBuilt"]
+points = PackedVector2Array(0, -38, 0, -56)
+width = 2.0
+default_color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="Flag" type="Polygon2D" parent="VisualBuilt"]
+color = Color(0.2, 0.45, 0.8, 1)
+polygon = PackedVector2Array(0, -56, 12, -50, 0, -44)
+
+[node name="LabelStatus" type="Label" parent="."]
+z_index = 5
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -65.0
+offset_right = 100.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Казарма"
+label_settings = SubResource("LabelSettings_status")
+horizontal_alignment = 1
+vertical_alignment = 1

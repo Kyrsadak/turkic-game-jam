@@ -1,0 +1,133 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 8.0
+height = 28.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_instructions"]
+font_size = 9
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -14)
+shape = SubResource("CapsuleShape2D_1")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="LegLeft" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -6.0
+offset_right = -1.0
+color = Color(0.12, 0.12, 0.16, 1)
+
+[node name="LegRight" type="ColorRect" parent="Body"]
+offset_left = 1.0
+offset_top = -6.0
+offset_right = 5.0
+color = Color(0.12, 0.12, 0.16, 1)
+
+[node name="Torso" type="ColorRect" parent="Body"]
+offset_left = -6.0
+offset_top = -20.0
+offset_right = 6.0
+offset_bottom = -6.0
+color = Color(0.2, 0.35, 0.55, 1)
+
+[node name="Head" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -29.0
+offset_right = 5.0
+offset_bottom = -20.0
+color = Color(0.9, 0.72, 0.58, 1)
+
+[node name="Crown" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -32.0
+offset_right = 5.0
+offset_bottom = -29.0
+color = Color(0.95, 0.8, 0.1, 1)
+
+[node name="CrownSpike1" type="ColorRect" parent="Body/Crown"]
+layout_mode = 0
+offset_top = -2.0
+offset_right = 2.0
+color = Color(0.95, 0.8, 0.1, 1)
+
+[node name="CrownSpike2" type="ColorRect" parent="Body/Crown"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -2.0
+offset_right = 6.0
+color = Color(0.95, 0.8, 0.1, 1)
+
+[node name="CrownSpike3" type="ColorRect" parent="Body/Crown"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -2.0
+offset_right = 10.0
+color = Color(0.95, 0.8, 0.1, 1)
+
+[node name="Torch" type="Line2D" parent="Body"]
+position = Vector2(8, -13)
+points = PackedVector2Array(0, 5, 2, -3)
+width = 2.0
+default_color = Color(0.45, 0.3, 0.15, 1)
+
+[node name="TorchFlame" type="ColorRect" parent="Body/Torch"]
+offset_left = 1.0
+offset_top = -6.0
+offset_right = 4.0
+offset_bottom = -3.0
+color = Color(1, 0.45, 0.1, 1)
+
+[node name="WoodPile" type="Node2D" parent="."]
+position = Vector2(0, -32)
+visible = false
+
+[node name="TorchLight" type="PointLight2D" parent="."]
+position = Vector2(10, -16)
+color = Color(1, 0.75, 0.45, 1)
+energy = 0.6
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.5)
+texture = ExtResource("2_light_texture")
+texture_scale = 2.0
+
+[node name="HitCooldown" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -40)
+limit_top = -200
+limit_bottom = 400
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Control"]
+z_index = 5
+layout_mode = 0
+offset_left = -40.0
+offset_top = -65.0
+offset_right = 40.0
+offset_bottom = -50.0
+text = "Игрок (Король)"
+label_settings = SubResource("LabelSettings_instructions")
+horizontal_alignment = 1
+
+[connection signal="timeout" from="HitCooldown" to="." method="_on_hit_cooldown_timeout"]

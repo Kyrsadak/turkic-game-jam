@@ -1,3 +1,12 @@
-# Godot 4+ specific ignores
+# Godot-specific ignores
 .godot/
-/android/
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash*.json
+
+# System ignores
+.DS_Store
+Thumbs.db

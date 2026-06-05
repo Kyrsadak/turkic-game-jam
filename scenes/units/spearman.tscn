@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/units/spearman.gd" id="1_script"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 7.0
+height = 24.0
+
+[node name="Spearman" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 1
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12)
+shape = SubResource("CapsuleShape2D_1")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="LegLeft" type="ColorRect" parent="Body"]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = -1.0
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="LegRight" type="ColorRect" parent="Body"]
+offset_left = 1.0
+offset_top = -4.0
+offset_right = 4.0
+color = Color(0.12, 0.12, 0.15, 1)
+
+[node name="Armor" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -18.0
+offset_right = 5.0
+offset_bottom = -4.0
+color = Color(0.48, 0.5, 0.55, 1)
+
+[node name="Cape" type="ColorRect" parent="Body"]
+z_index = -1
+offset_left = -7.0
+offset_top = -18.0
+offset_right = -5.0
+offset_bottom = -2.0
+color = Color(0.6, 0.15, 0.15, 1)
+
+[node name="Head" type="ColorRect" parent="Body"]
+offset_left = -4.0
+offset_top = -26.0
+offset_right = 4.0
+offset_bottom = -18.0
+color = Color(0.88, 0.72, 0.58, 1)
+
+[node name="Helmet" type="ColorRect" parent="Body"]
+offset_left = -5.0
+offset_top = -29.0
+offset_right = 5.0
+offset_bottom = -25.0
+color = Color(0.38, 0.4, 0.45, 1)
+
+[node name="HelmetNose" type="ColorRect" parent="Body/Helmet"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 6.0
+offset_bottom = 7.0
+color = Color(0.38, 0.4, 0.45, 1)
+
+[node name="Spear" type="Node2D" parent="Body"]
+position = Vector2(0, -11)
+
+[node name="Shaft" type="Line2D" parent="Body/Spear"]
+points = PackedVector2Array(-8, 3, 16, 3)
+width = 1.5
+default_color = Color(0.45, 0.3, 0.18, 1)
+
+[node name="SpearTip" type="Polygon2D" parent="Body/Spear"]
+color = Color(0.7, 0.72, 0.76, 1)
+polygon = PackedVector2Array(16, 1, 23, 3, 16, 5)
