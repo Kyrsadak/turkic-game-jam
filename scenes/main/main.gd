@@ -12,7 +12,7 @@ var vagrant_spawn_timer: float = 30.0
 var wolf_spawn_queue: int = 0
 var wolf_spawn_timer: float = 0.0
 
-@onready var campfire: Node2D = $Campfire
+@onready var campfire: Node2D = get_node_or_null("Campfire")
 @onready var player: CharacterBody2D = $Player
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
 @onready var hud: CanvasLayer = $HUD
@@ -53,23 +53,21 @@ var moon_sprite: Sprite2D
 
 func _ready() -> void:
 	game_over_screen.visible = false
-	campfire.connect("burned_out", Callable(self, "_on_campfire_burned_out"))
-	campfire.connect("fuel_changed", Callable(self, "_on_campfire_fuel_changed"))
+	if is_instance_valid(campfire):
+		campfire.connect("burned_out", Callable(self, "_on_campfire_burned_out"))
+		campfire.connect("fuel_changed", Callable(self, "_on_campfire_fuel_changed"))
+		_on_campfire_fuel_changed(campfire.current_fuel, campfire.max_fuel)
+	else:
+		progress_fuel.value = 0
+		
 	player.connect("wood_count_changed", Callable(self, "_on_player_wood_changed"))
 	
-	# Генерируем леса и пещеры, только если они не добавлены вручную в редакторе
-	var has_left_trees = $ForestLeft and $ForestLeft.get_child_count() > 0
-	var has_right_trees = $ForestRight and $ForestRight.get_child_count() > 0
-	if not has_left_trees and not has_right_trees:
-		generate_forests()
-		
 	if not has_node("CaveLeft") and not has_node("CaveRight"):
 		create_cave_at(-7300.0, false)
 		create_cave_at(7300.0, true)
 	
 	# Начальные значения интерфейса
 	_on_player_wood_changed(player.wood_count)
-	_on_campfire_fuel_changed(campfire.current_fuel, campfire.max_fuel)
 	update_hud_text()
 	
 	# Настраиваем новый фон с горами
@@ -344,112 +342,11 @@ func setup_background() -> void:
 				sprite.region_enabled = true
 				# Задаем огромный регион по горизонтали для покрытия всей карты (-100000..100000)
 				sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
-	else:
-		# Создаем Background Node2D программно, если его нет в сцене
-		bg = Node2D.new()
-		bg.name = "Background"
-		bg.z_index = -100
-		add_child(bg)
-		
-		# Небо День
-		bg_sky_day = Sprite2D.new()
-		bg_sky_day.name = "SkyDay"
-		var tex_sky_day = load("res://assets/textures/небо_день.png")
-		if tex_sky_day:
-			bg_sky_day.texture = tex_sky_day
-			bg_sky_day.centered = true
-			bg_sky_day.position = Vector2(0, -525)
-			bg_sky_day.scale = Vector2(1.5, 1.5)
-			bg.add_child(bg_sky_day)
-			
-		# Небо Ночь
-		bg_sky_night = Sprite2D.new()
-		bg_sky_night.name = "SkyNight"
-		var tex_sky_night = load("res://assets/textures/небо.png")
-		if tex_sky_night:
-			bg_sky_night.texture = tex_sky_night
-			bg_sky_night.centered = true
-			bg_sky_night.position = Vector2(0, -320)
-			bg_sky_night.scale = Vector2(1.5, 1.5)
-			bg.add_child(bg_sky_night)
-			
-		# Горы дальние
-		bg_mountains_far = Sprite2D.new()
-		bg_mountains_far.name = "MountainsFar"
-		var tex_far = load("res://assets/textures/Горы_задний.png")
-		if tex_far:
-			bg_mountains_far.texture = tex_far
-			bg_mountains_far.centered = true
-			bg_mountains_far.position = Vector2(0, -110)
-			bg_mountains_far.scale = Vector2(1.2, 1.2)
-			bg.add_child(bg_mountains_far)
-			
-		# Горы близкие
-		bg_mountains_close = Sprite2D.new()
-		bg_mountains_close.name = "MountainsClose"
-		var tex_close = load("res://assets/textures/Горы.png")
-		if tex_close:
-			bg_mountains_close.texture = tex_close
-			bg_mountains_close.centered = true
-			bg_mountains_close.position = Vector2(0, -160)
-			bg_mountains_close.scale = Vector2(1.2, 1.5)
-			bg.add_child(bg_mountains_close)
-			
-		# Лес задний
-		bg_forest_back = Sprite2D.new()
-		bg_forest_back.name = "ForestBack"
-		var tex_forest = load("res://assets/textures/Деревья_заднийфон.png")
-		if tex_forest:
-			bg_forest_back.texture = tex_forest
-			bg_forest_back.centered = true
-			bg_forest_back.position = Vector2(0, -130)
-			bg_forest_back.scale = Vector2(1.2, 1.2)
-			bg.add_child(bg_forest_back)
-			
-		# Инициализируем позиции
-		if is_instance_valid(bg_sky_day):
-			base_sky_day_pos = bg_sky_day.position
-		if is_instance_valid(bg_sky_night):
-			base_sky_night_pos = bg_sky_night.position
-		base_mountains_far_pos = bg_mountains_far.position
-		base_mountains_close_pos = bg_mountains_close.position
-		base_forest_back_pos = bg_forest_back.position
-		
-		for sprite in [bg_sky_day, bg_sky_night, bg_mountains_far, bg_mountains_close, bg_forest_back]:
-			if is_instance_valid(sprite) and sprite.texture:
-				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-				sprite.region_enabled = true
-				sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
 		
 	var celestial_layer = get_node_or_null("CelestialLayer")
 	if celestial_layer:
 		sun_sprite = celestial_layer.get_node_or_null("SunSprite")
 		moon_sprite = celestial_layer.get_node_or_null("MoonSprite")
-	else:
-		# Создаем отдельный CanvasLayer для небесных тел (Солнце, Луна)
-		# Позиционируем их за игровыми элементами, но перед дальними горами
-		celestial_layer = CanvasLayer.new()
-		celestial_layer.name = "CelestialLayer"
-		celestial_layer.layer = -95
-		add_child(celestial_layer)
-		
-		# Солнце
-		sun_sprite = Sprite2D.new()
-		sun_sprite.name = "SunSprite"
-		var tex_sun = load("res://assets/textures/sun.png")
-		if tex_sun:
-			sun_sprite.texture = tex_sun
-			sun_sprite.modulate.a = 1.0
-			celestial_layer.add_child(sun_sprite)
-			
-		# Луна
-		moon_sprite = Sprite2D.new()
-		moon_sprite.name = "MoonSprite"
-		var tex_moon = load("res://assets/textures/moon.png")
-		if tex_moon:
-			moon_sprite.texture = tex_moon
-			moon_sprite.modulate.a = 0.0
-			celestial_layer.add_child(moon_sprite)
 
 func update_background_and_celestial(delta: float) -> void:
 	if not is_instance_valid(bg_mountains_far) or not is_instance_valid(bg_mountains_close) or not is_instance_valid(bg_forest_back):
