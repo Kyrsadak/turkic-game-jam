@@ -417,7 +417,7 @@ func setup_ground() -> void:
 			sprite.texture = tex
 			sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 			sprite.region_enabled = true
-			sprite.region_rect = Rect2(0, 0, 15000, 64)
+			sprite.region_rect = Rect2(0, 0, 15000, 128)
 			sprite.centered = false
 			sprite.position = Vector2(-7500, 0)
 			ground.add_child(sprite)
