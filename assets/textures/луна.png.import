@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vn2nve3rpc6"
-path="res://.godot/imported/Оброзец.jpg-693c2bded10d9cba005341f720c9efce.ctex"
+uid="uid://cceghnamr76mt"
+path="res://.godot/imported/луна.png-a48745337d47dcff5415df21a0db38b6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://План/Концепт/Оброзец.jpg"
-dest_files=["res://.godot/imported/Оброзец.jpg-693c2bded10d9cba005341f720c9efce.ctex"]
+source_file="res://assets/textures/луна.png"
+dest_files=["res://.godot/imported/луна.png-a48745337d47dcff5415df21a0db38b6.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://l4kb1dwx0qb3"
-path="res://.godot/imported/Концепт.png-12e404c6034b51ffb75754e1404fe34e.ctex"
+uid="uid://bxmwmd17qvayo"
+path="res://.godot/imported/campfire2.png-101402570f611f62cfdf5fc73c889c32.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://План/Концепт/Концепт.png"
-dest_files=["res://.godot/imported/Концепт.png-12e404c6034b51ffb75754e1404fe34e.ctex"]
+source_file="res://assets/textures/campfire/campfire2.png"
+dest_files=["res://.godot/imported/campfire2.png-101402570f611f62cfdf5fc73c889c32.ctex"]
 
 [params]
 

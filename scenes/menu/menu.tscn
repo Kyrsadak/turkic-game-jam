@@ -1,0 +1,336 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scenes/menu/menu.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/menu/background_bg.tscn" id="2_bg"]
+[ext_resource type="Script" path="res://scenes/menu/background_bg.gd" id="3_bg_script"]
+[ext_resource type="FontFile" path="res://assets/Cinzel.ttf" id="4_font"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("4_font")
+font_size = 60
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 6
+shadow_color = Color(0, 0, 0, 0.75)
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
+font = ExtResource("4_font")
+font_size = 14
+font_color = Color(0.85, 0.8, 0.75, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+letter_spacing = 4.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_cursor"]
+font = ExtResource("4_font")
+font_size = 20
+font_color = Color(0.95, 0.8, 0.25, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_settings"]
+bg_color = Color(0.06, 0.06, 0.08, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.7, 0.3, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_settings_title"]
+font = ExtResource("4_font")
+font_size = 24
+font_color = Color(0.85, 0.7, 0.3, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_settings_text"]
+font = ExtResource("4_font")
+font_size = 13
+font_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_button_text"]
+font = ExtResource("4_font")
+font_size = 20
+font_color = Color(1, 1, 1, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_btn"]
+bg_color = Color(0.18, 0.12, 0.08, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.7, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("2_bg")]
+script = ExtResource("3_bg_script")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.18)
+
+[node name="MenuContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="VBoxContainer" parent="MenuContainer"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 80.0
+offset_top = -140.0
+offset_right = 530.0
+offset_bottom = 40.0
+grow_vertical = 2
+theme_override_constants/separation = -8
+alignment = 1
+
+[node name="Title" type="Label" parent="MenuContainer/Logo"]
+layout_mode = 2
+text = "KICK JAMILA"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="Subtitle" type="Label" parent="MenuContainer/Logo"]
+layout_mode = 2
+text = "BREATH OF THE WILDFIRE"
+label_settings = SubResource("LabelSettings_subtitle")
+
+[node name="Spacer" type="Control" parent="MenuContainer/Logo"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="Separator" type="ColorRect" parent="MenuContainer/Logo"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.85, 0.7, 0.3, 0.6)
+
+[node name="Buttons" type="Control" parent="MenuContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -100.0
+offset_right = -80.0
+offset_bottom = 100.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="BtnStart" type="Button" parent="MenuContainer/Buttons"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 45.0
+grow_horizontal = 2
+flat = true
+
+[node name="HBoxStart" type="HBoxContainer" parent="MenuContainer/Buttons/BtnStart"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="CurStart" type="Label" parent="MenuContainer/Buttons/BtnStart/HBoxStart"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+text = "◆"
+label_settings = SubResource("LabelSettings_cursor")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelStart" type="Label" parent="MenuContainer/Buttons/BtnStart/HBoxStart"]
+layout_mode = 2
+text = "START GAME"
+label_settings = SubResource("LabelSettings_button_text")
+vertical_alignment = 1
+
+[node name="BtnSettings" type="Button" parent="MenuContainer/Buttons"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 105.0
+grow_horizontal = 2
+flat = true
+
+[node name="HBoxSettings" type="HBoxContainer" parent="MenuContainer/Buttons/BtnSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="CurSettings" type="Label" parent="MenuContainer/Buttons/BtnSettings/HBoxSettings"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+text = "◆"
+label_settings = SubResource("LabelSettings_cursor")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelSettings" type="Label" parent="MenuContainer/Buttons/BtnSettings/HBoxSettings"]
+layout_mode = 2
+text = "SETTINGS"
+label_settings = SubResource("LabelSettings_button_text")
+vertical_alignment = 1
+
+[node name="BtnQuit" type="Button" parent="MenuContainer/Buttons"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 120.0
+offset_bottom = 165.0
+grow_horizontal = 2
+flat = true
+
+[node name="HBoxQuit" type="HBoxContainer" parent="MenuContainer/Buttons/BtnQuit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="CurQuit" type="Label" parent="MenuContainer/Buttons/BtnQuit/HBoxQuit"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+text = "◆"
+label_settings = SubResource("LabelSettings_cursor")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelQuit" type="Label" parent="MenuContainer/Buttons/BtnQuit/HBoxQuit"]
+layout_mode = 2
+text = "QUIT"
+label_settings = SubResource("LabelSettings_button_text")
+vertical_alignment = 1
+
+[node name="Footer" type="Label" parent="MenuContainer"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -40.0
+offset_right = -40.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 11
+text = "© 2026 JAMILA GAMES. ALL RIGHTS RESERVED."
+horizontal_alignment = 2
+
+[node name="SettingsPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(200, 150)
+theme_override_styles/panel = SubResource("StyleBoxFlat_settings")
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "SETTINGS"
+label_settings = SubResource("LabelSettings_settings_title")
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="SettingsPanel/VBox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "MASTER VOLUME"
+label_settings = SubResource("LabelSettings_settings_text")
+
+[node name="VolumeSlider" type="HSlider" parent="SettingsPanel/VBox"]
+layout_mode = 2
+value = 80.0
+
+[node name="SpacerControl" type="Control" parent="SettingsPanel/VBox"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="ControlLabel" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "CONTROLS: A/D - MOVE, W - JUMP, E - INTERACT"
+label_settings = SubResource("LabelSettings_settings_text")
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="SettingsPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CloseSettingsBtn" type="Button" parent="SettingsPanel/VBox"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_close_btn")
+text = "CLOSE"
