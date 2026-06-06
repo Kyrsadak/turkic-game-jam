@@ -7,8 +7,6 @@ var current_day: int = 1
 var is_day: bool = true
 var time_in_state: float = 0.0
 var game_over_active: bool = false
-var is_game_started: bool = false
-var menu_virtual_cam_x: float = 0.0
 
 var vagrant_spawn_timer: float = 30.0
 var wolf_spawn_queue: int = 0
@@ -80,16 +78,7 @@ func _ready() -> void:
 	# Настраиваем текстуру земли под ногами
 	setup_ground()
 
-	# Блокировка игрока и HUD для стартового меню
-	var menu = get_node_or_null("StartMenu/Menu")
-	if menu:
-		is_game_started = false
-		player.set_physics_process(false)
-		hud.visible = false
-		set_game_world_visible(false)
-		menu.connect("start_pressed", Callable(self, "_on_menu_start_pressed"))
-	else:
-		is_game_started = true
+
 
 func _process(delta: float) -> void:
 	if game_over_active:
@@ -127,11 +116,7 @@ func _process(delta: float) -> void:
 			else:
 				canvas_modulate.color = night_color
 
-	if not is_game_started:
-		# В меню костер не сгорает
-		if is_instance_valid(campfire):
-			campfire.current_fuel = 200.0  # Держим на стартовом значении
-		return
+
 
 	# Спавн бродяг (днем)
 	if is_day:
@@ -491,17 +476,13 @@ func update_background_and_celestial(delta: float) -> void:
 	if is_instance_valid(bg_sky_night):
 		bg_sky_night.modulate.a = transition_factor
 	
-	# 2.5. Применяем многослойный параллакс-эффект на основе позиции камеры игрока (или виртуальной в меню)
+	# 2.5. Применяем многослойный параллакс-эффект на основе позиции камеры игрока
 	var cam_pos = Vector2.ZERO
-	if is_game_started:
-		var camera = player.get_node_or_null("Camera2D")
-		if camera:
-			cam_pos = camera.get_screen_center_position()
-		else:
-			cam_pos = player.global_position
+	var camera = player.get_node_or_null("Camera2D")
+	if camera:
+		cam_pos = camera.get_screen_center_position()
 	else:
-		menu_virtual_cam_x += 100.0 * delta # Эмулируем постоянный сдвиг камеры вправо
-		cam_pos = Vector2(menu_virtual_cam_x, 0)
+		cam_pos = player.global_position
 		
 	# Применяем множители для каждого слоя (эффект глубины):
 	# Небо дня (двигается медленнее всего по X, следует по Y)
@@ -606,62 +587,6 @@ func setup_ground() -> void:
 				sprite.position = Vector2(-7500, 0)
 				ground.add_child(sprite)
 
-func _on_menu_start_pressed() -> void:
-	is_game_started = true
-	time_in_state = 0.0
-	is_day = true
-	current_day = 1
-	
-	# Сброс топлива костра к стартовому
-	if is_instance_valid(campfire):
-		campfire.current_fuel = 200.0
-		campfire.is_burned_out = false
-		campfire.emit_signal("fuel_changed", campfire.current_fuel, campfire.max_fuel)
-		
-	# Плавно проявляем игровой мир
-	fade_in_game_world()
-	
-	# Включаем физику игрока
-	if is_instance_valid(player):
-		player.set_physics_process(true)
-		
-	# Показываем HUD
-	if is_instance_valid(hud):
-		hud.visible = true
-		_on_player_wood_changed(player.wood_count)
-		_on_campfire_fuel_changed(campfire.current_fuel, campfire.max_fuel)
-		update_hud_text()
-
-func set_game_world_visible(p_visible: bool) -> void:
-	var nodes = [
-		player,
-		campfire,
-		get_node_or_null("Ground"),
-		get_node_or_null("ForestLeft"),
-		get_node_or_null("ForestRight"),
-		get_node_or_null("InitialVagrants"),
-		get_node_or_null("TileMapLayer")
-	]
-	for node in nodes:
-		if is_instance_valid(node):
-			node.visible = p_visible
-
-func fade_in_game_world() -> void:
-	var nodes = [
-		player,
-		campfire,
-		get_node_or_null("Ground"),
-		get_node_or_null("ForestLeft"),
-		get_node_or_null("ForestRight"),
-		get_node_or_null("InitialVagrants"),
-		get_node_or_null("TileMapLayer")
-	]
-	var tween = create_tween().set_parallel(true)
-	for node in nodes:
-		if is_instance_valid(node):
-			node.visible = true
-			node.modulate.a = 0.0
-			tween.tween_property(node, "modulate:a", 1.0, 0.6)
 
 
 

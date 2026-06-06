@@ -18,7 +18,6 @@
 [ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="17_mountains_close"]
 [ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="18_forest_back"]
 [ext_resource type="Texture2D" path="res://assets/textures/небо_день.png" id="19_sky_day"]
-[ext_resource type="PackedScene" path="res://scenes/menu/menu.tscn" id="20_menu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
@@ -697,17 +696,6 @@ position = Vector2(-60, 0)
 
 [node name="Vagrant2" parent="InitialVagrants" unique_id=1032120862 instance=ExtResource("8_vagrant")]
 position = Vector2(70, 0)
-
-[node name="StartMenu" type="CanvasLayer" parent="."]
-layer = 10
-
-[node name="Menu" parent="StartMenu" instance=ExtResource("20_menu")]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=406665461]
 
