@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/units/lumberjack.gd" id="1_script"]
 [ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="2_footstep"]
 [ext_resource type="AudioStream" path="res://voice/player_chop_swing/1.mp3" id="3_chop_swing"]
-[ext_resource type="AudioStream" path="res://voice/player_chop_swing/2.mp3" id="4_chop_hit"]
+[ext_resource type="AudioStream" path="res://voice/player_chop_swing/3.mp3" id="4_chop_hit"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 7.0

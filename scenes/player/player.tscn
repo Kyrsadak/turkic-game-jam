@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
 [ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="3_footstep"]
 [ext_resource type="AudioStream" path="res://voice/player_chop_swing/1.mp3" id="4_chop_swing"]
-[ext_resource type="AudioStream" path="res://voice/player_chop_swing/2.mp3" id="5_chop_hit"]
+[ext_resource type="AudioStream" path="res://voice/player_chop_swing/3.mp3" id="5_chop_hit"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 8.0
@@ -108,15 +108,15 @@ texture_scale = 3.2
 
 [node name="FootstepAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_footstep")
-volume_db = -4.5
+volume_db = -6.4
 
 [node name="ChopSwingAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_chop_swing")
-volume_db = -2.0
+volume_db = -3.9
 
 [node name="ChopHitAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_chop_hit")
-volume_db = -4.0
+volume_db = -11.7
 
 [node name="HitCooldown" type="Timer" parent="."]
 wait_time = 0.25
