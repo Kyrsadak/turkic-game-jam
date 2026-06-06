@@ -14,13 +14,27 @@ var is_hitting: bool = false
 @onready var wood_pile: Node2D = $WoodPile
 @onready var hit_cooldown: Timer = $HitCooldown
 @onready var camera: Camera2D = $Camera2D
+@onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
+@onready var chop_swing_audio: AudioStreamPlayer2D = $ChopSwingAudio
+@onready var chop_hit_audio: AudioStreamPlayer2D = $ChopHitAudio
 
 var shake_strength: float = 0.0
 var shake_decay: float = 12.0
+var footstep_timer: float = 0.0
+var footstep_base_volume_db: float = -6.4
+var footstep_fadeout_speed_db: float = 42.0
+var chop_sound_sequence: int = 0
+var chop_hit_impact_delay_sec: float = 0.16
+
+const AXE_HITBOX_OFFSET: Vector2 = Vector2(14.0, -16.0)
+const AXE_HITBOX_SIZE: Vector2 = Vector2(24.0, 26.0)
 
 func _ready() -> void:
 	add_to_group("player")
 	update_wood_visuals()
+	footstep_audio.volume_db = footstep_base_volume_db
+	chop_swing_audio.max_polyphony = 3
+	chop_hit_audio.max_polyphony = 4
 	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
 
 func _physics_process(delta: float) -> void:
@@ -62,6 +76,7 @@ func _physics_process(delta: float) -> void:
 			body.position = Vector2(0, 0)
 
 	move_and_slide()
+	update_footsteps(delta)
 
 	# Обработка клавиши E или клика мыши для взаимодействия
 	var wants_to_interact = Input.is_key_pressed(KEY_E) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
@@ -89,11 +104,10 @@ func perform_interaction() -> void:
 				is_hitting = false
 				return
 
-	# 2. Проверяем, есть ли рядом дерево для рубки
-	var tree = get_closest_in_group("tree", 65.0)
-	if tree and not tree.is_felled:
-		start_hit_animation()
-		tree.hit_tree(global_position.x)
+	# 2. Проверяем, касается ли хитбокс топора дерева
+	var tree = get_tree_in_axe_hitbox()
+	if tree:
+		start_hit_animation(tree)
 		return
 
 	# 3. Проверяем здания для сдачи дров / найма
@@ -124,10 +138,14 @@ func perform_interaction() -> void:
 			start_hit_animation()
 			return
 
-func start_hit_animation() -> void:
+	# 5. Если рядом нет цели для взаимодействия — все равно делаем взмах
+	start_hit_animation()
+
+func start_hit_animation(tree_to_hit: Node = null) -> void:
 	is_hitting = true
 	hit_cooldown.start()
 	apply_camera_shake(1.8)
+	play_chop_audio_sequence(tree_to_hit)
 	
 	# Эффект удара (наклон тела)
 	var tween = create_tween()
@@ -138,6 +156,76 @@ func start_hit_animation() -> void:
 	
 	await tween.finished
 	is_hitting = false
+
+func play_chop_audio_sequence(tree_to_hit: Node = null) -> void:
+	chop_sound_sequence += 1
+	var current_sequence: int = chop_sound_sequence
+
+	if tree_to_hit == null:
+		chop_swing_audio.pitch_scale = randf_range(0.72, 0.82)
+		chop_swing_audio.play()
+		return
+
+	chop_hit_audio.pitch_scale = randf_range(0.74, 0.84)
+	await get_tree().create_timer(chop_hit_impact_delay_sec).timeout
+	if current_sequence != chop_sound_sequence:
+		return
+	if is_instance_valid(tree_to_hit):
+		tree_to_hit.hit_tree(global_position.x)
+	chop_hit_audio.play()
+
+func get_tree_in_axe_hitbox() -> Node2D:
+	var axe_hitbox_rect := get_axe_hitbox_rect()
+	var trees = get_tree().get_nodes_in_group("tree")
+	var closest_tree: Node2D = null
+	var closest_dist := INF
+
+	for tree in trees:
+		if not (tree is Node2D):
+			continue
+		var tree_node := tree as Node2D
+		if tree_node.get("is_felled") == true:
+			continue
+		var tree_rect := get_tree_contact_rect(tree_node)
+		if not axe_hitbox_rect.intersects(tree_rect):
+			continue
+		var dist := global_position.distance_to(tree_node.global_position)
+		if dist < closest_dist:
+			closest_dist = dist
+			closest_tree = tree_node
+
+	return closest_tree
+
+func get_axe_hitbox_rect() -> Rect2:
+	var character_scale := scale.abs()
+	var center := global_position + Vector2(
+		AXE_HITBOX_OFFSET.x * character_scale.x * body.scale.x,
+		AXE_HITBOX_OFFSET.y * character_scale.y
+	)
+	var size := Vector2(
+		AXE_HITBOX_SIZE.x * character_scale.x,
+		AXE_HITBOX_SIZE.y * character_scale.y
+	)
+	return Rect2(center - size * 0.5, size)
+
+func get_tree_contact_rect(tree_node: Node2D) -> Rect2:
+	var collision_shape := tree_node.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision_shape and collision_shape.shape is RectangleShape2D:
+		var shape := collision_shape.shape as RectangleShape2D
+		var global_scale := tree_node.scale.abs()
+		var center := tree_node.global_position + Vector2(
+			collision_shape.position.x * global_scale.x,
+			collision_shape.position.y * global_scale.y
+		)
+		var size := Vector2(
+			shape.size.x * global_scale.x,
+			shape.size.y * global_scale.y
+		)
+		return Rect2(center - size * 0.5, size)
+
+	# Fallback, если форма дерева изменилась или отсутствует.
+	var fallback_size := Vector2(44.0, 74.0)
+	return Rect2(tree_node.global_position - fallback_size * 0.5, fallback_size)
 
 func add_wood(amount: int = 1) -> bool:
 	if wood_count < max_wood_carry:
@@ -168,3 +256,22 @@ func _on_hit_cooldown_timeout() -> void:
 
 func apply_camera_shake(strength: float) -> void:
 	shake_strength = strength
+
+func update_footsteps(delta: float) -> void:
+	var is_walking = is_on_floor() and abs(velocity.x) > 5.0 and not is_hitting
+	if is_walking:
+		footstep_audio.volume_db = move_toward(footstep_audio.volume_db, footstep_base_volume_db, footstep_fadeout_speed_db * delta)
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			footstep_audio.stop()
+			footstep_audio.volume_db = footstep_base_volume_db
+			footstep_audio.pitch_scale = randf_range(0.92, 0.98)
+			footstep_audio.play()
+			footstep_timer = 0.36
+	else:
+		footstep_timer = 0.0
+		if footstep_audio.playing:
+			footstep_audio.volume_db = move_toward(footstep_audio.volume_db, -40.0, footstep_fadeout_speed_db * delta)
+			if footstep_audio.volume_db <= -39.0:
+				footstep_audio.stop()
+				footstep_audio.volume_db = footstep_base_volume_db

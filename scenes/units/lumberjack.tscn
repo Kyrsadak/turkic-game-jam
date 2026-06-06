@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/units/lumberjack.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="2_footstep"]
+[ext_resource type="AudioStream" path="res://voice/player_chop_swing/1.mp3" id="3_chop_swing"]
+[ext_resource type="AudioStream" path="res://voice/player_chop_swing/2.mp3" id="4_chop_hit"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 7.0
@@ -106,3 +109,15 @@ offset_top = -18.0
 offset_right = 7.0
 offset_bottom = -15.0
 color = Color(0.58, 0.38, 0.22, 1)
+
+[node name="FootstepAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_footstep")
+volume_db = -19.4
+
+[node name="ChopSwingAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_chop_swing")
+volume_db = -17.4
+
+[node name="ChopHitAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_chop_hit")
+volume_db = -19.9

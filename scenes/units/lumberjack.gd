@@ -18,11 +18,19 @@ var chop_timer: float = 0.0
 @onready var body: Node2D = $Body
 @onready var axe: Node2D = $Body/Axe
 @onready var wood_pile: Node2D = $WoodPile
+@onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
+@onready var chop_swing_audio: AudioStreamPlayer2D = $ChopSwingAudio
+@onready var chop_hit_audio: AudioStreamPlayer2D = $ChopHitAudio
+
+var footstep_timer: float = 0.0
+var footstep_base_volume_db: float = -19.4
+var footstep_fadeout_speed_db: float = 38.0
 
 func _ready() -> void:
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
+	footstep_audio.volume_db = footstep_base_volume_db
 	TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
@@ -106,21 +114,31 @@ func _physics_process(delta: float) -> void:
 					current_state = State.IDLE
 
 	move_and_slide()
+	update_footsteps(delta)
 
 func chop_tree() -> void:
 	if is_instance_valid(target_tree):
-		target_tree.hit_tree(global_position.x, chop_damage)
-		
 		# Анимация взмаха топора
 		var tween = create_tween()
 		axe.rotation = -0.5
 		tween.tween_property(axe, "rotation", 1.1, 0.12)
 		tween.tween_property(axe, "rotation", 0.0, 0.18)
+		play_chop_audio_sequence(target_tree)
 		
 		# Эффект покачивания лесоруба при ударе
 		var tween_body = create_tween()
 		tween_body.tween_property(body, "scale:y", 0.85, 0.06)
 		tween_body.tween_property(body, "scale:y", 1.0, 0.12)
+
+func play_chop_audio_sequence(tree_to_hit: Node2D) -> void:
+	chop_swing_audio.stop()
+	chop_hit_audio.stop()
+	chop_swing_audio.pitch_scale = randf_range(0.92, 0.98)
+	chop_hit_audio.pitch_scale = randf_range(0.95, 1.0)
+	chop_swing_audio.play()
+	if is_instance_valid(tree_to_hit):
+		tree_to_hit.hit_tree(global_position.x, chop_damage)
+	chop_hit_audio.play()
 
 func add_wood(amount: int = 1) -> bool:
 	if wood_count < max_wood_carry:
@@ -149,3 +167,22 @@ func find_closest_tree() -> Node2D:
 func animate_walk() -> void:
 	var pulse = sin(Time.get_ticks_msec() * 0.02) * 0.08
 	body.scale.y = 1.0 + pulse
+
+func update_footsteps(delta: float) -> void:
+	var is_walking = is_on_floor() and abs(velocity.x) > 5.0
+	if is_walking:
+		footstep_audio.volume_db = move_toward(footstep_audio.volume_db, footstep_base_volume_db, footstep_fadeout_speed_db * delta)
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			footstep_audio.stop()
+			footstep_audio.volume_db = footstep_base_volume_db
+			footstep_audio.pitch_scale = randf_range(0.88, 0.94)
+			footstep_audio.play()
+			footstep_timer = 0.34
+	else:
+		footstep_timer = 0.0
+		if footstep_audio.playing:
+			footstep_audio.volume_db = move_toward(footstep_audio.volume_db, -40.0, footstep_fadeout_speed_db * delta)
+			if footstep_audio.volume_db <= -39.0:
+				footstep_audio.stop()
+				footstep_audio.volume_db = footstep_base_volume_db

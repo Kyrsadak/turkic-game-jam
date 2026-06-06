@@ -10,12 +10,14 @@ var health: float = 30.0
 var is_felled: bool = false
 var regrow_timer: float = 0.0
 var feller_was_lumberjack: bool = false
+const FALL_ANIMATION_DURATION: float = 1.2
 
 @onready var visual: Node2D = $Visual
 @onready var crown: Polygon2D = $Visual/Crown
 @onready var trunk: ColorRect = $Visual/Trunk
 @onready var particles: CPUParticles2D = $Particles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var fall_audio: AudioStreamPlayer2D = $FallAudio
 
 var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 
@@ -97,6 +99,9 @@ func hit_tree(hitter_x: float, damage: float = 1.0) -> void:
 func fell_tree(feller_x: float) -> void:
 	is_felled = true
 	collision_shape.disabled = true
+	if fall_audio.playing:
+		fall_audio.stop()
+	fall_audio.play()
 	
 	# Направление падения (от лесоруба)
 	var fall_dir = 1.0 if feller_x < global_position.x else -1.0
@@ -105,8 +110,12 @@ func fell_tree(feller_x: float) -> void:
 	var tween = create_tween()
 	tween.set_parallel(true)
 	# Поворачиваем вокруг основания (ось X=0, Y=0 локально находится у корней)
-	tween.tween_property(visual, "rotation", fall_dir * (PI / 2.2), 1.2).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(visual, "modulate:a", 0.0, 1.2)
+	tween.tween_property(visual, "rotation", fall_dir * (PI / 2.2), FALL_ANIMATION_DURATION).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(visual, "modulate:a", 0.0, FALL_ANIMATION_DURATION)
+	tween.finished.connect(func():
+		if fall_audio.playing:
+			fall_audio.stop()
+	)
 	
 	# Тряска камеры при ударе дерева об землю
 	var players = get_tree().get_nodes_in_group("player")
@@ -141,6 +150,8 @@ func regrow() -> void:
 	collision_shape.disabled = false
 	visual.rotation = 0.0
 	feller_was_lumberjack = false
+	if fall_audio.playing:
+		fall_audio.stop()
 	
 	# Плавное появление
 	var tween = create_tween()

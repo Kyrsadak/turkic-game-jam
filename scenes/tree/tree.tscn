@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://bi400nj0205hv"]
+[gd_scene load_steps=8 format=3 uid="uid://bi400nj0205hv"]
 
 [ext_resource type="Script" uid="uid://bmn62guka1ffu" path="res://scenes/tree/tree.gd" id="1_script"]
 [ext_resource type="Shader" uid="uid://r36ao5ywkumc" path="res://assets/shaders/wind_sway.gdshader" id="2_shader"]
+[ext_resource type="AudioStream" path="res://voice/tree_fall/1.mp3" id="3_tree_fall"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(16, 56)
@@ -76,3 +77,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1300669475]
+
+[node name="FallAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_tree_fall")
+volume_db = -2.5
