@@ -32,28 +32,40 @@ script = ExtResource("1_script")
 z_index = -100
 
 [node name="Sky" type="Sprite2D" parent="Background" unique_id=1862090506]
-position = Vector2(-2000, -750)
-scale = Vector2(1.18, 1.26)
+texture_repeat = 1
+position = Vector2(0, -700)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("12_sky")
 centered = false
+region_enabled = true
+region_rect = Rect2(-100000, 0, 200000, 511)
 
 [node name="MountainsFar" type="Sprite2D" parent="Background" unique_id=648521975]
-position = Vector2(-2000, -450)
-scale = Vector2(1.19, 1.19)
+texture_repeat = 1
+position = Vector2(0, -230)
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("13_mountains_far")
 centered = false
+region_enabled = true
+region_rect = Rect2(-100000, 0, 200000, 203)
 
 [node name="MountainsClose" type="Sprite2D" parent="Background" unique_id=648521976]
-position = Vector2(-2000, -320)
-scale = Vector2(1.17, 1.79)
+texture_repeat = 1
+position = Vector2(0, -330)
+scale = Vector2(1.2, 1.5)
 texture = ExtResource("17_mountains_close")
 centered = false
+region_enabled = true
+region_rect = Rect2(-100000, 0, 200000, 229)
 
 [node name="ForestBack" type="Sprite2D" parent="Background" unique_id=648521977]
-position = Vector2(-2000, -220)
-scale = Vector2(1.17, 1.17)
+texture_repeat = 1
+position = Vector2(0, -270)
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("18_forest_back")
 centered = false
+region_enabled = true
+region_rect = Rect2(-100000, 0, 200000, 233)
 
 [node name="CelestialLayer" type="CanvasLayer" parent="." unique_id=1260140329]
 layer = -95
