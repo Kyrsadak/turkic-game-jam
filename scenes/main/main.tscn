@@ -3,21 +3,8 @@
 [ext_resource type="Script" uid="uid://bibkxaqw2u657" path="res://scenes/main/main.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/wall.tscn" id="5_wall"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="6_lumberjack_house"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="7_barracks"]
-[ext_resource type="PackedScene" path="res://scenes/vagrant/vagrant.tscn" id="8_vagrant"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/builder_house.tscn" id="9_builder_house"]
-[ext_resource type="PackedScene" path="res://scenes/buildings/archer_tower.tscn" id="10_archer_tower"]
 [ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
-[ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="12_sky"]
-[ext_resource type="Texture2D" uid="uid://v0bpw3wypise" path="res://assets/textures/Горы_задний.png" id="13_mountains_far"]
-[ext_resource type="Texture2D" uid="uid://cjwkwtypypqk3" path="res://assets/textures/sun.png" id="14_sun"]
-[ext_resource type="Texture2D" uid="uid://l55qorxfwkcx" path="res://assets/textures/moon.png" id="15_moon"]
 [ext_resource type="Texture2D" uid="uid://njtq2y5qwnl2" path="res://assets/textures/ground_snowy.png" id="16_ground_snowy"]
-[ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="17_mountains_close"]
-[ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="18_forest_back"]
-[ext_resource type="Texture2D" uid="uid://bbekeqol4ortb" path="res://assets/textures/небо_день.png" id="19_sky_day"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
@@ -28,6 +15,12 @@ size = Vector2(15000, 40)
 script = ExtResource("1_script")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
+
+[node name="Campfire" parent="." unique_id=1726977443 instance=ExtResource("3_campfire")]
+position = Vector2(0, -11)
+
+[node name="Tree" parent="." unique_id=253433487 instance=ExtResource("11_tree")]
+position = Vector2(-284, 0)
 
 [node name="Ground" type="StaticBody2D" parent="." unique_id=785241900]
 collision_mask = 0
@@ -59,7 +52,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 15000, 128)
 
 [node name="Player" parent="." unique_id=517748356 instance=ExtResource("2_player")]
-position = Vector2(-35, -25)
+position = Vector2(-113, -9)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=406665461]
 
