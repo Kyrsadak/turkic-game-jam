@@ -78,7 +78,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed * 0.25)
 		if is_on_floor() and not is_hitting:
-			body.scale = Vector2(1, 1)
+			body.scale.y = 1.0
 			body.position = Vector2(0, 0)
 
 	move_and_slide()

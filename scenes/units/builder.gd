@@ -54,7 +54,7 @@ func _physics_process(delta: float) -> void:
 					animate_walk()
 				else:
 					velocity.x = move_toward(velocity.x, 0, speed * 0.35)
-					body.scale = Vector2(1, 1)
+					body.scale.y = 1.0
 
 		State.WALKING_TO_WOOD:
 			# Проверяем, не нашел ли уже дерево на земле

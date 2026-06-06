@@ -63,8 +63,9 @@ func _ready() -> void:
 	player.connect("wood_count_changed", Callable(self, "_on_player_wood_changed"))
 	
 	if not has_node("CaveLeft") and not has_node("CaveRight"):
-		create_cave_at(-7300.0, false)
-		create_cave_at(7300.0, true)
+		var limits = get_ground_x_limits()
+		create_cave_at(limits.x + 80.0, false)
+		create_cave_at(limits.y - 80.0, true)
 	
 	# Начальные значения интерфейса
 	_on_player_wood_changed(player.wood_count)
@@ -75,6 +76,10 @@ func _ready() -> void:
 	
 	# Настраиваем текстуру земли под ногами
 	setup_ground()
+	
+	# Спавним начальных бродяг поближе к костру на старте игры
+	for i in range(2):
+		spawn_vagrant_if_needed()
 
 
 
@@ -176,13 +181,25 @@ func spawn_vagrant_if_needed() -> void:
 	
 	# Ограничиваем количество свободных жителей в мире
 	if total_vagrants + total_citizens < 10:
-		# Выбираем случайную сторону спавна бродяг (далеко в лесу)
-		var spawn_side = 1.0 if randf() > 0.5 else -1.0
-		var spawn_x = spawn_side * randf_range(4000.0, 6800.0)
+		var ground_y = 0.0
+		var campfire_x = 0.0
+		if is_instance_valid(campfire):
+			ground_y = campfire.global_position.y
+			campfire_x = campfire.global_position.x
+		elif is_instance_valid(player):
+			ground_y = player.global_position.y
+			campfire_x = player.global_position.x
+			
+		# Выбираем случайную координату спавна бродяг в пределах видимости от костра
+		var spawn_x = campfire_x + randf_range(-600.0, 600.0)
+		
+		# Но убедимся, что координаты спавна лежат в пределах реальной земли
+		var limits = get_ground_x_limits()
+		spawn_x = clamp(spawn_x, limits.x + 100.0, limits.y - 100.0)
 		
 		var vagrant = vagrant_scene.instantiate()
 		add_child(vagrant)
-		vagrant.global_position = Vector2(spawn_x, -10)
+		vagrant.global_position = Vector2(spawn_x, ground_y - 20.0)
 		
 		# Эффект плавного появления
 		vagrant.modulate.a = 0.0
@@ -190,36 +207,52 @@ func spawn_vagrant_if_needed() -> void:
 		tween.tween_property(vagrant, "modulate:a", 1.0, 1.0)
 
 func spawn_wolf() -> void:
-	# Волки спавнятся из пещер по краям карты
+	# Волки спавнятся по краям карты на реальной земле
+	var ground_y = 0.0
+	if is_instance_valid(campfire):
+		ground_y = campfire.global_position.y
+	elif is_instance_valid(player):
+		ground_y = player.global_position.y
+
+	var limits = get_ground_x_limits()
 	var spawn_side = 1.0 if randf() > 0.5 else -1.0
-	var spawn_x = spawn_side * 7300.0
+	var spawn_x = limits.y - 80.0 if spawn_side > 0 else limits.x + 80.0
 	
 	var cave_name = "CaveRight" if spawn_side > 0 else "CaveLeft"
 	var cave = get_node_or_null(cave_name)
 	if cave:
 		spawn_x = cave.global_position.x
+		ground_y = cave.global_position.y
 	
 	var wolf = wolf_scene.instantiate()
 	add_child(wolf)
-	wolf.global_position = Vector2(spawn_x, -10)
+	wolf.global_position = Vector2(spawn_x, ground_y - 10)
 	
 	wolf.max_health = 20.0 + current_day * 4.0
 	wolf.health = wolf.max_health
 	wolf.speed = 90.0 + current_day * 2.0
 
 func spawn_bear() -> void:
-	# Медведи спавнятся из пещер по краям карты
+	# Медведи спавнятся по краям карты на реальной земле
+	var ground_y = 0.0
+	if is_instance_valid(campfire):
+		ground_y = campfire.global_position.y
+	elif is_instance_valid(player):
+		ground_y = player.global_position.y
+
+	var limits = get_ground_x_limits()
 	var spawn_side = 1.0 if randf() > 0.5 else -1.0
-	var spawn_x = spawn_side * 7300.0
+	var spawn_x = limits.y - 80.0 if spawn_side > 0 else limits.x + 80.0
 	
 	var cave_name = "CaveRight" if spawn_side > 0 else "CaveLeft"
 	var cave = get_node_or_null(cave_name)
 	if cave:
 		spawn_x = cave.global_position.x
+		ground_y = cave.global_position.y
 	
 	var bear = bear_scene.instantiate()
 	add_child(bear)
-	bear.global_position = Vector2(spawn_x, -10)
+	bear.global_position = Vector2(spawn_x, ground_y - 10)
 	
 	bear.max_health = 70.0 + current_day * 10.0
 	bear.health = bear.max_health
@@ -245,12 +278,26 @@ func generate_forests() -> void:
 func spawn_tree_at(x_pos: float, container: Node2D) -> void:
 	var tree_instance = tree_scene.instantiate()
 	container.add_child(tree_instance)
-	tree_instance.global_position = Vector2(x_pos, 0)
+	
+	var ground_y = 0.0
+	if is_instance_valid(campfire):
+		ground_y = campfire.global_position.y
+	elif is_instance_valid(player):
+		ground_y = player.global_position.y
+		
+	tree_instance.global_position = Vector2(x_pos, ground_y)
 
 func create_cave_at(x_pos: float, is_right_side: bool) -> void:
 	var cave_node = Node2D.new()
 	cave_node.name = "CaveRight" if is_right_side else "CaveLeft"
-	cave_node.global_position = Vector2(x_pos, 0)
+	
+	var ground_y = 0.0
+	if is_instance_valid(campfire):
+		ground_y = campfire.global_position.y
+	elif is_instance_valid(player):
+		ground_y = player.global_position.y
+		
+	cave_node.global_position = Vector2(x_pos, ground_y)
 	
 	# Архитектура пещеры с использованием полигона
 	var poly = Polygon2D.new()
@@ -483,6 +530,26 @@ func setup_ground() -> void:
 				sprite.centered = false
 				sprite.position = Vector2(-7500, 0)
 				ground.add_child(sprite)
+
+func get_ground_x_limits() -> Vector2:
+	var tilemap = get_node_or_null("CanvasModulate/TileMapLayer")
+	if tilemap and tilemap is TileMapLayer:
+		var cells = tilemap.get_used_cells()
+		if cells.size() > 0:
+			var min_x = INF
+			var max_x = -INF
+			for cell in cells:
+				var global_cell_x = tilemap.to_global(tilemap.map_to_local(cell)).x
+				if global_cell_x < min_x:
+					min_x = global_cell_x
+				if global_cell_x > max_x:
+					max_x = global_cell_x
+			return Vector2(min_x, max_x)
+	
+	# Резервный вариант, если тайлмап пустой или не найден
+	if is_instance_valid(campfire):
+		return Vector2(campfire.global_position.x - 2000.0, campfire.global_position.x + 2000.0)
+	return Vector2(-2000.0, 4000.0)
 
 
 

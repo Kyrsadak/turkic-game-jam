@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 	match current_state:
 		State.IDLE:
 			velocity.x = move_toward(velocity.x, 0, speed * 0.3)
-			body.scale = Vector2(1, 1)
+			body.scale.y = 1.0
 			
 			# Если в доме лесоруба освободилось место и есть деревья — идем рубить
 			if is_instance_valid(home_house) and home_house.wood_stored < home_house.max_storage:

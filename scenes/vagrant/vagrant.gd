@@ -26,7 +26,12 @@ func _ready() -> void:
 	footstep_audio.volume_db = footstep_base_volume_db
 	label_status.visible = false
 	setup_tooltip_style(label_status)
-	TextureLoader.try_apply_texture(self, "res://assets/textures/vagrant.png", Vector2(0, -14))
+	
+	if has_node("AnimatedSprite2D"):
+		var anim_sprite = $AnimatedSprite2D
+		anim_sprite.reparent(body)
+	else:
+		TextureLoader.try_apply_texture(self, "res://assets/textures/vagrant.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -47,7 +52,7 @@ func _physics_process(delta: float) -> void:
 				body.scale.y = 1.0 + pulse
 			else:
 				velocity.x = move_toward(velocity.x, 0, speed * 0.3)
-				body.scale = Vector2(1, 1)
+				body.scale.y = 1.0
 				
 		# Нанятые рабочие ходят за игроком молча, не создавая надписей
 		label_status.visible = false
@@ -65,7 +70,7 @@ func _physics_process(delta: float) -> void:
 			body.scale.y = 1.0 + pulse
 		else:
 			velocity.x = move_toward(velocity.x, 0, speed * 0.35)
-			body.scale = Vector2(1, 1)
+			body.scale.y = 1.0
 			
 		# Показываем статус найма
 		var player = get_closest_player()
@@ -80,6 +85,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	update_footsteps(delta)
+	update_animations()
 
 func choose_new_wander_target() -> void:
 	var campfire = get_tree().get_first_node_in_group("campfire")
@@ -93,12 +99,13 @@ func hire() -> bool:
 	is_hired = true
 	
 	# Меняем одежду на более чистую
-	robe.color = Color(0.6, 0.45, 0.35, 1.0)
+	if is_instance_valid(robe):
+		robe.color = Color(0.6, 0.45, 0.35, 1.0)
 	
 	# Эффект найма
 	var tween = create_tween()
-	tween.tween_property(body, "scale", Vector2(1.3, 0.7), 0.1)
-	tween.tween_property(body, "scale", Vector2(1.0, 1.0), 0.15)
+	tween.tween_property(body, "scale", Vector2(1.3 * sign(body.scale.x), 0.7), 0.1)
+	tween.tween_property(body, "scale", Vector2(1.0 * sign(body.scale.x), 1.0), 0.15)
 	
 	remove_from_group("vagrant")
 	add_to_group("citizen")
@@ -146,3 +153,24 @@ func update_footsteps(delta: float) -> void:
 			if footstep_audio.volume_db <= -39.0:
 				footstep_audio.stop()
 				footstep_audio.volume_db = footstep_base_volume_db
+
+func update_animations() -> void:
+	var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+	if not anim_sprite:
+		return
+	
+	var is_moving = abs(velocity.x) > 5.0
+	if is_moving:
+		if anim_sprite.sprite_frames.has_animation("walk"):
+			if anim_sprite.animation != "walk":
+				anim_sprite.play("walk")
+		elif anim_sprite.sprite_frames.has_animation("Walk"):
+			if anim_sprite.animation != "Walk":
+				anim_sprite.play("Walk")
+	else:
+		if anim_sprite.sprite_frames.has_animation("Idle"):
+			if anim_sprite.animation != "Idle":
+				anim_sprite.play("Idle")
+		elif anim_sprite.sprite_frames.has_animation("idle"):
+			if anim_sprite.animation != "idle":
+				anim_sprite.play("idle")
