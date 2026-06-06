@@ -1,5 +1,7 @@
 extends Control
 
+signal start_pressed
+
 @onready var btn_start = $MenuContainer/Buttons/BtnStart
 @onready var btn_settings = $MenuContainer/Buttons/BtnSettings
 @onready var btn_quit = $MenuContainer/Buttons/BtnQuit
@@ -23,6 +25,12 @@ const COLOR_NORMAL = Color(0.85, 0.85, 0.85)
 const COLOR_HOVER = Color(0.95, 0.8, 0.3)
 
 func _ready() -> void:
+	# Если меню встроено в другую сцену (например, main.tscn с живым фоном)
+	if get_parent() is CanvasLayer:
+		var bg_node = get_node_or_null("ParallaxBackground")
+		if bg_node:
+			bg_node.queue_free()
+
 	# Настройка сигналов кнопок
 	setup_button(btn_start, cur_start, label_start, hbox_start)
 	setup_button(btn_settings, cur_settings, label_settings, hbox_settings)
@@ -62,7 +70,27 @@ func animate_hover(btn: Button, cur: Label, label: Label, hbox: HBoxContainer, i
 		tween.tween_property(label, "self_modulate", COLOR_NORMAL, 0.15)
 
 func _on_start_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/main.tscn")
+	btn_start.disabled = true
+	btn_settings.disabled = true
+	btn_quit.disabled = true
+	
+	if start_pressed.get_connections().size() > 0:
+		var tween = create_tween().set_parallel(true)
+		var color_rect = get_node_or_null("ColorRect")
+		if color_rect:
+			tween.tween_property(color_rect, "color:a", 0.0, 0.5)
+		var menu_container = get_node_or_null("MenuContainer")
+		if menu_container:
+			tween.tween_property(menu_container, "modulate:a", 0.0, 0.5)
+		await tween.finished
+		
+		emit_signal("start_pressed")
+		if get_parent() is CanvasLayer:
+			get_parent().queue_free()
+		else:
+			queue_free()
+	else:
+		get_tree().change_scene_to_file("res://scenes/main/main.tscn")
 
 func _on_settings_pressed() -> void:
 	settings_panel.visible = true

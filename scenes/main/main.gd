@@ -7,6 +7,8 @@ var current_day: int = 1
 var is_day: bool = true
 var time_in_state: float = 0.0
 var game_over_active: bool = false
+var is_game_started: bool = false
+var menu_virtual_cam_x: float = 0.0
 
 var vagrant_spawn_timer: float = 30.0
 var wolf_spawn_queue: int = 0
@@ -36,12 +38,14 @@ var night_color = Color(0.28, 0.28, 0.45, 1.0)
 var transition_duration: float = 24.0
 
 # Ссылки на фоновые спрайты и небесные тела
-var bg_sky: Sprite2D
+var bg_sky_day: Sprite2D
+var bg_sky_night: Sprite2D
 var bg_mountains_far: Sprite2D
 var bg_mountains_close: Sprite2D
 var bg_forest_back: Sprite2D
 
-var base_sky_pos: Vector2
+var base_sky_day_pos: Vector2
+var base_sky_night_pos: Vector2
 var base_mountains_far_pos: Vector2
 var base_mountains_close_pos: Vector2
 var base_forest_back_pos: Vector2
@@ -75,6 +79,16 @@ func _ready() -> void:
 	
 	# Настраиваем текстуру земли под ногами
 	setup_ground()
+
+	# Блокировка игрока и HUD для стартового меню
+	var menu = get_node_or_null("StartMenu/Menu")
+	if menu:
+		is_game_started = false
+		player.set_physics_process(false)
+		hud.visible = false
+		menu.connect("start_pressed", Callable(self, "_on_menu_start_pressed"))
+	else:
+		is_game_started = true
 
 func _process(delta: float) -> void:
 	if game_over_active:
@@ -111,6 +125,12 @@ func _process(delta: float) -> void:
 				canvas_modulate.color = night_color.lerp(day_color, t)
 			else:
 				canvas_modulate.color = night_color
+
+	if not is_game_started:
+		# В меню костер не сгорает
+		if is_instance_valid(campfire):
+			campfire.current_fuel = 200.0  # Держим на стартовом значении
+		return
 
 	# Спавн бродяг (днем)
 	if is_day:
@@ -314,14 +334,17 @@ func setup_background() -> void:
 		
 	var bg = get_node_or_null("Background")
 	if bg:
-		bg_sky = bg.get_node_or_null("Sky")
+		bg_sky_day = bg.get_node_or_null("SkyDay")
+		bg_sky_night = bg.get_node_or_null("SkyNight")
 		bg_mountains_far = bg.get_node_or_null("MountainsFar")
 		bg_mountains_close = bg.get_node_or_null("MountainsClose")
 		bg_forest_back = bg.get_node_or_null("ForestBack")
 		
 		# Включаем горизонтальное повторение (tiling) и сохраняем начальные позиции
-		if is_instance_valid(bg_sky):
-			base_sky_pos = bg_sky.position
+		if is_instance_valid(bg_sky_day):
+			base_sky_day_pos = bg_sky_day.position
+		if is_instance_valid(bg_sky_night):
+			base_sky_night_pos = bg_sky_night.position
 		if is_instance_valid(bg_mountains_far):
 			base_mountains_far_pos = bg_mountains_far.position
 		if is_instance_valid(bg_mountains_close):
@@ -329,7 +352,7 @@ func setup_background() -> void:
 		if is_instance_valid(bg_forest_back):
 			base_forest_back_pos = bg_forest_back.position
 			
-		for sprite in [bg_sky, bg_mountains_far, bg_mountains_close, bg_forest_back]:
+		for sprite in [bg_sky_day, bg_sky_night, bg_mountains_far, bg_mountains_close, bg_forest_back]:
 			if is_instance_valid(sprite) and sprite.texture:
 				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 				sprite.region_enabled = true
@@ -342,16 +365,27 @@ func setup_background() -> void:
 		bg.z_index = -100
 		add_child(bg)
 		
-		# Небо
-		bg_sky = Sprite2D.new()
-		bg_sky.name = "Sky"
-		var tex_sky = load("res://assets/textures/небо.png")
-		if tex_sky:
-			bg_sky.texture = tex_sky
-			bg_sky.centered = false
-			bg_sky.position = Vector2(-2000, -750)
-			bg_sky.scale = Vector2(1.18, 1.26)
-			bg.add_child(bg_sky)
+		# Небо День
+		bg_sky_day = Sprite2D.new()
+		bg_sky_day.name = "SkyDay"
+		var tex_sky_day = load("res://assets/textures/небо_день.png")
+		if tex_sky_day:
+			bg_sky_day.texture = tex_sky_day
+			bg_sky_day.centered = true
+			bg_sky_day.position = Vector2(0, -525)
+			bg_sky_day.scale = Vector2(1.5, 1.5)
+			bg.add_child(bg_sky_day)
+			
+		# Небо Ночь
+		bg_sky_night = Sprite2D.new()
+		bg_sky_night.name = "SkyNight"
+		var tex_sky_night = load("res://assets/textures/небо.png")
+		if tex_sky_night:
+			bg_sky_night.texture = tex_sky_night
+			bg_sky_night.centered = true
+			bg_sky_night.position = Vector2(0, -320)
+			bg_sky_night.scale = Vector2(1.5, 1.5)
+			bg.add_child(bg_sky_night)
 			
 		# Горы дальние
 		bg_mountains_far = Sprite2D.new()
@@ -359,9 +393,9 @@ func setup_background() -> void:
 		var tex_far = load("res://assets/textures/Горы_задний.png")
 		if tex_far:
 			bg_mountains_far.texture = tex_far
-			bg_mountains_far.centered = false
-			bg_mountains_far.position = Vector2(-2000, -450)
-			bg_mountains_far.scale = Vector2(1.19, 1.19)
+			bg_mountains_far.centered = true
+			bg_mountains_far.position = Vector2(0, -110)
+			bg_mountains_far.scale = Vector2(1.2, 1.2)
 			bg.add_child(bg_mountains_far)
 			
 		# Горы близкие
@@ -370,9 +404,9 @@ func setup_background() -> void:
 		var tex_close = load("res://assets/textures/Горы.png")
 		if tex_close:
 			bg_mountains_close.texture = tex_close
-			bg_mountains_close.centered = false
-			bg_mountains_close.position = Vector2(-2000, -320)
-			bg_mountains_close.scale = Vector2(1.17, 1.79)
+			bg_mountains_close.centered = true
+			bg_mountains_close.position = Vector2(0, -160)
+			bg_mountains_close.scale = Vector2(1.2, 1.5)
 			bg.add_child(bg_mountains_close)
 			
 		# Лес задний
@@ -381,18 +415,21 @@ func setup_background() -> void:
 		var tex_forest = load("res://assets/textures/Деревья_заднийфон.png")
 		if tex_forest:
 			bg_forest_back.texture = tex_forest
-			bg_forest_back.centered = false
-			bg_forest_back.position = Vector2(-2000, -220)
-			bg_forest_back.scale = Vector2(1.17, 1.17)
+			bg_forest_back.centered = true
+			bg_forest_back.position = Vector2(0, -130)
+			bg_forest_back.scale = Vector2(1.2, 1.2)
 			bg.add_child(bg_forest_back)
 			
 		# Инициализируем позиции
-		base_sky_pos = bg_sky.position
+		if is_instance_valid(bg_sky_day):
+			base_sky_day_pos = bg_sky_day.position
+		if is_instance_valid(bg_sky_night):
+			base_sky_night_pos = bg_sky_night.position
 		base_mountains_far_pos = bg_mountains_far.position
 		base_mountains_close_pos = bg_mountains_close.position
 		base_forest_back_pos = bg_forest_back.position
 		
-		for sprite in [bg_sky, bg_mountains_far, bg_mountains_close, bg_forest_back]:
+		for sprite in [bg_sky_day, bg_sky_night, bg_mountains_far, bg_mountains_close, bg_forest_back]:
 			if is_instance_valid(sprite) and sprite.texture:
 				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 				sprite.region_enabled = true
@@ -429,7 +466,7 @@ func setup_background() -> void:
 			celestial_layer.add_child(moon_sprite)
 
 func update_background_and_celestial(delta: float) -> void:
-	if not is_instance_valid(bg_sky) or not is_instance_valid(bg_mountains_far) or not is_instance_valid(bg_mountains_close) or not is_instance_valid(bg_forest_back):
+	if not is_instance_valid(bg_mountains_far) or not is_instance_valid(bg_mountains_close) or not is_instance_valid(bg_forest_back):
 		return
 		
 	# 1. Вычисляем степень перехода (transition_factor) от 0.0 (день) до 1.0 (ночь)
@@ -447,23 +484,37 @@ func update_background_and_celestial(delta: float) -> void:
 		else:
 			transition_factor = 1.0
 			
-	# 2. Плавно скрываем голубое небо ночью, чтобы проявить темный космический фон проекта
-	bg_sky.modulate.a = 1.0 - transition_factor
+	# 2. Плавно перекрестно накладываем видимость неба дня и неба ночи
+	if is_instance_valid(bg_sky_day):
+		bg_sky_day.modulate.a = 1.0 - transition_factor
+	if is_instance_valid(bg_sky_night):
+		bg_sky_night.modulate.a = transition_factor
 	
-	# 2.5. Применяем многослойный параллакс-эффект на основе позиции камеры игрока
+	# 2.5. Применяем многослойный параллакс-эффект на основе позиции камеры игрока (или виртуальной в меню)
 	var cam_pos = Vector2.ZERO
-	var camera = player.get_node_or_null("Camera2D")
-	if camera:
-		cam_pos = camera.get_screen_center_position()
+	if is_game_started:
+		var camera = player.get_node_or_null("Camera2D")
+		if camera:
+			cam_pos = camera.get_screen_center_position()
+		else:
+			cam_pos = player.global_position
 	else:
-		cam_pos = player.global_position
+		menu_virtual_cam_x += 100.0 * delta # Эмулируем постоянный сдвиг камеры вправо
+		cam_pos = Vector2(menu_virtual_cam_x, 0)
 		
 	# Применяем множители для каждого слоя (эффект глубины):
-	# Небо (двигается медленнее всего по X, следует по Y)
-	bg_sky.global_position = Vector2(
-		cam_pos.x * 0.98 + base_sky_pos.x,
-		cam_pos.y * 1.0 + base_sky_pos.y
-	)
+	# Небо дня (двигается медленнее всего по X, следует по Y)
+	if is_instance_valid(bg_sky_day):
+		bg_sky_day.global_position = Vector2(
+			cam_pos.x * 0.98 + base_sky_day_pos.x,
+			cam_pos.y * 1.0 + base_sky_day_pos.y
+		)
+	# Небо ночи
+	if is_instance_valid(bg_sky_night):
+		bg_sky_night.global_position = Vector2(
+			cam_pos.x * 0.98 + base_sky_night_pos.x,
+			cam_pos.y * 1.0 + base_sky_night_pos.y
+		)
 	# Дальние горы (motion_scale.x = 0.1 => 0.9, motion_scale.y = 0.02 => 0.98)
 	bg_mountains_far.global_position = Vector2(
 		cam_pos.x * 0.9 + base_mountains_far_pos.x,
@@ -553,6 +604,29 @@ func setup_ground() -> void:
 				sprite.centered = false
 				sprite.position = Vector2(-7500, 0)
 				ground.add_child(sprite)
+
+func _on_menu_start_pressed() -> void:
+	is_game_started = true
+	time_in_state = 0.0
+	is_day = true
+	current_day = 1
+	
+	# Сброс топлива костра к стартовому
+	if is_instance_valid(campfire):
+		campfire.current_fuel = 200.0
+		campfire.is_burned_out = false
+		campfire.emit_signal("fuel_changed", campfire.current_fuel, campfire.max_fuel)
+		
+	# Включаем физику игрока
+	if is_instance_valid(player):
+		player.set_physics_process(true)
+		
+	# Показываем HUD
+	if is_instance_valid(hud):
+		hud.visible = true
+		_on_player_wood_changed(player.wood_count)
+		_on_campfire_fuel_changed(campfire.current_fuel, campfire.max_fuel)
+		update_hud_text()
 
 
 
