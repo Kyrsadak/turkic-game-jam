@@ -53,6 +53,13 @@ font = ExtResource("4_font")
 font_size = 13
 font_color = Color(0.9, 0.9, 0.9, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_button_text"]
+font = ExtResource("4_font")
+font_size = 20
+font_color = Color(1, 1, 1, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.9)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_btn"]
 bg_color = Color(0.18, 0.12, 0.08, 1)
 border_width_left = 1
@@ -140,15 +147,25 @@ offset_bottom = 100.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="HBoxStart" type="HBoxContainer" parent="MenuContainer/Buttons"]
+[node name="BtnStart" type="Button" parent="MenuContainer/Buttons"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 45.0
 grow_horizontal = 2
+flat = true
+
+[node name="HBoxStart" type="HBoxContainer" parent="MenuContainer/Buttons/BtnStart"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="CurStart" type="Label" parent="MenuContainer/Buttons/HBoxStart"]
+[node name="CurStart" type="Label" parent="MenuContainer/Buttons/BtnStart/HBoxStart"]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 text = "◆"
@@ -156,25 +173,32 @@ label_settings = SubResource("LabelSettings_cursor")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BtnStart" type="Button" parent="MenuContainer/Buttons/HBoxStart"]
+[node name="LabelStart" type="Label" parent="MenuContainer/Buttons/BtnStart/HBoxStart"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 20
 text = "START GAME"
-flat = true
-alignment = 0
+label_settings = SubResource("LabelSettings_button_text")
+vertical_alignment = 1
 
-[node name="HBoxSettings" type="HBoxContainer" parent="MenuContainer/Buttons"]
+[node name="BtnSettings" type="Button" parent="MenuContainer/Buttons"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 60.0
 offset_bottom = 105.0
 grow_horizontal = 2
+flat = true
+
+[node name="HBoxSettings" type="HBoxContainer" parent="MenuContainer/Buttons/BtnSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="CurSettings" type="Label" parent="MenuContainer/Buttons/HBoxSettings"]
+[node name="CurSettings" type="Label" parent="MenuContainer/Buttons/BtnSettings/HBoxSettings"]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 text = "◆"
@@ -182,25 +206,32 @@ label_settings = SubResource("LabelSettings_cursor")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BtnSettings" type="Button" parent="MenuContainer/Buttons/HBoxSettings"]
+[node name="LabelSettings" type="Label" parent="MenuContainer/Buttons/BtnSettings/HBoxSettings"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 20
 text = "SETTINGS"
-flat = true
-alignment = 0
+label_settings = SubResource("LabelSettings_button_text")
+vertical_alignment = 1
 
-[node name="HBoxQuit" type="HBoxContainer" parent="MenuContainer/Buttons"]
+[node name="BtnQuit" type="Button" parent="MenuContainer/Buttons"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 120.0
 offset_bottom = 165.0
 grow_horizontal = 2
+flat = true
+
+[node name="HBoxQuit" type="HBoxContainer" parent="MenuContainer/Buttons/BtnQuit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="CurQuit" type="Label" parent="MenuContainer/Buttons/HBoxQuit"]
+[node name="CurQuit" type="Label" parent="MenuContainer/Buttons/BtnQuit/HBoxQuit"]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 text = "◆"
@@ -208,14 +239,11 @@ label_settings = SubResource("LabelSettings_cursor")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BtnQuit" type="Button" parent="MenuContainer/Buttons/HBoxQuit"]
+[node name="LabelQuit" type="Label" parent="MenuContainer/Buttons/BtnQuit/HBoxQuit"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 20
 text = "QUIT"
-flat = true
-alignment = 0
+label_settings = SubResource("LabelSettings_button_text")
+vertical_alignment = 1
 
 [node name="Footer" type="Label" parent="MenuContainer"]
 layout_mode = 1
