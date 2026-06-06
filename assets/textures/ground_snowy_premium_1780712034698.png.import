@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jc2527crt1f"
-valid=false
+uid="uid://dtpv7fkuafb11"
+path="res://.godot/imported/ground_snowy_premium_1780712034698.png-324aa00476873d8050fddeff1a1f5e2d.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/textures/ground_snowy_premium_1780712034698.png"
+dest_files=["res://.godot/imported/ground_snowy_premium_1780712034698.png-324aa00476873d8050fddeff1a1f5e2d.ctex"]
 
 [params]
 
