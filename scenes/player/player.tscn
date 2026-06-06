@@ -116,7 +116,7 @@ volume_db = -2.0
 
 [node name="ChopHitAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_chop_hit")
-volume_db = -1.0
+volume_db = -4.0
 
 [node name="HitCooldown" type="Timer" parent="."]
 wait_time = 0.25

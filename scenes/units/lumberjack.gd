@@ -23,10 +23,8 @@ var chop_timer: float = 0.0
 @onready var chop_hit_audio: AudioStreamPlayer2D = $ChopHitAudio
 
 var footstep_timer: float = 0.0
-var footstep_base_volume_db: float = -14.0
+var footstep_base_volume_db: float = -19.4
 var footstep_fadeout_speed_db: float = 38.0
-var chop_sound_sequence: int = 0
-var chop_hit_overlap_before_end_sec: float = 0.06
 
 func _ready() -> void:
 	scale = Vector2(2.5, 2.5)
@@ -134,21 +132,11 @@ func chop_tree() -> void:
 		tween_body.tween_property(body, "scale:y", 1.0, 0.12)
 
 func play_chop_audio_sequence(tree_to_hit: Node2D) -> void:
-	chop_sound_sequence += 1
-	var current_sequence: int = chop_sound_sequence
 	chop_swing_audio.stop()
 	chop_hit_audio.stop()
 	chop_swing_audio.pitch_scale = randf_range(0.92, 0.98)
 	chop_hit_audio.pitch_scale = randf_range(0.95, 1.0)
 	chop_swing_audio.play()
-
-	var swing_length_sec: float = 0.2
-	if chop_swing_audio.stream:
-		swing_length_sec = chop_swing_audio.stream.get_length() / max(chop_swing_audio.pitch_scale, 0.01)
-	var impact_delay_sec: float = max(0.0, swing_length_sec - chop_hit_overlap_before_end_sec)
-	await get_tree().create_timer(impact_delay_sec).timeout
-	if current_sequence != chop_sound_sequence:
-		return
 	if is_instance_valid(tree_to_hit):
 		tree_to_hit.hit_tree(global_position.x, chop_damage)
 	chop_hit_audio.play()

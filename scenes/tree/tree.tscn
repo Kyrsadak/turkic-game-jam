@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scenes/tree/tree.gd" id="1_script"]
 [ext_resource type="Shader" path="res://assets/shaders/wind_sway.gdshader" id="2_shader"]
+[ext_resource type="AudioStream" path="res://voice/tree_fall/1.mp3" id="3_tree_fall"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sway"]
 shader = ExtResource("2_shader")
@@ -75,3 +76,7 @@ text = "Рубить дерево [E]"
 label_settings = SubResource("LabelSettings_tree")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="FallAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_tree_fall")
+volume_db = -2.5

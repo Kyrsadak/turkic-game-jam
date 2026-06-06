@@ -34,6 +34,8 @@ func _ready() -> void:
 	add_to_group("player")
 	update_wood_visuals()
 	footstep_audio.volume_db = footstep_base_volume_db
+	chop_swing_audio.max_polyphony = 3
+	chop_hit_audio.max_polyphony = 4
 	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
 
 func _physics_process(delta: float) -> void:
@@ -159,8 +161,6 @@ func start_hit_animation(tree_to_hit: Node = null) -> void:
 func play_chop_audio_sequence(tree_to_hit: Node = null) -> void:
 	chop_sound_sequence += 1
 	var current_sequence: int = chop_sound_sequence
-	chop_swing_audio.stop()
-	chop_hit_audio.stop()
 
 	if tree_to_hit == null:
 		chop_swing_audio.pitch_scale = randf_range(0.72, 0.82)
