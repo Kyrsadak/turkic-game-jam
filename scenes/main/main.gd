@@ -199,6 +199,10 @@ func spawn_bear() -> void:
 	bear.speed = 40.0 + current_day * 1.5
 
 func generate_forests() -> void:
+	# Если пользователь уже задизайнил лес в редакторе, не пересоздаем его динамически
+	if $ForestLeft.get_child_count() > 0 or $ForestRight.get_child_count() > 0:
+		return
+		
 	# Левый лес: от -7200 до -350
 	var current_x = -350.0
 	while current_x > -7200.0:
@@ -285,58 +289,77 @@ func setup_background() -> void:
 	if bg_forest:
 		bg_forest.visible = false
 		
-	# Создаем ParallaxBackground для гор
-	var pb = ParallaxBackground.new()
-	pb.layer = -100 # Отрисовывается позади всех элементов
-	add_child(pb)
-	
-	# Добавляем ParallaxLayer
-	var pl = ParallaxLayer.new()
-	pl.motion_scale = Vector2(0.15, 0.05) # Медленный параллакс по горизонтали, почти статичный по вертикали
-	pl.motion_mirroring = Vector2(1024, 0)
-	pb.add_child(pl)
-	
-	# Дневной фон
-	bg_day_sprite = Sprite2D.new()
-	var tex_day = load("res://assets/textures/background_mountains_day.png")
-	if tex_day:
-		bg_day_sprite.texture = tex_day
-		bg_day_sprite.centered = false
-		bg_day_sprite.position = Vector2(0, -120)
-		bg_day_sprite.modulate.a = 1.0
-		pl.add_child(bg_day_sprite)
+	var pb = get_node_or_null("ParallaxBackground")
+	if pb:
+		var pl = pb.get_node_or_null("ParallaxLayer")
+		if pl:
+			bg_day_sprite = pl.get_node_or_null("BgDaySprite")
+			bg_night_sprite = pl.get_node_or_null("BgNightSprite")
+	else:
+		# Создаем ParallaxBackground для гор
+		pb = ParallaxBackground.new()
+		pb.name = "ParallaxBackground"
+		pb.layer = -100 # Отрисовывается позади всех элементов
+		add_child(pb)
 		
-	# Ночной фон
-	bg_night_sprite = Sprite2D.new()
-	var tex_night = load("res://assets/textures/background_mountains.png")
-	if tex_night:
-		bg_night_sprite.texture = tex_night
-		bg_night_sprite.centered = false
-		bg_night_sprite.position = Vector2(0, -120)
-		bg_night_sprite.modulate.a = 0.0 # Начинаем с дневного
-		pl.add_child(bg_night_sprite)
+		# Добавляем ParallaxLayer
+		var pl = ParallaxLayer.new()
+		pl.name = "ParallaxLayer"
+		pl.motion_scale = Vector2(0.15, 0.05) # Медленный параллакс по горизонтали, почти статичный по вертикали
+		pl.motion_mirroring = Vector2(1024, 0)
+		pb.add_child(pl)
 		
-	# Создаем отдельный CanvasLayer для небесных тел (Солнце, Луна)
-	# Позиционируем их за игровыми элементами, но перед дальними горами
-	var celestial_layer = CanvasLayer.new()
-	celestial_layer.layer = -95
-	add_child(celestial_layer)
-	
-	# Солнце
-	sun_sprite = Sprite2D.new()
-	var tex_sun = load("res://assets/textures/sun.png")
-	if tex_sun:
-		sun_sprite.texture = tex_sun
-		sun_sprite.modulate.a = 1.0
-		celestial_layer.add_child(sun_sprite)
+		# Дневной фон
+		bg_day_sprite = Sprite2D.new()
+		bg_day_sprite.name = "BgDaySprite"
+		var tex_day = load("res://assets/textures/background_mountains_day.png")
+		if tex_day:
+			bg_day_sprite.texture = tex_day
+			bg_day_sprite.centered = false
+			bg_day_sprite.position = Vector2(0, -120)
+			bg_day_sprite.modulate.a = 1.0
+			pl.add_child(bg_day_sprite)
+			
+		# Ночной фон
+		bg_night_sprite = Sprite2D.new()
+		bg_night_sprite.name = "BgNightSprite"
+		var tex_night = load("res://assets/textures/background_mountains.png")
+		if tex_night:
+			bg_night_sprite.texture = tex_night
+			bg_night_sprite.centered = false
+			bg_night_sprite.position = Vector2(0, -120)
+			bg_night_sprite.modulate.a = 0.0 # Начинаем с дневного
+			pl.add_child(bg_night_sprite)
 		
-	# Луна
-	moon_sprite = Sprite2D.new()
-	var tex_moon = load("res://assets/textures/moon.png")
-	if tex_moon:
-		moon_sprite.texture = tex_moon
-		moon_sprite.modulate.a = 0.0
-		celestial_layer.add_child(moon_sprite)
+	var celestial_layer = get_node_or_null("CelestialLayer")
+	if celestial_layer:
+		sun_sprite = celestial_layer.get_node_or_null("SunSprite")
+		moon_sprite = celestial_layer.get_node_or_null("MoonSprite")
+	else:
+		# Создаем отдельный CanvasLayer для небесных тел (Солнце, Луна)
+		# Позиционируем их за игровыми элементами, но перед дальними горами
+		celestial_layer = CanvasLayer.new()
+		celestial_layer.name = "CelestialLayer"
+		celestial_layer.layer = -95
+		add_child(celestial_layer)
+		
+		# Солнце
+		sun_sprite = Sprite2D.new()
+		sun_sprite.name = "SunSprite"
+		var tex_sun = load("res://assets/textures/sun.png")
+		if tex_sun:
+			sun_sprite.texture = tex_sun
+			sun_sprite.modulate.a = 1.0
+			celestial_layer.add_child(sun_sprite)
+			
+		# Луна
+		moon_sprite = Sprite2D.new()
+		moon_sprite.name = "MoonSprite"
+		var tex_moon = load("res://assets/textures/moon.png")
+		if tex_moon:
+			moon_sprite.texture = tex_moon
+			moon_sprite.modulate.a = 0.0
+			celestial_layer.add_child(moon_sprite)
 
 func update_background_and_celestial(delta: float) -> void:
 	if not is_instance_valid(bg_day_sprite) or not is_instance_valid(bg_night_sprite):
@@ -412,17 +435,28 @@ func setup_ground() -> void:
 		if border:
 			border.visible = false
 			
-		var tex = load("res://assets/textures/ground_snowy.png")
-		if tex:
-			var sprite = Sprite2D.new()
-			sprite.name = "SnowyGroundSprite"
-			sprite.texture = tex
-			sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-			sprite.region_enabled = true
-			sprite.region_rect = Rect2(0, 0, 15000, 128)
-			sprite.centered = false
-			sprite.position = Vector2(-7500, 0)
-			ground.add_child(sprite)
+		var existing = ground.get_node_or_null("SnowyGroundSprite")
+		if existing:
+			var tex = load("res://assets/textures/ground_snowy.png")
+			if tex:
+				existing.texture = tex
+				existing.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+				existing.region_enabled = true
+				existing.region_rect = Rect2(0, 0, 15000, 128)
+				existing.centered = false
+				existing.position = Vector2(-7500, 0)
+		else:
+			var tex = load("res://assets/textures/ground_snowy.png")
+			if tex:
+				var sprite = Sprite2D.new()
+				sprite.name = "SnowyGroundSprite"
+				sprite.texture = tex
+				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+				sprite.region_enabled = true
+				sprite.region_rect = Rect2(0, 0, 15000, 128)
+				sprite.centered = false
+				sprite.position = Vector2(-7500, 0)
+				ground.add_child(sprite)
 
 
 

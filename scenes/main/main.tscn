@@ -9,6 +9,12 @@
 [ext_resource type="PackedScene" path="res://scenes/vagrant/vagrant.tscn" id="8_vagrant"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/builder_house.tscn" id="9_builder_house"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/archer_tower.tscn" id="10_archer_tower"]
+[ext_resource type="PackedScene" path="res://scenes/tree/tree.tscn" id="11_tree"]
+[ext_resource type="Texture2D" path="res://assets/textures/background_mountains_day.png" id="12_bg_day"]
+[ext_resource type="Texture2D" path="res://assets/textures/background_mountains.png" id="13_bg_night"]
+[ext_resource type="Texture2D" path="res://assets/textures/sun.png" id="14_sun"]
+[ext_resource type="Texture2D" path="res://assets/textures/moon.png" id="15_moon"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground_snowy.png" id="16_ground_snowy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
@@ -19,6 +25,35 @@ size = Vector2(15000, 40)
 script = ExtResource("1_script")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = -100
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.15, 0.05)
+motion_mirroring = Vector2(1024, 0)
+
+[node name="BgDaySprite" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource("12_bg_day")
+centered = false
+position = Vector2(0, -120)
+
+[node name="BgNightSprite" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+modulate = Color(1, 1, 1, 0)
+texture = ExtResource("13_bg_night")
+centered = false
+position = Vector2(0, -120)
+
+[node name="CelestialLayer" type="CanvasLayer" parent="."]
+layer = -95
+
+[node name="SunSprite" type="Sprite2D" parent="CelestialLayer"]
+texture = ExtResource("14_sun")
+
+[node name="MoonSprite" type="Sprite2D" parent="CelestialLayer"]
+modulate = Color(1, 1, 1, 0)
+texture = ExtResource("15_moon")
+
 
 [node name="BackgroundForest" type="Node2D" parent="." unique_id=208691109]
 z_index = -5
@@ -55,16 +90,27 @@ position = Vector2(0, 20)
 shape = SubResource("RectangleShape2D_ground")
 
 [node name="Visual" type="ColorRect" parent="Ground" unique_id=1301663457]
+visible = false
 offset_left = -7500.0
 offset_right = 7500.0
 offset_bottom = 60.0
 color = Color(0.18, 0.2, 0.24, 1)
 
 [node name="GrassBorder" type="ColorRect" parent="Ground" unique_id=1301294216]
+visible = false
 offset_left = -7500.0
 offset_right = 7500.0
 offset_bottom = 3.0
 color = Color(0.25, 0.35, 0.3, 1)
+
+[node name="SnowyGroundSprite" type="Sprite2D" parent="Ground"]
+texture_repeat = 1
+texture = ExtResource("16_ground_snowy")
+region_enabled = true
+region_rect = Rect2(0, 0, 15000, 128)
+centered = false
+position = Vector2(-7500, 0)
+
 
 [node name="Campfire" parent="." unique_id=865260620 instance=ExtResource("3_campfire")]
 
@@ -95,7 +141,525 @@ position = Vector2(240, 0)
 
 [node name="ForestLeft" type="Node2D" parent="." unique_id=812395994]
 
+[node name="Tree_L_1" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-350, 0)
+
+[node name="Tree_L_2" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-430, 0)
+
+[node name="Tree_L_3" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-510, 0)
+
+[node name="Tree_L_4" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-590, 0)
+
+[node name="Tree_L_5" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-670, 0)
+
+[node name="Tree_L_6" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-750, 0)
+
+[node name="Tree_L_7" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-830, 0)
+
+[node name="Tree_L_8" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-910, 0)
+
+[node name="Tree_L_9" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-990, 0)
+
+[node name="Tree_L_10" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1070, 0)
+
+[node name="Tree_L_11" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1150, 0)
+
+[node name="Tree_L_12" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1230, 0)
+
+[node name="Tree_L_13" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1310, 0)
+
+[node name="Tree_L_14" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1390, 0)
+
+[node name="Tree_L_15" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1470, 0)
+
+[node name="Tree_L_16" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1550, 0)
+
+[node name="Tree_L_17" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1630, 0)
+
+[node name="Tree_L_18" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1710, 0)
+
+[node name="Tree_L_19" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1790, 0)
+
+[node name="Tree_L_20" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1870, 0)
+
+[node name="Tree_L_21" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-1950, 0)
+
+[node name="Tree_L_22" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2030, 0)
+
+[node name="Tree_L_23" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2110, 0)
+
+[node name="Tree_L_24" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2190, 0)
+
+[node name="Tree_L_25" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2270, 0)
+
+[node name="Tree_L_26" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2350, 0)
+
+[node name="Tree_L_27" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2430, 0)
+
+[node name="Tree_L_28" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2510, 0)
+
+[node name="Tree_L_29" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2590, 0)
+
+[node name="Tree_L_30" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2670, 0)
+
+[node name="Tree_L_31" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2750, 0)
+
+[node name="Tree_L_32" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2830, 0)
+
+[node name="Tree_L_33" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2910, 0)
+
+[node name="Tree_L_34" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-2990, 0)
+
+[node name="Tree_L_35" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3070, 0)
+
+[node name="Tree_L_36" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3150, 0)
+
+[node name="Tree_L_37" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3230, 0)
+
+[node name="Tree_L_38" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3310, 0)
+
+[node name="Tree_L_39" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3390, 0)
+
+[node name="Tree_L_40" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3470, 0)
+
+[node name="Tree_L_41" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3550, 0)
+
+[node name="Tree_L_42" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3630, 0)
+
+[node name="Tree_L_43" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3710, 0)
+
+[node name="Tree_L_44" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3790, 0)
+
+[node name="Tree_L_45" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3870, 0)
+
+[node name="Tree_L_46" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-3950, 0)
+
+[node name="Tree_L_47" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4030, 0)
+
+[node name="Tree_L_48" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4110, 0)
+
+[node name="Tree_L_49" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4190, 0)
+
+[node name="Tree_L_50" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4270, 0)
+
+[node name="Tree_L_51" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4350, 0)
+
+[node name="Tree_L_52" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4430, 0)
+
+[node name="Tree_L_53" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4510, 0)
+
+[node name="Tree_L_54" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4590, 0)
+
+[node name="Tree_L_55" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4670, 0)
+
+[node name="Tree_L_56" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4750, 0)
+
+[node name="Tree_L_57" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4830, 0)
+
+[node name="Tree_L_58" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4910, 0)
+
+[node name="Tree_L_59" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-4990, 0)
+
+[node name="Tree_L_60" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5070, 0)
+
+[node name="Tree_L_61" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5150, 0)
+
+[node name="Tree_L_62" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5230, 0)
+
+[node name="Tree_L_63" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5310, 0)
+
+[node name="Tree_L_64" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5390, 0)
+
+[node name="Tree_L_65" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5470, 0)
+
+[node name="Tree_L_66" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5550, 0)
+
+[node name="Tree_L_67" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5630, 0)
+
+[node name="Tree_L_68" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5710, 0)
+
+[node name="Tree_L_69" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5790, 0)
+
+[node name="Tree_L_70" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5870, 0)
+
+[node name="Tree_L_71" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-5950, 0)
+
+[node name="Tree_L_72" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6030, 0)
+
+[node name="Tree_L_73" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6110, 0)
+
+[node name="Tree_L_74" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6190, 0)
+
+[node name="Tree_L_75" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6270, 0)
+
+[node name="Tree_L_76" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6350, 0)
+
+[node name="Tree_L_77" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6430, 0)
+
+[node name="Tree_L_78" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6510, 0)
+
+[node name="Tree_L_79" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6590, 0)
+
+[node name="Tree_L_80" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6670, 0)
+
+[node name="Tree_L_81" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6750, 0)
+
+[node name="Tree_L_82" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6830, 0)
+
+[node name="Tree_L_83" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6910, 0)
+
+[node name="Tree_L_84" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-6990, 0)
+
+[node name="Tree_L_85" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-7070, 0)
+
+[node name="Tree_L_86" parent="ForestLeft" instance=ExtResource("11_tree")]
+position = Vector2(-7150, 0)
+
+
 [node name="ForestRight" type="Node2D" parent="." unique_id=34258451]
+
+[node name="Tree_R_1" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(350, 0)
+
+[node name="Tree_R_2" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(430, 0)
+
+[node name="Tree_R_3" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(510, 0)
+
+[node name="Tree_R_4" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(590, 0)
+
+[node name="Tree_R_5" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(670, 0)
+
+[node name="Tree_R_6" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(750, 0)
+
+[node name="Tree_R_7" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(830, 0)
+
+[node name="Tree_R_8" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(910, 0)
+
+[node name="Tree_R_9" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(990, 0)
+
+[node name="Tree_R_10" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1070, 0)
+
+[node name="Tree_R_11" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1150, 0)
+
+[node name="Tree_R_12" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1230, 0)
+
+[node name="Tree_R_13" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1310, 0)
+
+[node name="Tree_R_14" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1390, 0)
+
+[node name="Tree_R_15" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1470, 0)
+
+[node name="Tree_R_16" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1550, 0)
+
+[node name="Tree_R_17" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1630, 0)
+
+[node name="Tree_R_18" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1710, 0)
+
+[node name="Tree_R_19" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1790, 0)
+
+[node name="Tree_R_20" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1870, 0)
+
+[node name="Tree_R_21" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(1950, 0)
+
+[node name="Tree_R_22" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2030, 0)
+
+[node name="Tree_R_23" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2110, 0)
+
+[node name="Tree_R_24" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2190, 0)
+
+[node name="Tree_R_25" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2270, 0)
+
+[node name="Tree_R_26" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2350, 0)
+
+[node name="Tree_R_27" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2430, 0)
+
+[node name="Tree_R_28" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2510, 0)
+
+[node name="Tree_R_29" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2590, 0)
+
+[node name="Tree_R_30" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2670, 0)
+
+[node name="Tree_R_31" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2750, 0)
+
+[node name="Tree_R_32" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2830, 0)
+
+[node name="Tree_R_33" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2910, 0)
+
+[node name="Tree_R_34" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(2990, 0)
+
+[node name="Tree_R_35" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3070, 0)
+
+[node name="Tree_R_36" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3150, 0)
+
+[node name="Tree_R_37" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3230, 0)
+
+[node name="Tree_R_38" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3310, 0)
+
+[node name="Tree_R_39" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3390, 0)
+
+[node name="Tree_R_40" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3470, 0)
+
+[node name="Tree_R_41" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3550, 0)
+
+[node name="Tree_R_42" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3630, 0)
+
+[node name="Tree_R_43" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3710, 0)
+
+[node name="Tree_R_44" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3790, 0)
+
+[node name="Tree_R_45" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3870, 0)
+
+[node name="Tree_R_46" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(3950, 0)
+
+[node name="Tree_R_47" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4030, 0)
+
+[node name="Tree_R_48" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4110, 0)
+
+[node name="Tree_R_49" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4190, 0)
+
+[node name="Tree_R_50" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4270, 0)
+
+[node name="Tree_R_51" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4350, 0)
+
+[node name="Tree_R_52" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4430, 0)
+
+[node name="Tree_R_53" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4510, 0)
+
+[node name="Tree_R_54" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4590, 0)
+
+[node name="Tree_R_55" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4670, 0)
+
+[node name="Tree_R_56" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4750, 0)
+
+[node name="Tree_R_57" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4830, 0)
+
+[node name="Tree_R_58" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4910, 0)
+
+[node name="Tree_R_59" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(4990, 0)
+
+[node name="Tree_R_60" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5070, 0)
+
+[node name="Tree_R_61" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5150, 0)
+
+[node name="Tree_R_62" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5230, 0)
+
+[node name="Tree_R_63" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5310, 0)
+
+[node name="Tree_R_64" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5390, 0)
+
+[node name="Tree_R_65" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5470, 0)
+
+[node name="Tree_R_66" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5550, 0)
+
+[node name="Tree_R_67" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5630, 0)
+
+[node name="Tree_R_68" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5710, 0)
+
+[node name="Tree_R_69" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5790, 0)
+
+[node name="Tree_R_70" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5870, 0)
+
+[node name="Tree_R_71" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(5950, 0)
+
+[node name="Tree_R_72" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6030, 0)
+
+[node name="Tree_R_73" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6110, 0)
+
+[node name="Tree_R_74" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6190, 0)
+
+[node name="Tree_R_75" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6270, 0)
+
+[node name="Tree_R_76" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6350, 0)
+
+[node name="Tree_R_77" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6430, 0)
+
+[node name="Tree_R_78" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6510, 0)
+
+[node name="Tree_R_79" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6590, 0)
+
+[node name="Tree_R_80" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6670, 0)
+
+[node name="Tree_R_81" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6750, 0)
+
+[node name="Tree_R_82" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6830, 0)
+
+[node name="Tree_R_83" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6910, 0)
+
+[node name="Tree_R_84" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(6990, 0)
+
+[node name="Tree_R_85" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(7070, 0)
+
+[node name="Tree_R_86" parent="ForestRight" instance=ExtResource("11_tree")]
+position = Vector2(7150, 0)
+
 
 [node name="InitialVagrants" type="Node2D" parent="." unique_id=517442161]
 
