@@ -57,6 +57,9 @@ func _ready() -> void:
 	
 	# Настраиваем новый фон с горами
 	setup_background()
+	
+	# Настраиваем текстуру земли под ногами
+	setup_ground()
 
 func _process(delta: float) -> void:
 	if game_over_active:
@@ -396,5 +399,28 @@ func update_background_and_celestial(delta: float) -> void:
 				h * 0.7 - sin(sun_angle) * (h * 0.55)
 			)
 			sun_sprite.modulate.a = 1.0 - transition_factor
+
+func setup_ground() -> void:
+	var ground = get_node_or_null("Ground")
+	if ground:
+		var visual = ground.get_node_or_null("Visual")
+		if visual:
+			visual.visible = false
+		var border = ground.get_node_or_null("GrassBorder")
+		if border:
+			border.visible = false
+			
+		var tex = load("res://assets/textures/ground_snowy.png")
+		if tex:
+			var sprite = Sprite2D.new()
+			sprite.name = "SnowyGroundSprite"
+			sprite.texture = tex
+			sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+			sprite.region_enabled = true
+			sprite.region_rect = Rect2(0, 0, 15000, 64)
+			sprite.centered = false
+			sprite.position = Vector2(-7500, 0)
+			ground.add_child(sprite)
+
 
 
