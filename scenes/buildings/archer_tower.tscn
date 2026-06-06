@@ -1,0 +1,106 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/buildings/archer_tower.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 350.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_status"]
+font_size = 9
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="ArcherTower" type="StaticBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_1")
+
+[node name="VisualSite" type="Node2D" parent="."]
+
+[node name="PoleLeft" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(-18, 0, -18, -30)
+width = 2.0
+default_color = Color(0.38, 0.3, 0.24, 1)
+
+[node name="PoleRight" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(18, 0, 18, -30)
+width = 2.0
+default_color = Color(0.38, 0.3, 0.24, 1)
+
+[node name="Sign" type="ColorRect" parent="VisualSite"]
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 10.0
+offset_bottom = -11.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CrossLines" type="Line2D" parent="VisualSite"]
+points = PackedVector2Array(-18, -25, 18, -25)
+width = 1.0
+default_color = Color(0.48, 0.45, 0.35, 1)
+
+[node name="VisualBuilt" type="Node2D" parent="."]
+visible = false
+
+[node name="Platform" type="ColorRect" parent="VisualBuilt"]
+offset_left = -20.0
+offset_top = -55.0
+offset_right = 20.0
+offset_bottom = -50.0
+color = Color(0.4, 0.3, 0.2, 1)
+
+[node name="SupportLeft" type="Line2D" parent="VisualBuilt"]
+points = PackedVector2Array(-15, 0, -15, -50)
+width = 3.0
+default_color = Color(0.35, 0.25, 0.18, 1)
+
+[node name="SupportRight" type="Line2D" parent="VisualBuilt"]
+points = PackedVector2Array(15, 0, 15, -50)
+width = 3.0
+default_color = Color(0.35, 0.25, 0.18, 1)
+
+[node name="Brace1" type="Line2D" parent="VisualBuilt"]
+points = PackedVector2Array(-15, -15, 15, -35)
+width = 1.5
+default_color = Color(0.28, 0.2, 0.15, 1)
+
+[node name="Brace2" type="Line2D" parent="VisualBuilt"]
+points = PackedVector2Array(15, -15, -15, -35)
+width = 1.5
+default_color = Color(0.28, 0.2, 0.15, 1)
+
+[node name="Roof" type="Polygon2D" parent="VisualBuilt"]
+color = Color(0.15, 0.35, 0.65, 1)
+polygon = PackedVector2Array(-24, -68, 0, -84, 24, -68, 18, -65, 0, -78, -18, -65)
+
+[node name="RangeArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeArea"]
+shape = SubResource("CircleShape2D_1")
+
+[node name="LabelStatus" type="Label" parent="."]
+z_index = 5
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Башня лучников"
+label_settings = SubResource("LabelSettings_status")
+horizontal_alignment = 1
+vertical_alignment = 1

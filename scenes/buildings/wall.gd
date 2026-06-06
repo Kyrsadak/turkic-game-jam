@@ -7,6 +7,7 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 var current_construction_wood: int = 0
 var level: int = 0 # 0 = не построена, 1 = дерево, 2 = камень, 3 = шипы
+var is_built: bool = false
 var max_health: float = 120.0
 var health: float = 120.0
 
@@ -144,6 +145,7 @@ func destroy_wall() -> void:
 	update_visuals()
 
 func update_visuals() -> void:
+	is_built = (level > 0)
 	# Коллизия включена только если стена построена
 	collision_shape.disabled = (level == 0)
 	visual_site.visible = (level == 0)

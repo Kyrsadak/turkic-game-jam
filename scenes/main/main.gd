@@ -25,6 +25,8 @@ var vagrant_scene = preload("res://scenes/vagrant/vagrant.tscn")
 var wolf_scene = preload("res://scenes/enemy/enemy.tscn")
 var tree_scene = preload("res://scenes/tree/tree.tscn")
 var bear_scene = preload("res://scenes/enemy/bear.tscn")
+var builder_house_scene = preload("res://scenes/buildings/builder_house.tscn")
+var archer_tower_scene = preload("res://scenes/buildings/archer_tower.tscn")
 
 var bear_spawn_queue: int = 0
 
