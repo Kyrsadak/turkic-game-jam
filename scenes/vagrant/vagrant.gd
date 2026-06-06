@@ -47,9 +47,7 @@ func _physics_process(delta: float) -> void:
 			if abs(dist_x) > 60.0:
 				velocity.x = sign(dist_x) * speed * 1.3
 				body.scale.x = sign(dist_x)
-				# Анимация бега
-				var pulse = sin(Time.get_ticks_msec() * 0.02) * 0.08
-				body.scale.y = 1.0 + pulse
+				body.scale.y = 1.0
 			else:
 				velocity.x = move_toward(velocity.x, 0, speed * 0.3)
 				body.scale.y = 1.0
@@ -66,8 +64,7 @@ func _physics_process(delta: float) -> void:
 		if abs(dist_x) > 15.0:
 			velocity.x = sign(dist_x) * speed
 			body.scale.x = sign(dist_x)
-			var pulse = sin(Time.get_ticks_msec() * 0.015) * 0.05
-			body.scale.y = 1.0 + pulse
+			body.scale.y = 1.0
 		else:
 			velocity.x = move_toward(velocity.x, 0, speed * 0.35)
 			body.scale.y = 1.0
