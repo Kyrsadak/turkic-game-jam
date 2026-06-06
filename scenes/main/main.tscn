@@ -10,11 +10,13 @@
 [ext_resource type="PackedScene" path="res://scenes/buildings/builder_house.tscn" id="9_builder_house"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/archer_tower.tscn" id="10_archer_tower"]
 [ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
-[ext_resource type="Texture2D" uid="uid://drtaq18c123ed" path="res://assets/textures/background_mountains_day.png" id="12_bg_day"]
-[ext_resource type="Texture2D" uid="uid://dgb33sh22i2s8" path="res://assets/textures/background_mountains.png" id="13_bg_night"]
+[ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="12_sky"]
+[ext_resource type="Texture2D" uid="uid://v0bpw3wypise" path="res://assets/textures/Горы_задний.png" id="13_mountains_far"]
 [ext_resource type="Texture2D" uid="uid://cjwkwtypypqk3" path="res://assets/textures/sun.png" id="14_sun"]
 [ext_resource type="Texture2D" uid="uid://l55qorxfwkcx" path="res://assets/textures/moon.png" id="15_moon"]
 [ext_resource type="Texture2D" uid="uid://njtq2y5qwnl2" path="res://assets/textures/ground_snowy.png" id="16_ground_snowy"]
+[ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="17_mountains_close"]
+[ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="18_forest_back"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
@@ -29,15 +31,28 @@ script = ExtResource("1_script")
 [node name="Background" type="Node2D" parent="." unique_id=336902206]
 z_index = -100
 
-[node name="BgDaySprite" type="Sprite2D" parent="Background" unique_id=1862090506]
-position = Vector2(-1268, -791)
-texture = ExtResource("12_bg_day")
+[node name="Sky" type="Sprite2D" parent="Background" unique_id=1862090506]
+position = Vector2(-2000, -750)
+scale = Vector2(1.18, 1.26)
+texture = ExtResource("12_sky")
 centered = false
 
-[node name="BgNightSprite" type="Sprite2D" parent="Background" unique_id=648521975]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(-1268, -791)
-texture = ExtResource("13_bg_night")
+[node name="MountainsFar" type="Sprite2D" parent="Background" unique_id=648521975]
+position = Vector2(-2000, -450)
+scale = Vector2(1.19, 1.19)
+texture = ExtResource("13_mountains_far")
+centered = false
+
+[node name="MountainsClose" type="Sprite2D" parent="Background" unique_id=648521976]
+position = Vector2(-2000, -320)
+scale = Vector2(1.17, 1.79)
+texture = ExtResource("17_mountains_close")
+centered = false
+
+[node name="ForestBack" type="Sprite2D" parent="Background" unique_id=648521977]
+position = Vector2(-2000, -220)
+scale = Vector2(1.17, 1.17)
+texture = ExtResource("18_forest_back")
 centered = false
 
 [node name="CelestialLayer" type="CanvasLayer" parent="." unique_id=1260140329]

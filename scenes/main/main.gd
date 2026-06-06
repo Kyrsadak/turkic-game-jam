@@ -36,10 +36,16 @@ var night_color = Color(0.28, 0.28, 0.45, 1.0)
 var transition_duration: float = 24.0
 
 # Ссылки на фоновые спрайты и небесные тела
-var bg_day_sprite: Sprite2D
-var bg_night_sprite: Sprite2D
-var base_bg_day_pos: Vector2
-var base_bg_night_pos: Vector2
+var bg_sky: Sprite2D
+var bg_mountains_far: Sprite2D
+var bg_mountains_close: Sprite2D
+var bg_forest_back: Sprite2D
+
+var base_sky_pos: Vector2
+var base_mountains_far_pos: Vector2
+var base_mountains_close_pos: Vector2
+var base_forest_back_pos: Vector2
+
 var sun_sprite: Sprite2D
 var moon_sprite: Sprite2D
 
@@ -308,23 +314,27 @@ func setup_background() -> void:
 		
 	var bg = get_node_or_null("Background")
 	if bg:
-		bg_day_sprite = bg.get_node_or_null("BgDaySprite")
-		bg_night_sprite = bg.get_node_or_null("BgNightSprite")
+		bg_sky = bg.get_node_or_null("Sky")
+		bg_mountains_far = bg.get_node_or_null("MountainsFar")
+		bg_mountains_close = bg.get_node_or_null("MountainsClose")
+		bg_forest_back = bg.get_node_or_null("ForestBack")
 		
-		# Синхронизируем положение ночного фона с дневным, если пользователь перетащил только дневной
-		if is_instance_valid(bg_day_sprite) and is_instance_valid(bg_night_sprite):
-			bg_night_sprite.position = bg_day_sprite.position
+		# Включаем горизонтальное повторение (tiling) и сохраняем начальные позиции
+		if is_instance_valid(bg_sky):
+			base_sky_pos = bg_sky.position
+		if is_instance_valid(bg_mountains_far):
+			base_mountains_far_pos = bg_mountains_far.position
+		if is_instance_valid(bg_mountains_close):
+			base_mountains_close_pos = bg_mountains_close.position
+		if is_instance_valid(bg_forest_back):
+			base_forest_back_pos = bg_forest_back.position
 			
-			base_bg_day_pos = bg_day_sprite.position
-			base_bg_night_pos = bg_night_sprite.position
-			
-			# Включаем горизонтальное повторение (tiling)
-			for sprite in [bg_day_sprite, bg_night_sprite]:
-				if sprite.texture:
-					sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-					sprite.region_enabled = true
-					# Задаем огромный регион по горизонтали для покрытия всей карты (-7500..7500)
-					sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
+		for sprite in [bg_sky, bg_mountains_far, bg_mountains_close, bg_forest_back]:
+			if is_instance_valid(sprite) and sprite.texture:
+				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+				sprite.region_enabled = true
+				# Задаем огромный регион по горизонтали для покрытия всей карты (-100000..100000)
+				sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
 	else:
 		# Создаем Background Node2D программно, если его нет в сцене
 		bg = Node2D.new()
@@ -332,35 +342,61 @@ func setup_background() -> void:
 		bg.z_index = -100
 		add_child(bg)
 		
-		# Дневной фон
-		bg_day_sprite = Sprite2D.new()
-		bg_day_sprite.name = "BgDaySprite"
-		var tex_day = load("res://assets/textures/background_mountains_day.png")
-		if tex_day:
-			bg_day_sprite.texture = tex_day
-			bg_day_sprite.centered = false
-			bg_day_sprite.position = Vector2(-2000, -600)
-			bg_day_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-			bg_day_sprite.region_enabled = true
-			bg_day_sprite.region_rect = Rect2(-100000, 0, 200000, tex_day.get_height())
-			bg.add_child(bg_day_sprite)
+		# Небо
+		bg_sky = Sprite2D.new()
+		bg_sky.name = "Sky"
+		var tex_sky = load("res://assets/textures/небо.png")
+		if tex_sky:
+			bg_sky.texture = tex_sky
+			bg_sky.centered = false
+			bg_sky.position = Vector2(-2000, -750)
+			bg_sky.scale = Vector2(1.18, 1.26)
+			bg.add_child(bg_sky)
 			
-		# Ночной фон
-		bg_night_sprite = Sprite2D.new()
-		bg_night_sprite.name = "BgNightSprite"
-		var tex_night = load("res://assets/textures/background_mountains.png")
-		if tex_night:
-			bg_night_sprite.texture = tex_night
-			bg_night_sprite.centered = false
-			bg_night_sprite.position = Vector2(-2000, -600)
-			bg_night_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-			bg_night_sprite.region_enabled = true
-			bg_night_sprite.region_rect = Rect2(-100000, 0, 200000, tex_night.get_height())
-			bg_night_sprite.modulate.a = 0.0 # Начинаем с дневного
-			bg.add_child(bg_night_sprite)
+		# Горы дальние
+		bg_mountains_far = Sprite2D.new()
+		bg_mountains_far.name = "MountainsFar"
+		var tex_far = load("res://assets/textures/Горы_задний.png")
+		if tex_far:
+			bg_mountains_far.texture = tex_far
+			bg_mountains_far.centered = false
+			bg_mountains_far.position = Vector2(-2000, -450)
+			bg_mountains_far.scale = Vector2(1.19, 1.19)
+			bg.add_child(bg_mountains_far)
 			
-		base_bg_day_pos = bg_day_sprite.position
-		base_bg_night_pos = bg_night_sprite.position
+		# Горы близкие
+		bg_mountains_close = Sprite2D.new()
+		bg_mountains_close.name = "MountainsClose"
+		var tex_close = load("res://assets/textures/Горы.png")
+		if tex_close:
+			bg_mountains_close.texture = tex_close
+			bg_mountains_close.centered = false
+			bg_mountains_close.position = Vector2(-2000, -320)
+			bg_mountains_close.scale = Vector2(1.17, 1.79)
+			bg.add_child(bg_mountains_close)
+			
+		# Лес задний
+		bg_forest_back = Sprite2D.new()
+		bg_forest_back.name = "ForestBack"
+		var tex_forest = load("res://assets/textures/Деревья_заднийфон.png")
+		if tex_forest:
+			bg_forest_back.texture = tex_forest
+			bg_forest_back.centered = false
+			bg_forest_back.position = Vector2(-2000, -220)
+			bg_forest_back.scale = Vector2(1.17, 1.17)
+			bg.add_child(bg_forest_back)
+			
+		# Инициализируем позиции
+		base_sky_pos = bg_sky.position
+		base_mountains_far_pos = bg_mountains_far.position
+		base_mountains_close_pos = bg_mountains_close.position
+		base_forest_back_pos = bg_forest_back.position
+		
+		for sprite in [bg_sky, bg_mountains_far, bg_mountains_close, bg_forest_back]:
+			if is_instance_valid(sprite) and sprite.texture:
+				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+				sprite.region_enabled = true
+				sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
 		
 	var celestial_layer = get_node_or_null("CelestialLayer")
 	if celestial_layer:
@@ -393,7 +429,7 @@ func setup_background() -> void:
 			celestial_layer.add_child(moon_sprite)
 
 func update_background_and_celestial(delta: float) -> void:
-	if not is_instance_valid(bg_day_sprite) or not is_instance_valid(bg_night_sprite):
+	if not is_instance_valid(bg_sky) or not is_instance_valid(bg_mountains_far) or not is_instance_valid(bg_mountains_close) or not is_instance_valid(bg_forest_back):
 		return
 		
 	# 1. Вычисляем степень перехода (transition_factor) от 0.0 (день) до 1.0 (ночь)
@@ -411,27 +447,37 @@ func update_background_and_celestial(delta: float) -> void:
 		else:
 			transition_factor = 1.0
 			
-	# 2. Плавно смешиваем прозрачность фонов гор
-	bg_day_sprite.modulate.a = 1.0 - transition_factor
-	bg_night_sprite.modulate.a = transition_factor
+	# 2. Плавно скрываем голубое небо ночью, чтобы проявить темный космический фон проекта
+	bg_sky.modulate.a = 1.0 - transition_factor
 	
-	# 2.5. Применяем параллакс-эффект на основе позиции камеры игрока
-	# Смещение: x на 15% (множитель 0.85), y на 5% (множитель 0.95)
+	# 2.5. Применяем многослойный параллакс-эффект на основе позиции камеры игрока
 	var cam_pos = Vector2.ZERO
 	var camera = player.get_node_or_null("Camera2D")
 	if camera:
-		# Используем реальную позицию камеры с учетом сглаживания
 		cam_pos = camera.get_screen_center_position()
 	else:
 		cam_pos = player.global_position
 		
-	bg_day_sprite.global_position = Vector2(
-		cam_pos.x * 0.85 + base_bg_day_pos.x,
-		cam_pos.y * 0.95 + base_bg_day_pos.y
+	# Применяем множители для каждого слоя (эффект глубины):
+	# Небо (двигается медленнее всего по X, следует по Y)
+	bg_sky.global_position = Vector2(
+		cam_pos.x * 0.98 + base_sky_pos.x,
+		cam_pos.y * 1.0 + base_sky_pos.y
 	)
-	bg_night_sprite.global_position = Vector2(
-		cam_pos.x * 0.85 + base_bg_night_pos.x,
-		cam_pos.y * 0.95 + base_bg_night_pos.y
+	# Дальние горы (motion_scale.x = 0.1 => 0.9, motion_scale.y = 0.02 => 0.98)
+	bg_mountains_far.global_position = Vector2(
+		cam_pos.x * 0.9 + base_mountains_far_pos.x,
+		cam_pos.y * 0.98 + base_mountains_far_pos.y
+	)
+	# Ближние горы (motion_scale.x = 0.25 => 0.75, motion_scale.y = 0.05 => 0.95)
+	bg_mountains_close.global_position = Vector2(
+		cam_pos.x * 0.75 + base_mountains_close_pos.x,
+		cam_pos.y * 0.95 + base_mountains_close_pos.y
+	)
+	# Задний лес (motion_scale.x = 0.5 => 0.5, motion_scale.y = 0.1 => 0.9)
+	bg_forest_back.global_position = Vector2(
+		cam_pos.x * 0.5 + base_forest_back_pos.x,
+		cam_pos.y * 0.9 + base_forest_back_pos.y
 	)
 	
 	# 3. Получаем размеры экрана для расчета траектории
