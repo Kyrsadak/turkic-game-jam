@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://1hpdah34pj4p"]
+
+[ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="1_5v56a"]
+[ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="1_oxbuu"]
+[ext_resource type="Texture2D" uid="uid://cceghnamr76mt" path="res://assets/textures/луна.png" id="2_1xygq"]
+[ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="4_1xygq"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" unique_id=1156262253]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=727856617]
+motion_scale = Vector2(0.2, 1)
+motion_mirroring = Vector2(1135.345, 0)
+
+[node name="Небо" type="Sprite2D" parent="ParallaxLayer" unique_id=1165158428]
+position = Vector2(579.5494, 323.75)
+scale = Vector2(1.1824627, 1.2651663)
+texture = ExtResource("1_oxbuu")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="." unique_id=74518620]
+motion_scale = Vector2(0.2, 1)
+
+[node name="Луна" type="Sprite2D" parent="ParallaxLayer2" unique_id=805476035]
+position = Vector2(974, 119)
+texture = ExtResource("2_1xygq")
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="." unique_id=140586795]
+motion_scale = Vector2(0.4, 1)
+motion_mirroring = Vector2(1150.14, 0)
+
+[node name="Горы" type="Sprite2D" parent="ParallaxLayer3" unique_id=454246823]
+position = Vector2(575.58624, 459)
+scale = Vector2(1.171922, 2.4705884)
+texture = ExtResource("1_5v56a")
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="." unique_id=1991566954]
+motion_scale = Vector2(0.6, 1)
+motion_mirroring = Vector2(1150.14, 0)
+
+[node name="ДеревьяЗаднийфон" type="Sprite2D" parent="ParallaxLayer4" unique_id=421924940]
+position = Vector2(588.75, 539)
+scale = Vector2(1.1883249, 1)
+texture = ExtResource("4_1xygq")

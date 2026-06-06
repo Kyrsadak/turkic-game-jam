@@ -1,102 +1,136 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=4 uid="uid://bmgwymj5lbfvr"]
 
-[ext_resource type="Script" path="res://scenes/main/main.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bibkxaqw2u657" path="res://scenes/main/main.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
-[ext_resource type="PackedScene" path="res://scenes/tree/tree.tscn" id="4_tree"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/wall.tscn" id="5_wall"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="6_lumberjack_house"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="7_barracks"]
+[ext_resource type="Texture2D" uid="uid://dcg7kid7k4b6y" path="res://assets/textures/дерт2.png" id="8_a8run"]
 [ext_resource type="PackedScene" path="res://scenes/vagrant/vagrant.tscn" id="8_vagrant"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
 
-[node name="Main" type="Node2D"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yyfjg"]
+texture = ExtResource("8_a8run")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_b1x3f"]
+sources/0 = SubResource("TileSetAtlasSource_yyfjg")
+
+[node name="Main" type="Node2D" unique_id=364118728]
 script = ExtResource("1_script")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(1, 1, 1, 1)
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=548994713]
 
-[node name="BackgroundForest" type="Node2D" parent="."]
+[node name="BackgroundForest" type="Node2D" parent="." unique_id=660863599]
 z_index = -5
 
-[node name="MountainFar" type="Polygon2D" parent="BackgroundForest"]
+[node name="MountainFar" type="Polygon2D" parent="BackgroundForest" unique_id=1924746038]
 color = Color(0.08, 0.08, 0.12, 1)
 polygon = PackedVector2Array(-600, 0, -200, -220, 200, 0)
 
-[node name="MountainFar2" type="Polygon2D" parent="BackgroundForest"]
+[node name="MountainFar2" type="Polygon2D" parent="BackgroundForest" unique_id=314320193]
 color = Color(0.08, 0.08, 0.12, 1)
 polygon = PackedVector2Array(-200, 0, 300, -260, 800, 0)
 
-[node name="ForestSilhouette1" type="Polygon2D" parent="BackgroundForest"]
+[node name="ForestSilhouette1" type="Polygon2D" parent="BackgroundForest" unique_id=1607884247]
 color = Color(0.1, 0.12, 0.16, 1)
 polygon = PackedVector2Array(-900, 0, -750, -80, -600, 0)
 
-[node name="ForestSilhouette2" type="Polygon2D" parent="BackgroundForest"]
+[node name="ForestSilhouette2" type="Polygon2D" parent="BackgroundForest" unique_id=1030652072]
 color = Color(0.1, 0.12, 0.16, 1)
 polygon = PackedVector2Array(-400, 0, -300, -90, -200, 0)
 
-[node name="ForestSilhouette3" type="Polygon2D" parent="BackgroundForest"]
+[node name="ForestSilhouette3" type="Polygon2D" parent="BackgroundForest" unique_id=1781187864]
 color = Color(0.1, 0.12, 0.16, 1)
 polygon = PackedVector2Array(150, 0, 300, -95, 450, 0)
 
-[node name="ForestSilhouette4" type="Polygon2D" parent="BackgroundForest"]
+[node name="ForestSilhouette4" type="Polygon2D" parent="BackgroundForest" unique_id=7255181]
 color = Color(0.1, 0.12, 0.16, 1)
 polygon = PackedVector2Array(550, 0, 700, -85, 850, 0)
 
-[node name="Ground" type="StaticBody2D" parent="."]
-collision_layer = 1
+[node name="Ground" type="StaticBody2D" parent="." unique_id=1106158114]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1707663431]
 position = Vector2(0, 20)
 shape = SubResource("RectangleShape2D_ground")
 
-[node name="Visual" type="ColorRect" parent="Ground"]
+[node name="Visual" type="ColorRect" parent="Ground" unique_id=4679017]
 offset_left = -7500.0
 offset_right = 7500.0
 offset_bottom = 60.0
 color = Color(0.18, 0.2, 0.24, 1)
 
-[node name="GrassBorder" type="ColorRect" parent="Ground"]
+[node name="GrassBorder" type="ColorRect" parent="Ground" unique_id=1912570945]
 offset_left = -7500.0
 offset_right = 7500.0
 offset_bottom = 3.0
 color = Color(0.25, 0.35, 0.3, 1)
 
-[node name="Campfire" parent="." instance=ExtResource("3_campfire")]
-
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Player" parent="." unique_id=1059557804 instance=ExtResource("2_player")]
 position = Vector2(-35, -25)
 
-[node name="WallLeft" parent="." instance=ExtResource("5_wall")]
+[node name="WallLeft" parent="." unique_id=111602152 instance=ExtResource("5_wall")]
 position = Vector2(-280, 0)
 
-[node name="WallRight" parent="." instance=ExtResource("5_wall")]
+[node name="WallRight" parent="." unique_id=119138589 instance=ExtResource("5_wall")]
 position = Vector2(280, 0)
 
-[node name="LumberjackHouse" parent="." instance=ExtResource("6_lumberjack_house")]
+[node name="LumberjackHouse" parent="." unique_id=1056746002 instance=ExtResource("6_lumberjack_house")]
 position = Vector2(-130, 0)
 
-[node name="Barracks" parent="." instance=ExtResource("7_barracks")]
+[node name="Barracks" parent="." unique_id=1038876000 instance=ExtResource("7_barracks")]
 position = Vector2(130, 0)
 
-[node name="ForestLeft" type="Node2D" parent="."]
+[node name="ForestLeft" type="Node2D" parent="." unique_id=2119468251]
 
-[node name="ForestRight" type="Node2D" parent="."]
+[node name="ForestRight" type="Node2D" parent="." unique_id=1525954285]
 
-[node name="InitialVagrants" type="Node2D" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1222212119]
 
-[node name="Vagrant1" parent="InitialVagrants" instance=ExtResource("8_vagrant")]
-position = Vector2(-60, 0)
-
-[node name="Vagrant2" parent="InitialVagrants" instance=ExtResource("8_vagrant")]
-position = Vector2(70, 0)
-
-[node name="HUD" type="CanvasLayer" parent="."]
-
-[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=876791447]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 85.0
@@ -105,49 +139,49 @@ theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=652940764]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LabelDayStatus" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+[node name="LabelDayStatus" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1966389674]
 layout_mode = 2
-text = "День 1 | ДЕНЬ (60 сек)"
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
+text = "День 1 | ДЕНЬ (60 сек)"
 
-[node name="ProgressFuel" type="ProgressBar" parent="HUD/MarginContainer/VBoxContainer"]
+[node name="ProgressFuel" type="ProgressBar" parent="HUD/MarginContainer/VBoxContainer" unique_id=959241678]
 custom_minimum_size = Vector2(200, 12)
 layout_mode = 2
 size_flags_horizontal = 0
 value = 50.0
 show_percentage = false
 
-[node name="LabelFuelDesc" type="Label" parent="HUD/MarginContainer/VBoxContainer/ProgressFuel"]
+[node name="LabelFuelDesc" type="Label" parent="HUD/MarginContainer/VBoxContainer/ProgressFuel" unique_id=1094937809]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Огонь костра"
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 9
+text = "Огонь костра"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelWood" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+[node name="LabelWood" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=990572657]
 layout_mode = 2
-text = "Дров у Короля: 0/5"
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 12
+text = "Дров у Короля: 0/5"
 
-[node name="GameOverScreen" type="CanvasLayer" parent="."]
+[node name="GameOverScreen" type="CanvasLayer" parent="." unique_id=94992659]
 visible = false
 
-[node name="BackgroundDim" type="ColorRect" parent="GameOverScreen"]
+[node name="BackgroundDim" type="ColorRect" parent="GameOverScreen" unique_id=1443108818]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -155,49 +189,64 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.05, 0.05, 0.08, 0.75)
 
-[node name="MarginContainer" type="MarginContainer" parent="GameOverScreen"]
+[node name="MarginContainer" type="MarginContainer" parent="GameOverScreen" unique_id=1920965450]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameOverScreen/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverScreen/MarginContainer" unique_id=901439360]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="LabelTitle" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer"]
+[node name="LabelTitle" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer" unique_id=574654171]
 layout_mode = 2
-text = "КОСТЕР ПОТУХ"
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 36
+text = "КОСТЕР ПОТУХ"
 horizontal_alignment = 1
 
-[node name="LabelSubtitle" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer"]
+[node name="LabelSubtitle" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer" unique_id=1468668960]
 layout_mode = 2
-text = "Тьма и холод поглотили эти земли..."
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 16
+text = "Тьма и холод поглотили эти земли..."
 horizontal_alignment = 1
 
-[node name="LabelStats" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer"]
+[node name="LabelStats" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer" unique_id=1750274618]
 layout_mode = 2
-text = "Вы прожили дней: 1"
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
+text = "Вы прожили дней: 1"
 horizontal_alignment = 1
 
-[node name="LabelRestart" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer"]
+[node name="LabelRestart" type="Label" parent="GameOverScreen/MarginContainer/VBoxContainer" unique_id=614083559]
 layout_mode = 2
-text = "Нажмите [R], чтобы начать заново"
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 12
+text = "Нажмите [R], чтобы начать заново"
 horizontal_alignment = 1
+
+[node name="InitialVagrants" type="Node2D" parent="." unique_id=517328089]
+
+[node name="Vagrant1" parent="InitialVagrants" unique_id=1700137837 instance=ExtResource("8_vagrant")]
+position = Vector2(-60, 0)
+
+[node name="Vagrant2" parent="InitialVagrants" unique_id=1710879789 instance=ExtResource("8_vagrant")]
+position = Vector2(70, 0)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1874447466]
+tile_map_data = PackedByteArray("AADv/wAAAAAIAAAAAADv/wEAAAAIAAEAAADv/wIAAAAIAAIAAADw/wAAAAAJAAAAAADw/wEAAAAJAAEAAADw/wIAAAAJAAIAAADx/wAAAAACAAAAAADx/wEAAAACAAEAAADx/wIAAAACAAIAAADy/wAAAAADAAAAAADy/wEAAAADAAEAAADy/wIAAAADAAIAAADz/wAAAAAEAAAAAADz/wEAAAAEAAEAAADz/wIAAAAEAAIAAAD0/wAAAAAFAAAAAAD0/wEAAAAFAAEAAAD0/wIAAAAFAAIAAAD1/wAAAAAGAAAAAAD1/wEAAAAGAAEAAAD1/wIAAAAGAAIAAAD2/wAAAAAHAAAAAAD2/wEAAAAHAAEAAAD2/wIAAAAHAAIAAAD3/wAAAAAIAAAAAAD3/wEAAAAIAAEAAAD3/wIAAAAIAAIAAAD4/wAAAAAJAAAAAAD4/wEAAAAJAAEAAAD4/wIAAAAJAAIAAAD5/wAAAAAAAAAAAAD5/wEAAAAAAAEAAAD5/wIAAAAAAAIAAAD6/wAAAAABAAAAAAD6/wEAAAABAAEAAAD6/wIAAAABAAIAAAD7/wAAAAACAAAAAAD7/wEAAAACAAEAAAD7/wIAAAACAAIAAAD8/wAAAAADAAAAAAD8/wEAAAADAAEAAAD8/wIAAAADAAIAAAD9/wAAAAAEAAAAAAD9/wEAAAAEAAEAAAD9/wIAAAAEAAIAAAD+/wAAAAAFAAAAAAD+/wEAAAAFAAEAAAD+/wIAAAAFAAIAAAD//wAAAAAGAAAAAAD//wEAAAAGAAEAAAD//wIAAAAGAAIAAAAAAAAAAAAHAAAAAAAAAAEAAAAHAAEAAAAAAAIAAAAHAAIAAAABAAAAAAAIAAAAAAABAAEAAAAIAAEAAAABAAIAAAAIAAIAAAACAAAAAAAJAAAAAAACAAEAAAAJAAEAAAACAAIAAAAJAAIAAAADAAAAAAAAAAAAAAADAAEAAAAAAAEAAAADAAIAAAAAAAIAAAAEAAAAAAABAAAAAAAEAAEAAAABAAEAAAAEAAIAAAABAAIAAAAFAAAAAAACAAAAAAAFAAEAAAACAAEAAAAFAAIAAAACAAIAAAAGAAAAAAADAAAAAAAGAAEAAAADAAEAAAAGAAIAAAADAAIAAAAHAAAAAAAEAAAAAAAHAAEAAAAEAAEAAAAHAAIAAAAEAAIAAAAIAAAAAAAFAAAAAAAIAAEAAAAFAAEAAAAIAAIAAAAFAAIAAAAJAAAAAAAGAAAAAAAJAAEAAAAGAAEAAAAJAAIAAAAGAAIAAAAKAAAAAAAHAAAAAAAKAAEAAAAHAAEAAAAKAAIAAAAHAAIAAAALAAAAAAAIAAAAAAALAAEAAAAIAAEAAAALAAIAAAAIAAIAAAAMAAAAAAAJAAAAAAAMAAEAAAAJAAEAAAAMAAIAAAAJAAIAAAANAAAAAAAAAAAAAAANAAEAAAAAAAEAAAANAAIAAAAAAAIAAAAOAAAAAAABAAAAAAAOAAEAAAABAAEAAAAOAAIAAAABAAIAAAAPAAAAAAACAAAAAAAPAAEAAAACAAEAAAAPAAIAAAACAAIAAAAQAAAAAAADAAAAAAAQAAEAAAADAAEAAAAQAAIAAAADAAIAAAARAAAAAAAEAAAAAAARAAEAAAAEAAEAAAARAAIAAAAEAAIAAAASAAAAAAAFAAAAAAASAAEAAAAFAAEAAAASAAIAAAAFAAIAAAATAAAAAAAGAAAAAAATAAEAAAAGAAEAAAATAAIAAAAGAAIAAAAUAAAAAAAHAAAAAAAUAAEAAAAHAAEAAAAUAAIAAAAHAAIAAAAVAAAAAAAIAAAAAAAVAAEAAAAIAAEAAAAVAAIAAAAIAAIAAAAWAAAAAAAJAAAAAAAWAAEAAAAJAAEAAAAWAAIAAAAJAAIAAAAXAAAAAAAAAAAAAAAXAAEAAAAAAAEAAAAXAAIAAAAAAAIAAAAYAAAAAAABAAAAAAAYAAEAAAABAAEAAAAYAAIAAAABAAIAAAAZAAAAAAACAAAAAAAZAAEAAAACAAEAAAAZAAIAAAACAAIAAAAaAAAAAAADAAAAAAAaAAEAAAADAAEAAAAaAAIAAAADAAIAAAAbAAAAAAAEAAAAAAAbAAEAAAAEAAEAAAAbAAIAAAAEAAIAAAAcAAAAAAAFAAAAAAAcAAEAAAAFAAEAAAAcAAIAAAAFAAIAAAAdAAAAAAAGAAAAAAAdAAEAAAAGAAEAAAAdAAIAAAAGAAIAAAAeAAAAAAAHAAAAAAAeAAEAAAAHAAEAAAAeAAIAAAAHAAIAAAAfAAAAAAAIAAAAAAAfAAEAAAAIAAEAAAAfAAIAAAAIAAIAAAAgAAAAAAAJAAAAAAAgAAEAAAAJAAEAAAAgAAIAAAAJAAIAAADn/wAAAAAAAAAAAADn/wEAAAAAAAEAAADn/wIAAAAAAAIAAADo/wAAAAABAAAAAADo/wEAAAABAAEAAADo/wIAAAABAAIAAADp/wAAAAACAAAAAADp/wEAAAACAAEAAADp/wIAAAACAAIAAADq/wAAAAADAAAAAADq/wEAAAADAAEAAADq/wIAAAADAAIAAADr/wAAAAAEAAAAAADr/wEAAAAEAAEAAADr/wIAAAAEAAIAAADs/wAAAAAFAAAAAADs/wEAAAAFAAEAAADs/wIAAAAFAAIAAADt/wAAAAAGAAAAAADt/wEAAAAGAAEAAADt/wIAAAAGAAIAAADu/wAAAAAHAAAAAADu/wEAAAAHAAEAAADu/wIAAAAHAAIAAADd/wAAAAAAAAAAAADd/wEAAAAAAAEAAADd/wIAAAAAAAIAAADe/wAAAAABAAAAAADe/wEAAAABAAEAAADe/wIAAAABAAIAAADf/wAAAAACAAAAAADf/wEAAAACAAEAAADf/wIAAAACAAIAAADg/wAAAAADAAAAAADg/wEAAAADAAEAAADg/wIAAAADAAIAAADh/wAAAAAEAAAAAADh/wEAAAAEAAEAAADh/wIAAAAEAAIAAADi/wAAAAAFAAAAAADi/wEAAAAFAAEAAADi/wIAAAAFAAIAAADj/wAAAAAGAAAAAADj/wEAAAAGAAEAAADj/wIAAAAGAAIAAADk/wAAAAAHAAAAAADk/wEAAAAHAAEAAADk/wIAAAAHAAIAAADl/wAAAAAIAAAAAADl/wEAAAAIAAEAAADl/wIAAAAIAAIAAADm/wAAAAAJAAAAAADm/wEAAAAJAAEAAADm/wIAAAAJAAIAAADT/wAAAAAAAAAAAADT/wEAAAAAAAEAAADT/wIAAAAAAAIAAADU/wAAAAABAAAAAADU/wEAAAABAAEAAADU/wIAAAABAAIAAADV/wAAAAACAAAAAADV/wEAAAACAAEAAADV/wIAAAACAAIAAADW/wAAAAADAAAAAADW/wEAAAADAAEAAADW/wIAAAADAAIAAADX/wAAAAAEAAAAAADX/wEAAAAEAAEAAADX/wIAAAAEAAIAAADY/wAAAAAFAAAAAADY/wEAAAAFAAEAAADY/wIAAAAFAAIAAADZ/wAAAAAGAAAAAADZ/wEAAAAGAAEAAADZ/wIAAAAGAAIAAADa/wAAAAAHAAAAAADa/wEAAAAHAAEAAADa/wIAAAAHAAIAAADb/wAAAAAIAAAAAADb/wEAAAAIAAEAAADb/wIAAAAIAAIAAADc/wAAAAAJAAAAAADc/wEAAAAJAAEAAADc/wIAAAAJAAIAAADJ/wAAAAAAAAAAAADJ/wEAAAAAAAEAAADJ/wIAAAAAAAIAAADK/wAAAAABAAAAAADK/wEAAAABAAEAAADK/wIAAAABAAIAAADL/wAAAAACAAAAAADL/wEAAAACAAEAAADL/wIAAAACAAIAAADM/wAAAAADAAAAAADM/wEAAAADAAEAAADM/wIAAAADAAIAAADN/wAAAAAEAAAAAADN/wEAAAAEAAEAAADN/wIAAAAEAAIAAADO/wAAAAAFAAAAAADO/wEAAAAFAAEAAADO/wIAAAAFAAIAAADP/wAAAAAGAAAAAADP/wEAAAAGAAEAAADP/wIAAAAGAAIAAADQ/wAAAAAHAAAAAADQ/wEAAAAHAAEAAADQ/wIAAAAHAAIAAADR/wAAAAAIAAAAAADR/wEAAAAIAAEAAADR/wIAAAAIAAIAAADS/wAAAAAJAAAAAADS/wEAAAAJAAEAAADS/wIAAAAJAAIAAAA=")
+tile_set = SubResource("TileSet_b1x3f")
+
+[node name="Campfire" parent="." unique_id=733894628 instance=ExtResource("3_campfire")]
+position = Vector2(-1, -3)
