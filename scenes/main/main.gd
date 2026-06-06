@@ -38,6 +38,8 @@ var transition_duration: float = 24.0
 # Ссылки на фоновые спрайты и небесные тела
 var bg_day_sprite: Sprite2D
 var bg_night_sprite: Sprite2D
+var base_bg_day_pos: Vector2
+var base_bg_night_pos: Vector2
 var sun_sprite: Sprite2D
 var moon_sprite: Sprite2D
 
@@ -304,25 +306,31 @@ func setup_background() -> void:
 	if bg_forest:
 		bg_forest.visible = false
 		
-	var pb = get_node_or_null("ParallaxBackground")
-	if pb:
-		var pl = pb.get_node_or_null("ParallaxLayer")
-		if pl:
-			bg_day_sprite = pl.get_node_or_null("BgDaySprite")
-			bg_night_sprite = pl.get_node_or_null("BgNightSprite")
-	else:
-		# Создаем ParallaxBackground для гор
-		pb = ParallaxBackground.new()
-		pb.name = "ParallaxBackground"
-		pb.layer = -100 # Отрисовывается позади всех элементов
-		add_child(pb)
+	var bg = get_node_or_null("Background")
+	if bg:
+		bg_day_sprite = bg.get_node_or_null("BgDaySprite")
+		bg_night_sprite = bg.get_node_or_null("BgNightSprite")
 		
-		# Добавляем ParallaxLayer
-		var pl = ParallaxLayer.new()
-		pl.name = "ParallaxLayer"
-		pl.motion_scale = Vector2(0.15, 0.05) # Медленный параллакс по горизонтали, почти статичный по вертикали
-		pl.motion_mirroring = Vector2(1024, 0)
-		pb.add_child(pl)
+		# Синхронизируем положение ночного фона с дневным, если пользователь перетащил только дневной
+		if is_instance_valid(bg_day_sprite) and is_instance_valid(bg_night_sprite):
+			bg_night_sprite.position = bg_day_sprite.position
+			
+			base_bg_day_pos = bg_day_sprite.position
+			base_bg_night_pos = bg_night_sprite.position
+			
+			# Включаем горизонтальное повторение (tiling)
+			for sprite in [bg_day_sprite, bg_night_sprite]:
+				if sprite.texture:
+					sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+					sprite.region_enabled = true
+					# Задаем огромный регион по горизонтали для покрытия всей карты (-7500..7500)
+					sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
+	else:
+		# Создаем Background Node2D программно, если его нет в сцене
+		bg = Node2D.new()
+		bg.name = "Background"
+		bg.z_index = -100
+		add_child(bg)
 		
 		# Дневной фон
 		bg_day_sprite = Sprite2D.new()
@@ -331,9 +339,11 @@ func setup_background() -> void:
 		if tex_day:
 			bg_day_sprite.texture = tex_day
 			bg_day_sprite.centered = false
-			bg_day_sprite.position = Vector2(0, -120)
-			bg_day_sprite.modulate.a = 1.0
-			pl.add_child(bg_day_sprite)
+			bg_day_sprite.position = Vector2(-2000, -600)
+			bg_day_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+			bg_day_sprite.region_enabled = true
+			bg_day_sprite.region_rect = Rect2(-100000, 0, 200000, tex_day.get_height())
+			bg.add_child(bg_day_sprite)
 			
 		# Ночной фон
 		bg_night_sprite = Sprite2D.new()
@@ -342,9 +352,15 @@ func setup_background() -> void:
 		if tex_night:
 			bg_night_sprite.texture = tex_night
 			bg_night_sprite.centered = false
-			bg_night_sprite.position = Vector2(0, -120)
+			bg_night_sprite.position = Vector2(-2000, -600)
+			bg_night_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+			bg_night_sprite.region_enabled = true
+			bg_night_sprite.region_rect = Rect2(-100000, 0, 200000, tex_night.get_height())
 			bg_night_sprite.modulate.a = 0.0 # Начинаем с дневного
-			pl.add_child(bg_night_sprite)
+			bg.add_child(bg_night_sprite)
+			
+		base_bg_day_pos = bg_day_sprite.position
+		base_bg_night_pos = bg_night_sprite.position
 		
 	var celestial_layer = get_node_or_null("CelestialLayer")
 	if celestial_layer:
@@ -398,6 +414,25 @@ func update_background_and_celestial(delta: float) -> void:
 	# 2. Плавно смешиваем прозрачность фонов гор
 	bg_day_sprite.modulate.a = 1.0 - transition_factor
 	bg_night_sprite.modulate.a = transition_factor
+	
+	# 2.5. Применяем параллакс-эффект на основе позиции камеры игрока
+	# Смещение: x на 15% (множитель 0.85), y на 5% (множитель 0.95)
+	var cam_pos = Vector2.ZERO
+	var camera = player.get_node_or_null("Camera2D")
+	if camera:
+		# Используем реальную позицию камеры с учетом сглаживания
+		cam_pos = camera.get_screen_center_position()
+	else:
+		cam_pos = player.global_position
+		
+	bg_day_sprite.global_position = Vector2(
+		cam_pos.x * 0.85 + base_bg_day_pos.x,
+		cam_pos.y * 0.95 + base_bg_day_pos.y
+	)
+	bg_night_sprite.global_position = Vector2(
+		cam_pos.x * 0.85 + base_bg_night_pos.x,
+		cam_pos.y * 0.95 + base_bg_night_pos.y
+	)
 	
 	# 3. Получаем размеры экрана для расчета траектории
 	var viewport_size = get_viewport_rect().size
