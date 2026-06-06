@@ -86,6 +86,7 @@ func _ready() -> void:
 		is_game_started = false
 		player.set_physics_process(false)
 		hud.visible = false
+		set_game_world_visible(false)
 		menu.connect("start_pressed", Callable(self, "_on_menu_start_pressed"))
 	else:
 		is_game_started = true
@@ -617,6 +618,9 @@ func _on_menu_start_pressed() -> void:
 		campfire.is_burned_out = false
 		campfire.emit_signal("fuel_changed", campfire.current_fuel, campfire.max_fuel)
 		
+	# Плавно проявляем игровой мир
+	fade_in_game_world()
+	
 	# Включаем физику игрока
 	if is_instance_valid(player):
 		player.set_physics_process(true)
@@ -627,6 +631,37 @@ func _on_menu_start_pressed() -> void:
 		_on_player_wood_changed(player.wood_count)
 		_on_campfire_fuel_changed(campfire.current_fuel, campfire.max_fuel)
 		update_hud_text()
+
+func set_game_world_visible(p_visible: bool) -> void:
+	var nodes = [
+		player,
+		campfire,
+		get_node_or_null("Ground"),
+		get_node_or_null("ForestLeft"),
+		get_node_or_null("ForestRight"),
+		get_node_or_null("InitialVagrants"),
+		get_node_or_null("TileMapLayer")
+	]
+	for node in nodes:
+		if is_instance_valid(node):
+			node.visible = p_visible
+
+func fade_in_game_world() -> void:
+	var nodes = [
+		player,
+		campfire,
+		get_node_or_null("Ground"),
+		get_node_or_null("ForestLeft"),
+		get_node_or_null("ForestRight"),
+		get_node_or_null("InitialVagrants"),
+		get_node_or_null("TileMapLayer")
+	]
+	var tween = create_tween().set_parallel(true)
+	for node in nodes:
+		if is_instance_valid(node):
+			node.visible = true
+			node.modulate.a = 0.0
+			tween.tween_property(node, "modulate:a", 1.0, 0.6)
 
 
 
