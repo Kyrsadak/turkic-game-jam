@@ -19,12 +19,13 @@ var is_hitting: bool = false
 @onready var chop_hit_audio: AudioStreamPlayer2D = $ChopHitAudio
 
 var shake_strength: float = 0.0
-var shake_decay: float = 12.0
+var shake_decay: float = 24.0
 var footstep_timer: float = 0.0
 var footstep_base_volume_db: float = -6.4
 var footstep_fadeout_speed_db: float = 42.0
 var chop_sound_sequence: int = 0
 var chop_hit_impact_delay_sec: float = 0.16
+var is_mining: bool = false
 
 const AXE_HITBOX_OFFSET: Vector2 = Vector2(14.0, -16.0)
 const AXE_HITBOX_SIZE: Vector2 = Vector2(24.0, 26.0)
@@ -35,7 +36,12 @@ func _ready() -> void:
 	footstep_audio.volume_db = footstep_base_volume_db
 	chop_swing_audio.max_polyphony = 3
 	chop_hit_audio.max_polyphony = 4
-	TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
+	
+	if has_node("AnimatedSprite2D"):
+		var anim_sprite = $AnimatedSprite2D
+		anim_sprite.reparent(body)
+	else:
+		TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
 
 func _physics_process(delta: float) -> void:
 	# Гравитация
@@ -77,6 +83,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	update_footsteps(delta)
+	update_animations()
 
 	# Обработка клавиши E или клика мыши для взаимодействия
 	var wants_to_interact = Input.is_key_pressed(KEY_E) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
@@ -98,7 +105,7 @@ func perform_interaction() -> void:
 				tween.tween_property(wood_pile, "position:y", -5.0, 0.1)
 				tween.tween_property(wood_pile, "position:y", 0.0, 0.1)
 				
-				apply_camera_shake(1.2)
+				apply_camera_shake(0.25)
 				is_hitting = true
 				await get_tree().create_timer(0.25).timeout
 				is_hitting = false
@@ -119,7 +126,7 @@ func perform_interaction() -> void:
 				emit_signal("wood_count_changed", wood_count)
 				update_wood_visuals()
 				
-				apply_camera_shake(1.2)
+				apply_camera_shake(0.25)
 				is_hitting = true
 				await get_tree().create_timer(0.2).timeout
 				is_hitting = false
@@ -138,24 +145,34 @@ func perform_interaction() -> void:
 			start_hit_animation()
 			return
 
-	# 5. Если рядом нет цели для взаимодействия — все равно делаем взмах
-	start_hit_animation()
-
 func start_hit_animation(tree_to_hit: Node = null) -> void:
 	is_hitting = true
+	if tree_to_hit != null:
+		is_mining = true
+		var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+		if anim_sprite:
+			anim_sprite.play("Mining")
+		apply_camera_shake(0.4)
+	else:
+		apply_camera_shake(0.2)
+			
 	hit_cooldown.start()
-	apply_camera_shake(1.8)
 	play_chop_audio_sequence(tree_to_hit)
 	
-	# Эффект удара (наклон тела)
+	# Эффект удара (маленький наклон тела, без выворачивания)
+	# Сбрасываем scale.y в 1 чтобы пульс-эффект ходьбы не мешал
+	var dir_sign = sign(body.scale.x) if body.scale.x != 0 else 1
+	body.scale = Vector2(dir_sign, 1.0)
+	body.position = Vector2.ZERO
 	var tween = create_tween()
 	var orig_rot = body.rotation
-	var hit_rot = 0.35 * sign(body.scale.x)
+	var hit_rot = 0.15 * dir_sign
 	tween.tween_property(body, "rotation", hit_rot, 0.08)
 	tween.tween_property(body, "rotation", orig_rot, 0.12)
 	
 	await tween.finished
 	is_hitting = false
+	is_mining = false
 
 func play_chop_audio_sequence(tree_to_hit: Node = null) -> void:
 	chop_sound_sequence += 1
@@ -275,3 +292,18 @@ func update_footsteps(delta: float) -> void:
 			if footstep_audio.volume_db <= -39.0:
 				footstep_audio.stop()
 				footstep_audio.volume_db = footstep_base_volume_db
+
+func update_animations() -> void:
+	var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+	if not anim_sprite:
+		return
+		
+	if is_mining:
+		if anim_sprite.animation != "Mining":
+			anim_sprite.play("Mining")
+	elif is_on_floor() and abs(velocity.x) > 5.0:
+		if anim_sprite.animation != "walk":
+			anim_sprite.play("walk")
+	else:
+		if anim_sprite.animation != "Idle":
+			anim_sprite.play("Idle")
