@@ -20,7 +20,6 @@ var target_post_x: float = 0.0
 static var spearman_count: int = 0
 
 func _ready() -> void:
-	scale = Vector2(2.5, 2.5)
 	add_to_group("spearman")
 	
 	# Чередуем фланги: нечётные → правый (+1), чётные → левый (-1)

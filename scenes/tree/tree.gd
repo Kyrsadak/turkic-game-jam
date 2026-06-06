@@ -22,13 +22,27 @@ var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 @onready var label_health: Label = $LabelHealth
 
 func _ready() -> void:
-	scale = Vector2(2.5, 2.5)
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0
 	label_health.visible = false
 	setup_tooltip_style(label_health)
-	TextureLoader.try_apply_texture(self, "res://assets/textures/tree.png", Vector2(0, -70))
+	
+	# Выбираем случайную текстуру дерева
+	var tree_textures = [
+		"res://assets/textures/tree_pine.png",
+		"res://assets/textures/tree_spruce.png",
+		"res://assets/textures/tree_birch.png"
+	]
+	
+	# Выбираем случайное дерево
+	var chosen_tex = tree_textures[randi() % tree_textures.size()]
+	
+	# Если файлы не сгенерированы (или для тестов), используем стандартный
+	if not FileAccess.file_exists(chosen_tex):
+		chosen_tex = "res://assets/textures/tree.png"
+		
+	TextureLoader.try_apply_texture(self, chosen_tex, Vector2(0, -70))
 
 func _process(delta: float) -> void:
 	if is_felled:

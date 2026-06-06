@@ -33,6 +33,12 @@ var day_color = Color(1.0, 1.0, 1.0, 1.0)
 var night_color = Color(0.28, 0.28, 0.45, 1.0)
 var transition_duration: float = 24.0
 
+# Ссылки на фоновые спрайты и небесные тела
+var bg_day_sprite: Sprite2D
+var bg_night_sprite: Sprite2D
+var sun_sprite: Sprite2D
+var moon_sprite: Sprite2D
+
 func _ready() -> void:
 	game_over_screen.visible = false
 	campfire.connect("burned_out", Callable(self, "_on_campfire_burned_out"))
@@ -48,6 +54,9 @@ func _ready() -> void:
 	_on_player_wood_changed(player.wood_count)
 	_on_campfire_fuel_changed(campfire.current_fuel, campfire.max_fuel)
 	update_hud_text()
+	
+	# Настраиваем новый фон с горами
+	setup_background()
 
 func _process(delta: float) -> void:
 	if game_over_active:
@@ -57,6 +66,9 @@ func _process(delta: float) -> void:
 
 	# Игровое время
 	time_in_state += delta
+	
+	# Обновляем фон и небесные тела
+	update_background_and_celestial(delta)
 	
 	# Логика смены дня и ночи
 	if is_day:
@@ -261,3 +273,128 @@ func update_hud_text() -> void:
 
 func restart_game() -> void:
 	get_tree().reload_current_scene()
+
+func setup_background() -> void:
+	# Скрываем старый векторный фон
+	var bg_forest = get_node_or_null("BackgroundForest")
+	if bg_forest:
+		bg_forest.visible = false
+		
+	# Создаем ParallaxBackground для гор
+	var pb = ParallaxBackground.new()
+	pb.layer = -100 # Отрисовывается позади всех элементов
+	add_child(pb)
+	
+	# Добавляем ParallaxLayer
+	var pl = ParallaxLayer.new()
+	pl.motion_scale = Vector2(0.15, 0.05) # Медленный параллакс по горизонтали, почти статичный по вертикали
+	pl.motion_mirroring = Vector2(1024, 0)
+	pb.add_child(pl)
+	
+	# Дневной фон
+	bg_day_sprite = Sprite2D.new()
+	var tex_day = load("res://assets/textures/background_mountains_day.png")
+	if tex_day:
+		bg_day_sprite.texture = tex_day
+		bg_day_sprite.centered = false
+		bg_day_sprite.position = Vector2(0, -120)
+		bg_day_sprite.modulate.a = 1.0
+		pl.add_child(bg_day_sprite)
+		
+	# Ночной фон
+	bg_night_sprite = Sprite2D.new()
+	var tex_night = load("res://assets/textures/background_mountains.png")
+	if tex_night:
+		bg_night_sprite.texture = tex_night
+		bg_night_sprite.centered = false
+		bg_night_sprite.position = Vector2(0, -120)
+		bg_night_sprite.modulate.a = 0.0 # Начинаем с дневного
+		pl.add_child(bg_night_sprite)
+		
+	# Создаем отдельный CanvasLayer для небесных тел (Солнце, Луна)
+	# Позиционируем их за игровыми элементами, но перед дальними горами
+	var celestial_layer = CanvasLayer.new()
+	celestial_layer.layer = -95
+	add_child(celestial_layer)
+	
+	# Солнце
+	sun_sprite = Sprite2D.new()
+	var tex_sun = load("res://assets/textures/sun.png")
+	if tex_sun:
+		sun_sprite.texture = tex_sun
+		sun_sprite.modulate.a = 1.0
+		celestial_layer.add_child(sun_sprite)
+		
+	# Луна
+	moon_sprite = Sprite2D.new()
+	var tex_moon = load("res://assets/textures/moon.png")
+	if tex_moon:
+		moon_sprite.texture = tex_moon
+		moon_sprite.modulate.a = 0.0
+		celestial_layer.add_child(moon_sprite)
+
+func update_background_and_celestial(delta: float) -> void:
+	if not is_instance_valid(bg_day_sprite) or not is_instance_valid(bg_night_sprite):
+		return
+		
+	# 1. Вычисляем степень перехода (transition_factor) от 0.0 (день) до 1.0 (ночь)
+	var transition_factor: float = 0.0
+	if is_day:
+		var time_left = day_duration - time_in_state
+		if time_left < transition_duration:
+			transition_factor = (transition_duration - time_left) / transition_duration
+		else:
+			transition_factor = 0.0
+	else:
+		var time_left = night_duration - time_in_state
+		if time_left < transition_duration:
+			transition_factor = 1.0 - ((transition_duration - time_left) / transition_duration)
+		else:
+			transition_factor = 1.0
+			
+	# 2. Плавно смешиваем прозрачность фонов гор
+	bg_day_sprite.modulate.a = 1.0 - transition_factor
+	bg_night_sprite.modulate.a = transition_factor
+	
+	# 3. Получаем размеры экрана для расчета траектории
+	var viewport_size = get_viewport_rect().size
+	var w = viewport_size.x
+	var h = viewport_size.y
+	
+	# 4. Движение солнца и луны по дуге
+	if is_day:
+		var sun_prog = time_in_state / day_duration
+		var sun_angle = PI * (1.0 - sun_prog)
+		if is_instance_valid(sun_sprite):
+			sun_sprite.position = Vector2(
+				w * 0.5 + cos(sun_angle) * (w * 0.45),
+				h * 0.7 - sin(sun_angle) * (h * 0.55)
+			)
+			sun_sprite.modulate.a = 1.0 - transition_factor
+			
+		if is_instance_valid(moon_sprite):
+			var moon_angle = PI * (1.0 - transition_factor * 0.1)
+			moon_sprite.position = Vector2(
+				w * 0.5 + cos(moon_angle) * (w * 0.45),
+				h * 0.7 - sin(moon_angle) * (h * 0.55)
+			)
+			moon_sprite.modulate.a = transition_factor
+	else:
+		var night_prog = time_in_state / night_duration
+		var moon_angle = PI * (1.0 - night_prog)
+		if is_instance_valid(moon_sprite):
+			moon_sprite.position = Vector2(
+				w * 0.5 + cos(moon_angle) * (w * 0.45),
+				h * 0.7 - sin(moon_angle) * (h * 0.55)
+			)
+			moon_sprite.modulate.a = transition_factor
+			
+		if is_instance_valid(sun_sprite):
+			var sun_angle = PI * (1.0 - (1.0 - transition_factor) * 0.1)
+			sun_sprite.position = Vector2(
+				w * 0.5 + cos(sun_angle) * (w * 0.45),
+				h * 0.7 - sin(sun_angle) * (h * 0.55)
+			)
+			sun_sprite.modulate.a = 1.0 - transition_factor
+
+

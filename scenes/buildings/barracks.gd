@@ -78,8 +78,8 @@ func spawn_spearman() -> void:
 	
 	# Эффект спавна
 	var tween = create_tween()
-	sm.scale = Vector2(1.25, 3.75)  # 0.5x и 1.5x от 2.5
-	tween.tween_property(sm, "scale", Vector2(2.5, 2.5), 0.2)
+	sm.scale = Vector2(0.5, 1.5)
+	tween.tween_property(sm, "scale", Vector2(1.0, 1.0), 0.2)
 
 func update_visuals() -> void:
 	visual_site.visible = not is_built

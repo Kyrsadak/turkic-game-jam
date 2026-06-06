@@ -20,7 +20,6 @@ var chop_timer: float = 0.0
 @onready var wood_pile: Node2D = $WoodPile
 
 func _ready() -> void:
-	scale = Vector2(2.5, 2.5)
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE

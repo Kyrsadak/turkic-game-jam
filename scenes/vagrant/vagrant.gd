@@ -15,7 +15,6 @@ var spawn_x: float = 0.0
 @onready var label_status: Label = $LabelStatus
 
 func _ready() -> void:
-	scale = Vector2(2.5, 2.5)
 	add_to_group("vagrant")
 	spawn_x = global_position.x
 	choose_new_wander_target()

@@ -5,21 +5,30 @@ static func try_apply_texture(node: Node2D, texture_path: String, offset: Vector
 	if FileAccess.file_exists(texture_path):
 		var tex = load(texture_path)
 		if tex:
-			# Скрываем стандартную векторную графику
+			# Находим контейнер для векторной графики
+			var container: Node2D = null
 			var visual = node.get_node_or_null("Visual")
+			var body = node.get_node_or_null("Body")
+			var logs = node.get_node_or_null("Logs")
+			
 			if visual:
-				visual.visible = false
-			else:
-				var body = node.get_node_or_null("Body")
-				if body:
-					body.visible = false
-				else:
-					var logs = node.get_node_or_null("Logs")
-					if logs:
-						logs.visible = false
+				container = visual
+			elif body:
+				container = body
+			elif logs:
+				container = logs
+				
+			var parent_node = container if container else node
+			
+			# Скрываем все оригинальные векторные элементы внутри контейнера
+			if container:
+				for child in container.get_children():
+					if child.name != "DesignerSprite":
+						if child is CanvasItem:
+							child.visible = false
 			
 			# Проверяем, не был ли спрайт уже добавлен
-			var existing_sprite = node.get_node_or_null("DesignerSprite")
+			var existing_sprite = parent_node.get_node_or_null("DesignerSprite")
 			if existing_sprite:
 				existing_sprite.texture = tex
 				existing_sprite.position = offset
@@ -38,6 +47,6 @@ static func try_apply_texture(node: Node2D, texture_path: String, offset: Vector
 				if crown and crown.material:
 					sprite.material = crown.material
 					
-			node.add_child(sprite)
+			parent_node.add_child(sprite)
 			return sprite
 	return null
