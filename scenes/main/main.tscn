@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
 [ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
 [ext_resource type="Texture2D" uid="uid://njtq2y5qwnl2" path="res://assets/textures/ground_snowy.png" id="16_ground_snowy"]
+[ext_resource type="PackedScene" path="res://scenes/main/game_background.tscn" id="17_gamebg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
@@ -15,6 +16,8 @@ size = Vector2(15000, 40)
 script = ExtResource("1_script")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
+
+[node name="GameBackground" parent="." instance=ExtResource("17_gamebg")]
 
 [node name="Campfire" parent="." unique_id=1726977443 instance=ExtResource("3_campfire")]
 position = Vector2(0, -11)
