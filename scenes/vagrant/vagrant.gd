@@ -27,6 +27,7 @@ func _ready() -> void:
 	footstep_audio.volume_db = footstep_base_volume_db
 	label_status.visible = false
 	setup_tooltip_style(label_status)
+	body.position.y = 6.0
 	
 	if has_node("AnimatedSprite2D"):
 		var anim_sprite = $AnimatedSprite2D

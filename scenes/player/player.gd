@@ -30,6 +30,7 @@ var is_mining: bool = false
 
 const AXE_HITBOX_OFFSET: Vector2 = Vector2(14.0, -16.0)
 const AXE_HITBOX_SIZE: Vector2 = Vector2(24.0, 26.0)
+const BODY_Y_OFFSET: float = 6.0
 
 func _ready() -> void:
 	scale = Vector2(1.4, 1.4)
@@ -38,6 +39,8 @@ func _ready() -> void:
 	footstep_audio.volume_db = footstep_base_volume_db
 	chop_swing_audio.max_polyphony = 3
 	chop_hit_audio.max_polyphony = 4
+	
+	body.position.y = BODY_Y_OFFSET
 	
 	if has_node("AnimatedSprite2D"):
 		var anim_sprite = $AnimatedSprite2D
@@ -80,12 +83,15 @@ func _physics_process(delta: float) -> void:
 		if is_on_floor() and not is_hitting:
 			var pulse = sin(Time.get_ticks_msec() * 0.015) * 0.08
 			body.scale.y = 1.0 + pulse
-			body.position.y = pulse * 1.5
+			body.position.y = BODY_Y_OFFSET + pulse * 1.5
+		elif not is_on_floor() and not is_hitting:
+			body.scale.y = 1.0
+			body.position = Vector2(0, BODY_Y_OFFSET)
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed * 0.25)
-		if is_on_floor() and not is_hitting:
+		if not is_hitting:
 			body.scale.y = 1.0
-			body.position = Vector2(0, 0)
+			body.position = Vector2(0, BODY_Y_OFFSET)
 
 	move_and_slide()
 	update_footsteps(delta)
@@ -169,7 +175,7 @@ func start_hit_animation(tree_to_hit: Node = null) -> void:
 	# Сбрасываем scale.y в 1 чтобы пульс-эффект ходьбы не мешал
 	var dir_sign = sign(body.scale.x) if body.scale.x != 0 else 1
 	body.scale = Vector2(dir_sign, 1.0)
-	body.position = Vector2.ZERO
+	body.position = Vector2(0, BODY_Y_OFFSET)
 	var tween = create_tween()
 	var orig_rot = body.rotation
 	var hit_rot = 0.15 * dir_sign

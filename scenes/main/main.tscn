@@ -109,6 +109,7 @@ tile_set = SubResource("TileSet_hujxm")
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
 
 [node name="GrassSprite" type="Sprite2D" parent="." unique_id=1028392193]
+z_index = 2
 texture_repeat = 2
 scale = Vector2(0.15, 0.15)
 texture = ExtResource("21_ground_grass")

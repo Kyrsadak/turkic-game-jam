@@ -32,6 +32,7 @@ func _ready() -> void:
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
 	footstep_audio.volume_db = footstep_base_volume_db
+	body.position.y = 6.0
 	TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
