@@ -11,6 +11,7 @@ var is_felled: bool = false
 var regrow_timer: float = 0.0
 var feller_was_lumberjack: bool = false
 const FALL_ANIMATION_DURATION: float = 1.2
+static var first_tree_tutorial_shown: bool = false
 
 @onready var visual: Node2D = $Visual
 @onready var crown: Polygon2D = $Visual/Crown
@@ -61,9 +62,12 @@ func _process(delta: float) -> void:
 			if dist < 55.0:
 				label_health.visible = true
 				if health == max_health:
-					label_health.text = "E"
+					if not first_tree_tutorial_shown:
+						label_health.text = "[E] Рубка дерева"
+					else:
+						label_health.text = "E"
 				else:
-					label_health.text = "Срубить: %d" % int(health)
+					label_health.text = "%d" % int(health)
 			else:
 				label_health.visible = false
 		else:
@@ -79,6 +83,7 @@ func hit_tree(hitter_x: float, damage: float = 1.0) -> void:
 	else:
 		feller_was_lumberjack = false
 
+	first_tree_tutorial_shown = true
 	health -= damage
 	
 	# Активация щепок
