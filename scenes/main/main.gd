@@ -29,6 +29,17 @@ var bear_scene = preload("res://scenes/enemy/bear.tscn")
 var builder_house_scene = preload("res://scenes/buildings/builder_house.tscn")
 var archer_tower_scene = preload("res://scenes/buildings/archer_tower.tscn")
 
+# На сколько пикселей опускать деревья и постройки, чтобы их основания
+# касались видимого верхнего края снежной земли (а не висели в воздухе).
+const GROUND_TOUCH_OFFSET: float = 14.0
+
+# Минимальный «свободный» радиус вокруг костра, куда деревья не спавнятся.
+const FOREST_KEEPOUT_RADIUS: float = 560.0
+
+# Шаг спавна деревьев (чем больше — тем реже).
+const FOREST_STEP_MIN: float = 130.0
+const FOREST_STEP_MAX: float = 210.0
+
 var bear_spawn_queue: int = 0
 
 # Цвета для дня и ночи
@@ -78,6 +89,9 @@ func _ready() -> void:
 	
 	# Настраиваем текстуру земли под ногами
 	setup_ground()
+	
+	# Создаём лес слева и справа от костра
+	generate_forests()
 	
 	# (Отключено, чтобы использовать только бродяг, расставленных вручную на сцене)
 	# Спавним начальных бродяг поближе к костру на старте игры
@@ -264,18 +278,23 @@ func generate_forests() -> void:
 	# Если пользователь уже задизайнил лес в редакторе, не пересоздаем его динамически
 	if $ForestLeft.get_child_count() > 0 or $ForestRight.get_child_count() > 0:
 		return
-		
-	# Левый лес: от -7200 до -350
-	var current_x = -350.0
+
+	# Опорная X-координата костра — отсюда отмеряем зону отчуждения.
+	var campfire_x: float = 0.0
+	if is_instance_valid(campfire):
+		campfire_x = campfire.global_position.x
+	
+	# Левый лес: от (campfire_x - FOREST_KEEPOUT_RADIUS) до -7200
+	var current_x = campfire_x - FOREST_KEEPOUT_RADIUS
 	while current_x > -7200.0:
 		spawn_tree_at(current_x, $ForestLeft)
-		current_x -= randf_range(50.0, 95.0)
+		current_x -= randf_range(FOREST_STEP_MIN, FOREST_STEP_MAX)
 		
-	# Правый лес: от 350 до 7200
-	current_x = 350.0
+	# Правый лес: от (campfire_x + FOREST_KEEPOUT_RADIUS) до 7200
+	current_x = campfire_x + FOREST_KEEPOUT_RADIUS
 	while current_x < 7200.0:
 		spawn_tree_at(current_x, $ForestRight)
-		current_x += randf_range(50.0, 95.0)
+		current_x += randf_range(FOREST_STEP_MIN, FOREST_STEP_MAX)
 
 func spawn_tree_at(x_pos: float, container: Node2D) -> void:
 	var tree_instance = tree_scene.instantiate()
@@ -287,7 +306,15 @@ func spawn_tree_at(x_pos: float, container: Node2D) -> void:
 	elif is_instance_valid(player):
 		ground_y = player.global_position.y
 		
-	tree_instance.global_position = Vector2(x_pos, ground_y)
+	# Добавляем небольшое случайное смещение по X (внутри текущего шага)
+	# и по Y (земля «волнистая»), чтобы лес выглядел естественно, а не
+	# выровненным по линейке.
+	var jitter_x := randf_range(-25.0, 25.0)
+	var jitter_y := randf_range(-3.0, 4.0)
+	tree_instance.global_position = Vector2(
+		x_pos + jitter_x,
+		ground_y + GROUND_TOUCH_OFFSET + jitter_y
+	)
 
 func create_cave_at(x_pos: float, is_right_side: bool) -> void:
 	var cave_node = Node2D.new()

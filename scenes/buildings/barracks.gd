@@ -2,6 +2,10 @@ extends StaticBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
 const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
+# Целевая высота построек в пикселях. Дом и казарма должны иметь одинаковую
+# высоту, чуть выше игрока (~82px спрайта). См. также lumberjack_house.gd.
+const BUILDING_TARGET_HEIGHT: float = 150.0
+
 @export var build_cost: int = 8
 
 var is_built: bool = false
@@ -91,7 +95,19 @@ func update_visuals() -> void:
 	visual_built.visible = is_built
 	
 	if is_built:
-		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/barracks.png", Vector2(0, -35))
+		var tex_path := "res://assets/textures/barracks.png"
+		var tex_size := TextureLoader.get_texture_size(tex_path)
+		var scale_factor: float = 1.0
+		var offset_y: float = -35.0
+		if tex_size.y > 0.0:
+			scale_factor = BUILDING_TARGET_HEIGHT / tex_size.y
+			offset_y = -BUILDING_TARGET_HEIGHT * 0.5
+		var sprite = TextureLoader.try_apply_texture(
+			self,
+			tex_path,
+			Vector2(0, offset_y),
+			Vector2(scale_factor, scale_factor)
+		)
 		if sprite:
 			visual_built.visible = false
 

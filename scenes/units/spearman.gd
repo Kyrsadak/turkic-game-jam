@@ -2,18 +2,44 @@ extends CharacterBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
 const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
-enum State { WALKING_TO_POST, DEFENDING, ATTACKING }
+# Мини-мозг копейщика для обороны базы:
+#   PATROLLING — ходит между левой и правой стеной (периметр базы)
+#   CHASING    — заметил врага, бежит к нему
+#   ATTACKING  — ударяет копьем когда враг в радиусе удара
+#   RETURNING  — возвращается к ближайшей точке периметра после боя
+enum State { PATROLLING, CHASING, ATTACKING, RETURNING }
 
-@export var speed: float = 90.0
+@export var patrol_speed: float = 60.0
+@export var combat_speed: float = 110.0
 @export var damage: float = 14.0
 @export var attack_cooldown: float = 0.75
+@export var attack_range: float = 30.0
+@export var detection_range: float = 230.0
+@export var leash_range: float = 380.0
+@export var patrol_pause_min: float = 0.6
+@export var patrol_pause_max: float = 1.4
+# Запас вертикали при поиске врагов: ловим тех, что стоят на одной «полке»
+# с базой, и не ведёмся на тех, что прыгают где-то в небе.
+@export var vertical_threat_range: float = 80.0
+# Защитный буфер от стен при погоне: копейщик не выходит за периметр базы
+# дальше чем на это расстояние, чтобы не уходить в чистое поле.
+@export var leash_outside_buffer: float = 60.0
 
 var gravity: float = 900.0
-var current_state: State = State.WALKING_TO_POST
+var current_state: State = State.PATROLLING
 var target_enemy: Node2D = null
 var attack_timer: float = 0.0
-var flank: float = 1.0 # 1.0 = правый фланг, -1.0 = левый фланг
-var target_post_x: float = 0.0
+var patrol_dir: float = 1.0
+var patrol_pause_timer: float = 0.0
+var patrol_left_x: float = -280.0
+var patrol_right_x: float = 280.0
+var patrol_target_x: float = 0.0
+# «Якорь» базы — центр периметра. К нему возвращаемся после боя.
+var base_center_x: float = 0.0
+
+# Кэш периметра базы — обновляем периодически, чтобы реагировать на стены,
+# которые игрок строит/чинит во время игры.
+var perimeter_refresh_timer: float = 0.0
 
 @onready var body: Node2D = $Body
 @onready var spear: Node2D = $Body/Spear
@@ -28,83 +54,188 @@ func _ready() -> void:
 	add_to_group("spearman")
 	footstep_audio.volume_db = footstep_base_volume_db
 	
-	# Чередуем фланги: нечётные → правый (+1), чётные → левый (-1)
 	spearman_count += 1
-	flank = 1.0 if (spearman_count % 2 == 1) else -1.0
 	
-	choose_post_position()
+	refresh_patrol_bounds()
+	# Чередуем стартовое направление, чтобы копейщики патрулировали в разные
+	# стороны и быстрее покрывали периметр базы.
+	patrol_dir = 1.0 if (spearman_count % 2 == 1) else -1.0
+	patrol_target_x = patrol_right_x if patrol_dir > 0 else patrol_left_x
+	
 	TextureLoader.try_apply_texture(self, "res://assets/textures/spearman.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Поиск врагов поблизости
-	target_enemy = find_closest_enemy(90.0)
+	perimeter_refresh_timer -= delta
+	if perimeter_refresh_timer <= 0.0:
+		refresh_patrol_bounds()
+		perimeter_refresh_timer = 1.5
+
+	# Поиск врагов в зависимости от состояния:
+	# на патруле — широкий радиус; в бою — дольше «удерживаем» цель.
+	var search_radius: float = detection_range
+	if current_state == State.CHASING or current_state == State.ATTACKING:
+		search_radius = leash_range
+	target_enemy = find_closest_enemy(search_radius)
 
 	match current_state:
-		State.WALKING_TO_POST:
-			choose_post_position()
-			var dist_x = target_post_x - global_position.x
-			if abs(dist_x) > 15.0:
-				velocity.x = sign(dist_x) * speed
-				body.scale.x = sign(dist_x)
-				animate_walk()
-			else:
-				velocity.x = 0
-				current_state = State.DEFENDING
-				
-		State.DEFENDING:
-			velocity.x = 0
-			body.scale.x = flank # Смотрим наружу базы
-			
-			if target_enemy:
-				current_state = State.ATTACKING
-				attack_timer = 0.1
-			else:
-				choose_post_position()
-				if abs(target_post_x - global_position.x) > 20.0:
-					current_state = State.WALKING_TO_POST
-
+		State.PATROLLING:
+			tick_patrolling(delta)
+		State.CHASING:
+			tick_chasing(delta)
 		State.ATTACKING:
-			if not is_instance_valid(target_enemy) or global_position.distance_to(target_enemy.global_position) > 110.0:
-				current_state = State.DEFENDING
-			else:
-				# Поворачиваемся к врагу
-				var dist_x = target_enemy.global_position.x - global_position.x
-				if dist_x != 0:
-					body.scale.x = sign(dist_x)
-				
-				velocity.x = 0
-				
-				attack_timer -= delta
-				if attack_timer <= 0:
-					stab_enemy()
-					attack_timer = attack_cooldown
+			tick_attacking(delta)
+		State.RETURNING:
+			tick_returning(delta)
 
 	move_and_slide()
 	update_footsteps(delta)
 
-func choose_post_position() -> void:
+# ---------------------------------------------------------------------------
+# Состояния мини-мозга
+# ---------------------------------------------------------------------------
+
+func tick_patrolling(_delta: float) -> void:
+	# Заметили врага — погоня.
+	if is_instance_valid(target_enemy):
+		current_state = State.CHASING
+		patrol_pause_timer = 0.0
+		return
+
+	# Стоим на паузе на конце маршрута.
+	if patrol_pause_timer > 0.0:
+		velocity.x = 0.0
+		patrol_pause_timer -= _delta
+		# Смотрим наружу базы во время паузы.
+		body.scale.x = patrol_dir
+		return
+
+	var dist_x = patrol_target_x - global_position.x
+	if abs(dist_x) < 6.0:
+		# Достигли конца маршрута — пауза, разворот.
+		velocity.x = 0.0
+		patrol_pause_timer = randf_range(patrol_pause_min, patrol_pause_max)
+		patrol_dir = -patrol_dir
+		patrol_target_x = patrol_right_x if patrol_dir > 0 else patrol_left_x
+		return
+
+	velocity.x = sign(dist_x) * patrol_speed
+	body.scale.x = sign(dist_x)
+	animate_walk()
+
+func tick_chasing(_delta: float) -> void:
+	if not is_instance_valid(target_enemy):
+		current_state = State.RETURNING
+		return
+
+	var dist = global_position.distance_to(target_enemy.global_position)
+	# Враг ушёл далеко — возвращаемся на периметр.
+	if dist > leash_range:
+		current_state = State.RETURNING
+		return
+
+	# Если копейщик уже сильно за периметром базы — отзываем на защиту.
+	# Это защищает от выманивания в чистое поле.
+	if global_position.x < patrol_left_x - leash_outside_buffer or \
+			global_position.x > patrol_right_x + leash_outside_buffer:
+		current_state = State.RETURNING
+		return
+
+	# В радиусе удара — атакуем.
+	if dist <= attack_range:
+		velocity.x = 0.0
+		current_state = State.ATTACKING
+		attack_timer = 0.1
+		return
+
+	# Бежим к врагу.
+	var dist_x = target_enemy.global_position.x - global_position.x
+	if dist_x != 0.0:
+		velocity.x = sign(dist_x) * combat_speed
+		body.scale.x = sign(dist_x)
+	animate_walk()
+
+func tick_attacking(delta: float) -> void:
+	if not is_instance_valid(target_enemy):
+		current_state = State.RETURNING
+		return
+
+	var dist = global_position.distance_to(target_enemy.global_position)
+	if dist > attack_range + 6.0:
+		current_state = State.CHASING
+		return
+
+	# Поворачиваемся к врагу.
+	var dist_x = target_enemy.global_position.x - global_position.x
+	if dist_x != 0.0:
+		body.scale.x = sign(dist_x)
+
+	velocity.x = 0.0
+
+	attack_timer -= delta
+	if attack_timer <= 0.0:
+		stab_enemy()
+		attack_timer = attack_cooldown
+
+func tick_returning(_delta: float) -> void:
+	# Если по дороге снова появился враг — гонимся.
+	if is_instance_valid(target_enemy):
+		current_state = State.CHASING
+		return
+
+	# Возвращаемся к ближайшей точке периметра базы.
+	var return_x = clamp(global_position.x, patrol_left_x, patrol_right_x)
+	var dist_x = return_x - global_position.x
+
+	if abs(dist_x) < 8.0:
+		velocity.x = 0.0
+		current_state = State.PATROLLING
+		# Свежая цель патруля — продолжаем в текущем направлении.
+		patrol_target_x = patrol_right_x if patrol_dir > 0 else patrol_left_x
+		return
+
+	velocity.x = sign(dist_x) * combat_speed
+	body.scale.x = sign(dist_x)
+	animate_walk()
+
+# ---------------------------------------------------------------------------
+# Помощники
+# ---------------------------------------------------------------------------
+
+func refresh_patrol_bounds() -> void:
+	# Левая и правая границы патрулирования вычисляются по позициям всех
+	# узлов в группе "wall" (наша база ограничена забором). Если стен
+	# вообще нет — используем периметр вокруг костра.
 	var walls = get_tree().get_nodes_in_group("wall")
-	var flank_wall: Node2D = null
-	
-	var campfire = get_tree().get_first_node_in_group("campfire")
-	var campfire_x = campfire.global_position.x if campfire else 0.0
-	
+	var min_x: float = INF
+	var max_x: float = -INF
 	for wall in walls:
-		if is_instance_valid(wall) and wall.level > 0:
-			var wall_is_right = wall.global_position.x > campfire_x
-			if (flank == 1.0 and wall_is_right) or (flank == -1.0 and not wall_is_right):
-				flank_wall = wall
-				break
-				
-	if flank_wall:
-		# Встаем чуть позади стены, чтобы бить сквозь нее
-		target_post_x = flank_wall.global_position.x - flank * 24.0
-	else:
-		# Пост по умолчанию, если стены нет
-		target_post_x = campfire_x + flank * 240.0
+		if not is_instance_valid(wall):
+			continue
+		var wx: float = wall.global_position.x
+		if wx < min_x:
+			min_x = wx
+		if wx > max_x:
+			max_x = wx
+
+	if min_x == INF or max_x == -INF or max_x - min_x < 30.0:
+		# Резервный периметр вокруг костра.
+		var campfire = get_tree().get_first_node_in_group("campfire")
+		var center_x: float = campfire.global_position.x if campfire else 0.0
+		min_x = center_x - 240.0
+		max_x = center_x + 240.0
+
+	# Сужаем периметр на пару пикселей внутрь, чтобы копейщик не упирался
+	# в коллизии стен и не «дёргался» на самой границе.
+	patrol_left_x = min_x + 12.0
+	patrol_right_x = max_x - 12.0
+	if patrol_left_x > patrol_right_x:
+		var mid = (min_x + max_x) * 0.5
+		patrol_left_x = mid - 1.0
+		patrol_right_x = mid + 1.0
+	base_center_x = (patrol_left_x + patrol_right_x) * 0.5
 
 func stab_enemy() -> void:
 	if is_instance_valid(target_enemy):
@@ -119,15 +250,26 @@ func stab_enemy() -> void:
 		tween.tween_property(spear, "position", orig_pos, 0.12)
 
 func find_closest_enemy(max_dist: float) -> Node2D:
+	# Берём только тех, кто на той же «полке» земли (по Y) — копейщик не
+	# гоняется за теми, кто на другой высоте, и не реагирует на врагов вне
+	# зоны защиты базы.
 	var enemies = get_tree().get_nodes_in_group("enemy")
 	var closest: Node2D = null
 	var min_dist: float = max_dist
 	for enemy in enemies:
-		if is_instance_valid(enemy) and not enemy.is_dead:
-			var dist = global_position.distance_to(enemy.global_position)
-			if dist < min_dist:
-				min_dist = dist
-				closest = enemy
+		if not is_instance_valid(enemy) or enemy.is_dead:
+			continue
+		var dy: float = abs(enemy.global_position.y - global_position.y)
+		if dy > vertical_threat_range:
+			continue
+		# Не уходим далеко за периметр базы за врагами.
+		var ex: float = enemy.global_position.x
+		if ex < patrol_left_x - leash_range or ex > patrol_right_x + leash_range:
+			continue
+		var dist: float = global_position.distance_to(enemy.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			closest = enemy
 	return closest
 
 func animate_walk() -> void:

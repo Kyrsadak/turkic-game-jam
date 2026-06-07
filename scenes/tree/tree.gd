@@ -7,6 +7,13 @@ signal tree_felled(wood_count)
 @export var max_health: float = 30.0
 @export var regrow_time: float = 180.0
 
+# Список доступных скинов дерева. Спрайт выбирается случайно при спавне.
+const TREE_TEXTURES: Array[String] = [
+	"res://assets/textures/tree_pine.png",
+	"res://assets/textures/tree_spruce.png",
+	"res://assets/textures/tree_birch.png",
+]
+
 var health: float = 30.0
 var is_felled: bool = false
 var regrow_timer: float = 0.0
@@ -32,20 +39,29 @@ func _ready() -> void:
 	label_health.visible = false
 	setup_tooltip_style(label_health)
 	
-	# Выбираем случайную текстуру дерева
-	var tree_textures = [
-		"res://assets/textures/tree_pine.png",
-		"res://assets/textures/tree_spruce.png",
-		"res://assets/textures/tree_birch.png"
-	]
-	
-	# Выбираем случайное дерево
-	var chosen_tex = tree_textures[randi() % tree_textures.size()]
-	
-	# Если файлы не сгенерированы (или для тестов), используем стандартный
+	# Случайный скин и его вариация: масштаб, отражение, лёгкий наклон.
+	var chosen_tex: String = TREE_TEXTURES[randi() % TREE_TEXTURES.size()]
 	if not FileAccess.file_exists(chosen_tex):
 		chosen_tex = "res://assets/textures/tree.png"
-		
+
+	# Визуальные параметры варьируем у самого Visual-узла, а не у спрайта,
+	# чтобы анимации падения/качания продолжали работать корректно.
+	var random_scale := randf_range(0.85, 1.18)
+	# Зеркалим часть деревьев (~35%) для естественного разнообразия леса.
+	var flip := -1.0 if randf() < 0.35 else 1.0
+	visual.scale = Vector2(random_scale * flip, random_scale)
+	visual.rotation = randf_range(-0.04, 0.04)
+	
+	# Лёгкая вариация цвета: каждое дерево чуть светлее/темнее и теплее/холоднее.
+	var brightness := randf_range(0.86, 1.08)
+	var hue_shift := randf_range(-0.05, 0.05)
+	visual.modulate = Color(
+		clamp(brightness + hue_shift, 0.6, 1.2),
+		clamp(brightness, 0.6, 1.2),
+		clamp(brightness - hue_shift, 0.6, 1.2),
+		1.0
+	)
+
 	TextureLoader.try_apply_texture(self, chosen_tex, Vector2(0, -70))
 
 func _process(delta: float) -> void:

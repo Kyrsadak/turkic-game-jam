@@ -149,31 +149,41 @@ func perform_interaction() -> void:
 			start_hit_animation()
 			return
 
+	# 5. Если рядом нет цели для взаимодействия — всё равно делаем взмах
+	start_hit_animation()
+
 func start_hit_animation(tree_to_hit: Node = null) -> void:
 	is_hitting = true
+	is_mining = true
+
+	var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+	if anim_sprite:
+		anim_sprite.frame = 0
+		anim_sprite.play("Mining")
+
 	if tree_to_hit != null:
-		is_mining = true
-		var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
-		if anim_sprite:
-			anim_sprite.play("Mining")
 		apply_camera_shake(0.4)
 	else:
 		apply_camera_shake(0.2)
-			
+
 	hit_cooldown.start()
 	play_chop_audio_sequence(tree_to_hit)
-	
+
 	# Эффект удара (маленький наклон тела, без выворачивания)
 	# Сбрасываем scale.y в 1 чтобы пульс-эффект ходьбы не мешал
 	var dir_sign = sign(body.scale.x) if body.scale.x != 0 else 1
 	body.scale = Vector2(dir_sign, 1.0)
 	body.position = Vector2.ZERO
+
+	# Пустой замах длится дольше, чтобы успел отыграть полный цикл анимации рубки.
+	# При рубке дерева оставляем быстрый темп, чтобы ритм ударов не замедлялся.
+	var swing_duration: float = 0.20 if tree_to_hit != null else 0.55
 	var tween = create_tween()
 	var orig_rot = body.rotation
 	var hit_rot = 0.15 * dir_sign
-	tween.tween_property(body, "rotation", hit_rot, 0.08)
-	tween.tween_property(body, "rotation", orig_rot, 0.12)
-	
+	tween.tween_property(body, "rotation", hit_rot, swing_duration * 0.4)
+	tween.tween_property(body, "rotation", orig_rot, swing_duration * 0.6)
+
 	await tween.finished
 	is_hitting = false
 	is_mining = false
