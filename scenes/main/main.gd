@@ -81,9 +81,6 @@ func _ready() -> void:
 	# Настраиваем новый фон с горами
 	setup_background()
 	
-	# Настраиваем текстуру земли под ногами
-	setup_ground()
-	
 	# (Отключено, чтобы использовать только бродяг, расставленных вручную на сцене)
 	# Спавним начальных бродяг поближе к костру на старте игры
 	# for i in range(2):
@@ -566,38 +563,7 @@ func update_background_and_celestial(delta: float) -> void:
 			)
 			sun_sprite.modulate.a = 1.0 - transition_factor
 
-func setup_ground() -> void:
-	var ground = get_node_or_null("Ground")
-	if ground:
-		var visual = ground.get_node_or_null("Visual")
-		if visual:
-			visual.visible = false
-		var border = ground.get_node_or_null("GrassBorder")
-		if border:
-			border.visible = false
-			
-		var existing = ground.get_node_or_null("SnowyGroundSprite")
-		if existing:
-			var tex = load("res://assets/textures/ground_snowy.png")
-			if tex:
-				existing.texture = tex
-				existing.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-				existing.region_enabled = true
-				existing.region_rect = Rect2(0, 0, 15000, 128)
-				existing.centered = false
-				existing.position = Vector2(-7500, 0)
-		else:
-			var tex = load("res://assets/textures/ground_snowy.png")
-			if tex:
-				var sprite = Sprite2D.new()
-				sprite.name = "SnowyGroundSprite"
-				sprite.texture = tex
-				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-				sprite.region_enabled = true
-				sprite.region_rect = Rect2(0, 0, 15000, 128)
-				sprite.centered = false
-				sprite.position = Vector2(-7500, 0)
-				ground.add_child(sprite)
+
 
 func get_ground_x_limits() -> Vector2:
 	var tilemap = get_node_or_null("CanvasModulate/TileMapLayer")

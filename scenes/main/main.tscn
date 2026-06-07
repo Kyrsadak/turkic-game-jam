@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bibkxaqw2u657" path="res://scenes/main/main.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/main/inventory_ui.tscn" id="20_inventory_ui"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground_grass.png" id="21_ground_grass"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
 [ext_resource type="Texture2D" uid="uid://kfm36xylyfol" path="res://assets/textures/Inventory.png" id="5_ouso4"]
@@ -104,6 +105,15 @@ tile_map_data = PackedByteArray("AADH////AQAAAAAAABDG////AQABAAAAABDF////AQACAAA
 tile_set = SubResource("TileSet_hujxm")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
+
+[node name="GrassSprite" type="Sprite2D" parent="." unique_id=1028392193]
+texture_repeat = 2
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("21_ground_grass")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 100000, 284)
+position = Vector2(-7500, -15)
 
 [node name="Tree" parent="." unique_id=253433487 instance=ExtResource("11_tree")]
 position = Vector2(-445, 21)
