@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" path="res://assets/textures/Inventory.png" id="1_inventory_bg"]
 [ext_resource type="Script" path="res://scenes/main/inventory_ui.gd" id="2_inventory_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood.png" id="3_wood_tex"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_count"]
 font_size = 11
@@ -65,33 +66,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="WoodIcon" type="Control" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer"]
+[node name="WoodIcon" type="TextureRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer"]
 custom_minimum_size = Vector2(24, 14)
 layout_mode = 2
-
-[node name="LogBase" type="ColorRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 23.0
-offset_bottom = 12.0
-color = Color(0.54902, 0.34902, 0.2, 1)
-
-[node name="LogDetail1" type="ColorRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = 20.0
-offset_bottom = 4.0
-color = Color(0.647059, 0.45098, 0.25098, 1)
-
-[node name="LogDetail2" type="ColorRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon"]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 10.0
-offset_right = 21.0
-offset_bottom = 12.0
-color = Color(0.419608, 0.25098, 0.121569, 1)
+texture = ExtResource("3_wood_tex")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="CountLabel" type="Label" parent="Background/SlotsContainer/HBoxContainer/Slot1"]
 layout_mode = 1
