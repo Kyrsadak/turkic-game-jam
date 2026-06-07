@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://dr1yp21pqxvwa"]
 
-[ext_resource type="Script" path="res://scenes/campfire/campfire.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
-
-[sub_resource type="Gradient" id="Gradient_flame"]
-offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
-colors = PackedColorArray(1, 0.9, 0.2, 1, 1, 0.5, 0, 1, 0.8, 0.1, 0, 0.8, 0.5, 0, 0, 0)
+[ext_resource type="Script" uid="uid://1lta8u15xnu5" path="res://scenes/campfire/campfire.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cf16csmvgdax7" path="res://assets/light_texture.tres" id="2_light_texture"]
+[ext_resource type="Texture2D" uid="uid://bdkuruoa2g2fn" path="res://assets/textures/campfire/campfire1.png" id="3_8pjve"]
+[ext_resource type="Texture2D" uid="uid://bxmwmd17qvayo" path="res://assets/textures/campfire/campfire2.png" id="4_hk2pn"]
+[ext_resource type="Texture2D" uid="uid://d07ak4h3bbk27" path="res://assets/textures/campfire/campfire3.png" id="5_ki1b5"]
+[ext_resource type="Texture2D" uid="uid://bb436227s5fjs" path="res://assets/textures/campfire/campfire4.png" id="6_bacyy"]
+[ext_resource type="Texture2D" uid="uid://c6uq4grkcvbed" path="res://assets/textures/campfire/campfire5.png" id="7_iffde"]
+[ext_resource type="Texture2D" uid="uid://dpju764f4ilfl" path="res://assets/textures/campfire/campfire6.png" id="8_q1o60"]
 
 [sub_resource type="Gradient" id="Gradient_sparks"]
 offsets = PackedFloat32Array(0, 0.7, 1)
@@ -19,26 +21,36 @@ font_size = 9
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Campfire" type="Node2D"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_8pjve"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_8pjve")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_hk2pn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ki1b5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_bacyy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_iffde")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_q1o60")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Campfire" type="Node2D" unique_id=1737077004]
 script = ExtResource("1_script")
 
-[node name="Logs" type="Node2D" parent="."]
-
-[node name="Log1" type="Line2D" parent="Logs"]
-points = PackedVector2Array(-16, 2, 16, -6)
-width = 5.0
-default_color = Color(0.38, 0.22, 0.12, 1)
-begin_cap_mode = 2
-end_cap_mode = 2
-
-[node name="Log2" type="Line2D" parent="Logs"]
-points = PackedVector2Array(-12, -6, 12, 2)
-width = 5.0
-default_color = Color(0.32, 0.18, 0.10, 1)
-begin_cap_mode = 2
-end_cap_mode = 2
-
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=884624236]
 position = Vector2(0, -4)
 color = Color(1, 0.56, 0.2, 1)
 energy = 1.2
@@ -47,25 +59,7 @@ shadow_color = Color(0, 0, 0, 0.6)
 texture = ExtResource("2_light_texture")
 texture_scale = 6.0
 
-[node name="ParticlesFlame" type="CPUParticles2D" parent="."]
-position = Vector2(0, -2)
-amount = 35
-lifetime = 0.8
-preprocess = 0.5
-randomness = 0.2
-direction = Vector2(0, -1)
-spread = 12.0
-gravity = Vector2(0, -30)
-initial_velocity_min = 40.0
-initial_velocity_max = 70.0
-angular_velocity_min = -60.0
-angular_velocity_max = 60.0
-draw_order = 1
-scale_amount_min = 3.0
-scale_amount_max = 6.0
-color_ramp = SubResource("Gradient_flame")
-
-[node name="ParticlesSparks" type="CPUParticles2D" parent="."]
+[node name="ParticlesSparks" type="CPUParticles2D" parent="." unique_id=2099291459]
 position = Vector2(0, -4)
 emitting = false
 amount = 15
@@ -81,14 +75,13 @@ scale_amount_min = 1.5
 scale_amount_max = 3.0
 color_ramp = SubResource("Gradient_sparks")
 
-[node name="InteractionArea" type="Area2D" parent="."]
-collision_layer = 1
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1582813237]
 collision_mask = 6
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1545429688]
 shape = SubResource("CircleShape2D_1")
 
-[node name="LabelStatus" type="Label" parent="."]
+[node name="LabelStatus" type="Label" parent="." unique_id=1182706772]
 z_index = 5
 anchors_preset = 7
 anchor_left = 0.5
@@ -105,3 +98,7 @@ text = "Нажмите [E] чтобы подбросить дрова"
 label_settings = SubResource("LabelSettings_status")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1386782530]
+sprite_frames = SubResource("SpriteFrames_8pjve")
+autoplay = "default"

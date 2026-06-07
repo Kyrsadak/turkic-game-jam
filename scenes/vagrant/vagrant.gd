@@ -29,7 +29,7 @@ func _ready() -> void:
 	
 	if has_node("AnimatedSprite2D"):
 		var anim_sprite = $AnimatedSprite2D
-		anim_sprite.reparent(body)
+		anim_sprite.reparent(body, false)
 	else:
 		TextureLoader.try_apply_texture(self, "res://assets/textures/vagrant.png", Vector2(0, -14))
 

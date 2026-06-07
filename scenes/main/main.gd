@@ -50,6 +50,7 @@ var base_forest_back_pos: Vector2
 
 var sun_sprite: Sprite2D
 var moon_sprite: Sprite2D
+var bg_parallax_ref: ParallaxBackground = null  # кэш ссылки на ParallaxBackground
 
 func _ready() -> void:
 	game_over_screen.visible = false
@@ -77,10 +78,10 @@ func _ready() -> void:
 	# Настраиваем текстуру земли под ногами
 	setup_ground()
 	
+	# (Отключено, чтобы использовать только бродяг, расставленных вручную на сцене)
 	# Спавним начальных бродяг поближе к костру на старте игры
-	for i in range(2):
-		spawn_vagrant_if_needed()
-
+	# for i in range(2):
+	# 	spawn_vagrant_if_needed()
 
 
 func _process(delta: float) -> void:
@@ -363,91 +364,99 @@ func setup_background() -> void:
 	if bg_forest:
 		bg_forest.visible = false
 		
-	# Ищем новый ParallaxBackground
+	# Ищем ParallaxBackground
 	var parallax_bg = get_node_or_null("ParallaxBackground")
-	if parallax_bg:
-		# Настраиваем небо (слой ParallaxLayer)
-		var sky_layer = parallax_bg.get_node_or_null("ParallaxLayer")
-		if sky_layer:
-			var nebo = sky_layer.get_node_or_null("Небо")
-			if nebo:
-				bg_sky_night = nebo
-				
-				# Если SkyDay еще не создан, создаем его для переключения дня/ночи
-				var sky_day = sky_layer.get_node_or_null("SkyDay")
-				if not sky_day:
-					sky_day = Sprite2D.new()
-					sky_day.name = "SkyDay"
-					sky_day.texture = load("res://assets/textures/небо_день.png")
-					sky_day.position = nebo.position
-					sky_day.scale = nebo.scale
-					sky_day.centered = nebo.centered
-					sky_day.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-					sky_day.region_enabled = nebo.region_enabled
-					sky_day.region_rect = nebo.region_rect
-					sky_layer.add_child(sky_day)
-				bg_sky_day = sky_day
-				
-		bg_mountains_far = parallax_bg.get_node_or_null("ParallaxLayer5/ГорыЗадний")
-		bg_mountains_close = parallax_bg.get_node_or_null("ParallaxLayer3/Горы")
-		bg_forest_back = parallax_bg.get_node_or_null("ParallaxLayer4/ДеревьяЗаднийфон")
+	if not is_instance_valid(parallax_bg):
+		return
+	
+	# Убедимся, что ParallaxBackground на правильном слое (-100) и поднят на 20px
+	parallax_bg.layer = -100
+	parallax_bg.offset = Vector2(0, -20)
+	parallax_bg.visible = true
+	
+	# Игнорируем зум камеры, чтобы фон рендерился 1:1 по размерам экрана (как в меню)
+	parallax_bg.scroll_ignore_camera_zoom = true
+	
+	bg_parallax_ref = parallax_bg
+	
+	# 1. Небо — ТОЧНЫЕ значения из background_bg.tscn (меню)
+	var sky_layer = parallax_bg.get_node_or_null("ParallaxLayer")
+	if sky_layer:
+		sky_layer.motion_scale = Vector2(0.2, 0)   # 0 по Y = небо не сдвигается вертикально
+		sky_layer.motion_mirroring = Vector2(1135.345, 0)
+		sky_layer.motion_offset = Vector2.ZERO
 		
-		# Включаем горизонтальное повторение (tiling) для всех спрайтов
-		for sprite in [bg_sky_day, bg_sky_night, bg_mountains_far, bg_mountains_close, bg_forest_back]:
-			if is_instance_valid(sprite) and sprite.texture:
-				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-				sprite.region_enabled = true
-				sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
-				
-		# Настраиваем солнце и луну
-		var moon_layer = parallax_bg.get_node_or_null("ParallaxLayer2")
-		if moon_layer:
-			var moon = moon_layer.get_node_or_null("Луна")
-			if moon:
-				moon_sprite = moon
-				
-			# Создаем солнце в том же слое, если его нет
-			var sun = moon_layer.get_node_or_null("SunSprite")
-			if not sun:
-				sun = Sprite2D.new()
-				sun.name = "SunSprite"
-				sun.texture = load("res://assets/textures/sun.png")
-				sun.position = moon.position if moon else Vector2.ZERO
-				moon_layer.add_child(sun)
-			sun_sprite = sun
+		var nebo = sky_layer.get_node_or_null("Небо")
+		if nebo:
+			bg_sky_night = nebo
+			nebo.region_enabled = false
+			nebo.position = Vector2(579.5494, 323.75)     # ТОЧНО как в меню
+			nebo.scale = Vector2(1.1824627, 1.2651663)    # ТОЧНО как в меню
 			
-	else:
-		# Старая система
-		var bg = get_node_or_null("Background")
-		if bg:
-			bg_sky_day = bg.get_node_or_null("SkyDay")
-			bg_sky_night = bg.get_node_or_null("SkyNight")
-			bg_mountains_far = bg.get_node_or_null("MountainsFar")
-			bg_mountains_close = bg.get_node_or_null("MountainsClose")
-			bg_forest_back = bg.get_node_or_null("ForestBack")
-			
-			# Включаем горизонтальное повторение (tiling) и сохраняем начальные позиции
-			if is_instance_valid(bg_sky_day):
-				base_sky_day_pos = bg_sky_day.position
-			if is_instance_valid(bg_sky_night):
-				base_sky_night_pos = bg_sky_night.position
-			if is_instance_valid(bg_mountains_far):
-				base_mountains_far_pos = bg_mountains_far.position
-			if is_instance_valid(bg_mountains_close):
-				base_mountains_close_pos = bg_mountains_close.position
-			if is_instance_valid(bg_forest_back):
-				base_forest_back_pos = bg_forest_back.position
-				
-			for sprite in [bg_sky_day, bg_sky_night, bg_mountains_far, bg_mountains_close, bg_forest_back]:
-				if is_instance_valid(sprite) and sprite.texture:
-					sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-					sprite.region_enabled = true
-					sprite.region_rect = Rect2(-100000, 0, 200000, sprite.texture.get_height())
-			
-		var celestial_layer = get_node_or_null("CelestialLayer")
-		if celestial_layer:
-			sun_sprite = celestial_layer.get_node_or_null("SunSprite")
-			moon_sprite = celestial_layer.get_node_or_null("MoonSprite")
+			var sky_day = sky_layer.get_node_or_null("SkyDay")
+			if not sky_day:
+				sky_day = Sprite2D.new()
+				sky_day.name = "SkyDay"
+				sky_day.texture = load("res://assets/textures/небо_день.png")
+				sky_layer.add_child(sky_day)
+			bg_sky_day = sky_day
+			bg_sky_day.region_enabled = false
+			bg_sky_day.centered = nebo.centered
+			bg_sky_day.position = nebo.position
+			bg_sky_day.scale = Vector2(1.108735, 1.2651663)
+	
+	# 2. ГорыЗадний — ТОЧНЫЕ значения из меню
+	var layer_mountains_far = parallax_bg.get_node_or_null("ParallaxLayer5")
+	if layer_mountains_far:
+		layer_mountains_far.motion_scale = Vector2(0.33, 0)
+		layer_mountains_far.motion_mirroring = Vector2(1110.355, 0)
+		layer_mountains_far.motion_offset = Vector2.ZERO
+		bg_mountains_far = layer_mountains_far.get_node_or_null("ГорыЗадний")
+		if bg_mountains_far:
+			bg_mountains_far.region_enabled = false
+			bg_mountains_far.position = Vector2(561, 384)        # ТОЧНО как в меню
+			bg_mountains_far.scale = Vector2(1.1930894, 1.0)     # ТОЧНО как в меню
+	
+	# 3. Горы — ТОЧНЫЕ значения из меню
+	var layer_mountains_close = parallax_bg.get_node_or_null("ParallaxLayer3")
+	if layer_mountains_close:
+		layer_mountains_close.motion_scale = Vector2(0.4, 0)
+		layer_mountains_close.motion_mirroring = Vector2(1150.14, 0)
+		layer_mountains_close.motion_offset = Vector2.ZERO
+		bg_mountains_close = layer_mountains_close.get_node_or_null("Горы")
+		if bg_mountains_close:
+			bg_mountains_close.region_enabled = false
+			bg_mountains_close.position = Vector2(576, 438.9706)      # ТОЧНО как в меню
+			bg_mountains_close.scale = Vector2(1.171922, 1.7901362)   # ТОЧНО как в меню
+	
+	# 4. ДеревьяЗаднийфон — ТОЧНЫЕ значения из меню
+	var layer_forest_back = parallax_bg.get_node_or_null("ParallaxLayer4")
+	if layer_forest_back:
+		layer_forest_back.motion_scale = Vector2(0.6, 0)
+		layer_forest_back.motion_mirroring = Vector2(1150.14, 0)
+		layer_forest_back.motion_offset = Vector2.ZERO
+		bg_forest_back = layer_forest_back.get_node_or_null("ДеревьяЗаднийфон")
+		if bg_forest_back:
+			bg_forest_back.region_enabled = false
+			bg_forest_back.position = Vector2(580.9025, 539)    # ТОЧНО как в меню
+			bg_forest_back.scale = Vector2(1.172677, 1.0)       # ТОЧНО как в меню
+	
+	# 5. Луна и солнце — управляются скриптом, не движутся с параллаксом
+	var moon_layer = parallax_bg.get_node_or_null("ParallaxLayer2")
+	if moon_layer:
+		moon_layer.motion_scale = Vector2(0, 0)
+		moon_layer.motion_offset = Vector2.ZERO
+		var moon = moon_layer.get_node_or_null("Луна")
+		if moon:
+			moon_sprite = moon
+		var sun = moon_layer.get_node_or_null("SunSprite")
+		if not sun:
+			sun = Sprite2D.new()
+			sun.name = "SunSprite"
+			sun.texture = load("res://assets/textures/sun.png")
+			sun.position = moon.position if moon else Vector2.ZERO
+			moon_layer.add_child(sun)
+		sun_sprite = sun
 
 func update_background_and_celestial(delta: float) -> void:
 	# 1. Вычисляем степень перехода (transition_factor) от 0.0 (день) до 1.0 (ночь)
@@ -471,9 +480,9 @@ func update_background_and_celestial(delta: float) -> void:
 	if is_instance_valid(bg_sky_night):
 		bg_sky_night.modulate.a = transition_factor
 	
-	# Если нет ParallaxBackground, двигаем фон вручную
-	var parallax_bg = get_node_or_null("ParallaxBackground")
-	if not parallax_bg:
+	# Если нет ParallaxBackground, двигаем фон вручную (старая система)
+	var parallax_bg = bg_parallax_ref
+	if not is_instance_valid(parallax_bg):
 		if not is_instance_valid(bg_mountains_far) or not is_instance_valid(bg_mountains_close) or not is_instance_valid(bg_forest_back):
 			return
 			
@@ -600,7 +609,3 @@ func get_ground_x_limits() -> Vector2:
 	if is_instance_valid(campfire):
 		return Vector2(campfire.global_position.x - 2000.0, campfire.global_position.x + 2000.0)
 	return Vector2(-2000.0, 4000.0)
-
-
-
-

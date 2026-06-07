@@ -11,8 +11,8 @@ signal fuel_changed(current_fuel, max_fuel)
 var current_fuel: float = 200.0  # Начинаем с половины
 
 @onready var light_2d: PointLight2D = $PointLight2D
-@onready var particles_flame: CPUParticles2D = $ParticlesFlame
-@onready var particles_sparks: CPUParticles2D = $ParticlesSparks
+@onready var particles_flame: CPUParticles2D = get_node_or_null("ParticlesFlame")
+@onready var particles_sparks: CPUParticles2D = get_node_or_null("ParticlesSparks")
 @onready var label_status: Label = $LabelStatus
 
 var light_base_scale: float = 6.0
@@ -38,8 +38,15 @@ func _process(delta: float) -> void:
 			is_burned_out = true
 			emit_signal("burned_out")
 			# Выключаем визуальные эффекты
-			particles_flame.emitting = false
-			particles_sparks.emitting = false
+			if is_instance_valid(particles_flame):
+				particles_flame.emitting = false
+			if is_instance_valid(particles_sparks):
+				particles_sparks.emitting = false
+			
+			var anim_sprite = get_node_or_null("AnimatedSprite2D")
+			if anim_sprite:
+				anim_sprite.stop()
+				anim_sprite.visible = false
 			
 			# Плавное затухание света
 			var tween = create_tween()
@@ -58,11 +65,18 @@ func _process(delta: float) -> void:
 		light_2d.energy = light_base_energy * (0.5 + 0.5 * fuel_ratio) + flicker * 0.5
 		
 		# Масштабируем частицы огня
-		particles_flame.amount = int(clamp(40 * fuel_ratio, 10, 50))
-		particles_flame.scale_amount_min = 3.0 * (0.5 + 0.5 * fuel_ratio)
-		particles_flame.scale_amount_max = 6.0 * (0.5 + 0.5 * fuel_ratio)
-		particles_flame.initial_velocity_min = 40.0 * (0.5 + 0.5 * fuel_ratio)
-		particles_flame.initial_velocity_max = 70.0 * (0.5 + 0.5 * fuel_ratio)
+		if is_instance_valid(particles_flame):
+			particles_flame.amount = int(clamp(40 * fuel_ratio, 10, 50))
+			particles_flame.scale_amount_min = 3.0 * (0.5 + 0.5 * fuel_ratio)
+			particles_flame.scale_amount_max = 6.0 * (0.5 + 0.5 * fuel_ratio)
+			particles_flame.initial_velocity_min = 40.0 * (0.5 + 0.5 * fuel_ratio)
+			particles_flame.initial_velocity_max = 70.0 * (0.5 + 0.5 * fuel_ratio)
+			
+		# Масштабируем спрайт огня
+		var anim_sprite = get_node_or_null("AnimatedSprite2D")
+		if anim_sprite:
+			var fire_scale = 0.5 + 0.6 * fuel_ratio
+			anim_sprite.scale = Vector2(fire_scale, fire_scale)
 		
 		# Показываем статус при подходе игрока (только если есть дрова в руках)
 		var players = get_tree().get_nodes_in_group("player")

@@ -39,9 +39,13 @@ func _ready() -> void:
 	
 	if has_node("AnimatedSprite2D"):
 		var anim_sprite = $AnimatedSprite2D
-		anim_sprite.reparent(body)
+		anim_sprite.reparent(body, false)
 	else:
 		TextureLoader.try_apply_texture(self, "res://assets/textures/player.png", Vector2(0, -16))
+		
+	if has_node("WoodPile"):
+		var wp = $WoodPile
+		wp.reparent(body, false)
 
 func _physics_process(delta: float) -> void:
 	# Гравитация
@@ -301,7 +305,7 @@ func update_animations() -> void:
 	if is_mining:
 		if anim_sprite.animation != "Mining":
 			anim_sprite.play("Mining")
-	elif is_on_floor() and abs(velocity.x) > 5.0:
+	elif abs(velocity.x) > 5.0:
 		if anim_sprite.animation != "walk":
 			anim_sprite.play("walk")
 	else:

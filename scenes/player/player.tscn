@@ -56,61 +56,33 @@ region = Rect2(384, 0, 128, 128)
 atlas = ExtResource("6_qek5x")
 region = Rect2(512, 0, 128, 128)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0owmy"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qek5x"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gtgg"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(256, 0, 128, 128)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_3j4b4"]
 atlas = ExtResource("7_5gtgg")
-region = Rect2(768, 0, 128, 128)
+region = Rect2(384, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yj68g"]
 atlas = ExtResource("7_5gtgg")
-region = Rect2(640, 0, 128, 128)
+region = Rect2(512, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ioxgp"]
 atlas = ExtResource("7_5gtgg")
-region = Rect2(512, 0, 128, 128)
+region = Rect2(640, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnsyf"]
 atlas = ExtResource("7_5gtgg")
-region = Rect2(384, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_007i1"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6cv16"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j4nxn"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_28m0y"]
-atlas = ExtResource("7_5gtgg")
 region = Rect2(768, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uniwh"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(640, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_iqsei"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tffgl"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pk8ii"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5mf0n"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(384, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4hvnv"]
-atlas = ExtResource("7_5gtgg")
-region = Rect2(512, 0, 128, 128)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bbmj2"]
 animations = [{
@@ -159,6 +131,15 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_0owmy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qek5x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5gtgg")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_3j4b4")
 }, {
 "duration": 1.0,
@@ -169,40 +150,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cnsyf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_007i1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6cv16")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j4nxn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_28m0y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uniwh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_iqsei")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tffgl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pk8ii")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5mf0n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4hvnv")
 }],
 "loop": true,
 "name": &"walk",
-"speed": 10.0
+"speed": 7.0
 }]
 
 [node name="Player" type="CharacterBody2D" unique_id=219392961]
@@ -245,11 +196,11 @@ position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1428111368]
-position = Vector2(3, -36)
-scale = Vector2(0.5419922, 0.5419922)
+position = Vector2(4, -42.65625)
+scale = Vector2(0.6459961, 0.6459961)
 sprite_frames = SubResource("SpriteFrames_bbmj2")
 animation = &"Idle"
 autoplay = "Idle"
-frame_progress = 0.67707485
+frame_progress = 0.76660013
 
 [connection signal="timeout" from="HitCooldown" to="." method="_on_hit_cooldown_timeout"]
