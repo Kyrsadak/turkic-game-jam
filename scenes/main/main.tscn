@@ -1,8 +1,10 @@
 [gd_scene format=4 uid="uid://bmgwymj5lbfvr"]
 
 [ext_resource type="Script" uid="uid://bibkxaqw2u657" path="res://scenes/main/main.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://cos75erspsonl" path="res://scenes/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" uid="uid://dr1yp21pqxvwa" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
+[ext_resource type="PackedScene" path="res://scenes/main/inventory_ui.tscn" id="20_inventory_ui"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
+[ext_resource type="Texture2D" uid="uid://kfm36xylyfol" path="res://assets/textures/Inventory.png" id="5_ouso4"]
 [ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="6_a8run"]
 [ext_resource type="Texture2D" uid="uid://cbtcdgvrxpkm1" path="res://assets/textures/Снег_земля.png" id="6_ow5a4"]
 [ext_resource type="Texture2D" uid="uid://cceghnamr76mt" path="res://assets/textures/луна.png" id="7_ouso4"]
@@ -110,6 +112,8 @@ position = Vector2(-445, 21)
 position = Vector2(-115, -19)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=406665461]
+
+[node name="InventoryUI" parent="HUD" instance=ExtResource("20_inventory_ui")]
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=2018199963]
 anchors_preset = 10

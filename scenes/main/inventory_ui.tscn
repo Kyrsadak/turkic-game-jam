@@ -1,0 +1,117 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/Inventory.png" id="1_inventory_bg"]
+[ext_resource type="Script" path="res://scenes/main/inventory_ui.gd" id="2_inventory_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_count"]
+font_size = 11
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="InventoryUI" type="Control"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -196.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 137.0
+grow_horizontal = 0
+script = ExtResource("2_inventory_script")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_inventory_bg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotsContainer" type="Control" parent="Background"]
+layout_mode = 1
+anchor_left = 0.18
+anchor_top = 0.45
+anchor_right = 0.86
+anchor_bottom = 0.82
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/SlotsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Slot1" type="Control" parent="Background/SlotsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="Background/SlotsContainer/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WoodIcon" type="Control" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer"]
+custom_minimum_size = Vector2(24, 14)
+layout_mode = 2
+
+[node name="LogBase" type="ColorRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 23.0
+offset_bottom = 12.0
+color = Color(0.54902, 0.34902, 0.2, 1)
+
+[node name="LogDetail1" type="ColorRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 20.0
+offset_bottom = 4.0
+color = Color(0.647059, 0.45098, 0.25098, 1)
+
+[node name="LogDetail2" type="ColorRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 10.0
+offset_right = 21.0
+offset_bottom = 12.0
+color = Color(0.419608, 0.25098, 0.121569, 1)
+
+[node name="CountLabel" type="Label" parent="Background/SlotsContainer/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -15.0
+offset_right = -2.0
+offset_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "0"
+label_settings = SubResource("LabelSettings_count")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Slot2" type="Control" parent="Background/SlotsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot3" type="Control" parent="Background/SlotsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

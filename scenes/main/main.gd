@@ -20,6 +20,7 @@ var wolf_spawn_timer: float = 0.0
 @onready var label_day_status: Label = $HUD/MarginContainer/VBoxContainer/LabelDayStatus
 @onready var progress_fuel: ProgressBar = $HUD/MarginContainer/VBoxContainer/ProgressFuel
 @onready var label_wood: Label = $HUD/MarginContainer/VBoxContainer/LabelWood
+var inventory_ui: Control = null
 
 var vagrant_scene = preload("res://scenes/vagrant/vagrant.tscn")
 var wolf_scene = preload("res://scenes/enemy/enemy.tscn")
@@ -61,6 +62,11 @@ func _ready() -> void:
 	else:
 		progress_fuel.value = 0
 		
+	# Скрываем текстовый счетчик дерева и находим графический инвентарь на сцене
+	if is_instance_valid(label_wood):
+		label_wood.visible = false
+	inventory_ui = hud.get_node_or_null("InventoryUI")
+
 	player.connect("wood_count_changed", Callable(self, "_on_player_wood_changed"))
 	
 	if not has_node("CaveLeft") and not has_node("CaveRight"):
@@ -348,7 +354,10 @@ func _on_campfire_fuel_changed(current_fuel: float, max_fuel: float) -> void:
 	progress_fuel.value = (current_fuel / max_fuel) * 100.0
 
 func _on_player_wood_changed(count: int) -> void:
-	label_wood.text = "Дров у Короля: %d/%d" % [count, player.max_wood_carry]
+	if is_instance_valid(label_wood):
+		label_wood.text = "Дров у Короля: %d/%d" % [count, player.max_wood_carry]
+	if is_instance_valid(inventory_ui):
+		inventory_ui.update_wood(count, player.max_wood_carry)
 
 func update_hud_text() -> void:
 	var state_name = "ДЕНЬ" if is_day else "НОЧЬ"
