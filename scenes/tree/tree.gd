@@ -3,10 +3,10 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal tree_felled(wood_count)
 
-@export var max_health: float = 30.0
+@export var max_health: float = 10.0
 @export var regrow_time: float = 180.0
 
-var health: float = 30.0
+var health: float = 10.0
 var is_felled: bool = false
 var regrow_timer: float = 0.0
 var feller_was_lumberjack: bool = false
@@ -61,7 +61,7 @@ func _process(delta: float) -> void:
 			if dist < 55.0:
 				label_health.visible = true
 				if health == max_health:
-					label_health.text = "[E] Рубить дерево"
+					label_health.text = "E"
 				else:
 					label_health.text = "Срубить: %d / %d" % [int(health), int(max_health)]
 			else:
