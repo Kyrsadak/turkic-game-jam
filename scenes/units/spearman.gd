@@ -151,3 +151,25 @@ func update_footsteps(delta: float) -> void:
 			if footstep_audio.volume_db <= -39.0:
 				footstep_audio.stop()
 				footstep_audio.volume_db = footstep_base_volume_db
+
+func take_damage(amount: float) -> void:
+	# Копейщик превращается обратно в бродягу
+	var vagrant_scene = load("res://scenes/vagrant/vagrant.tscn")
+	if vagrant_scene:
+		var v = vagrant_scene.instantiate()
+		get_parent().add_child(v)
+		v.global_position = global_position
+		v.is_hired = false
+		
+		# Отскок назад для нового бродяги
+		var knock_dir = -sign(body.scale.x) if body.scale.x != 0 else -1.0
+		v.velocity = Vector2(knock_dir * 120.0, -100.0)
+		
+		var v_body = v.get_node_or_null("Body")
+		if v_body:
+			v_body.modulate = Color(1.0, 0.3, 0.3)
+			var tween = create_tween()
+			tween.tween_property(v_body, "modulate", Color(1, 1, 1), 0.15)
+		
+	queue_free()
+

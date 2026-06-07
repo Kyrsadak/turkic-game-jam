@@ -171,3 +171,20 @@ func update_animations() -> void:
 		elif anim_sprite.sprite_frames.has_animation("idle"):
 			if anim_sprite.animation != "idle":
 				anim_sprite.play("idle")
+
+func take_damage(amount: float) -> void:
+	if is_hired:
+		# Разжалование до обычного бродяги
+		is_hired = false
+		remove_from_group("citizen")
+		add_to_group("vagrant")
+		if is_instance_valid(robe):
+			robe.color = Color(0.15, 0.16, 0.2, 1)
+		
+		# Эффект удара (отскок назад)
+		var knock_dir = -sign(body.scale.x) if body.scale.x != 0 else -1.0
+		velocity = Vector2(knock_dir * 120.0, -100.0)
+		
+		var tween = create_tween()
+		body.modulate = Color(1.0, 0.3, 0.3)
+		tween.tween_property(body, "modulate", Color(1, 1, 1), 0.15)

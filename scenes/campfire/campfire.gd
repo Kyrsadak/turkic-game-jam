@@ -31,66 +31,69 @@ func _process(delta: float) -> void:
 	if is_burned_out:
 		return
 		
-	if current_fuel > 0:
-		current_fuel -= fuel_burn_rate * delta
-		if current_fuel <= 0:
-			current_fuel = 0
-			is_burned_out = true
-			emit_signal("burned_out")
-			# Выключаем визуальные эффекты
-			if is_instance_valid(particles_flame):
-				particles_flame.emitting = false
-			if is_instance_valid(particles_sparks):
-				particles_sparks.emitting = false
-			
-			var anim_sprite = get_node_or_null("AnimatedSprite2D")
-			if anim_sprite:
-				anim_sprite.stop()
-				anim_sprite.visible = false
-			
-			# Плавное затухание света
-			var tween = create_tween()
-			tween.tween_property(light_2d, "energy", 0.0, 1.5)
-			return
-
+	if current_fuel <= 0.0:
+		current_fuel = 0.0
+		is_burned_out = true
+		emit_signal("burned_out")
 		emit_signal("fuel_changed", current_fuel, max_fuel)
-		
-		# Эффект мерцания света костра
-		noise_time += delta * 15.0
-		var flicker = sin(noise_time) * 0.06 + cos(noise_time * 0.7) * 0.04
-		
-		# Размер и яркость зависят от уровня топлива
-		var fuel_ratio = current_fuel / max_fuel
-		light_2d.texture_scale = light_base_scale * (0.4 + 0.6 * fuel_ratio) + flicker
-		light_2d.energy = light_base_energy * (0.5 + 0.5 * fuel_ratio) + flicker * 0.5
-		
-		# Масштабируем частицы огня
+		# Выключаем визуальные эффекты
 		if is_instance_valid(particles_flame):
-			particles_flame.amount = int(clamp(40 * fuel_ratio, 10, 50))
-			particles_flame.scale_amount_min = 3.0 * (0.5 + 0.5 * fuel_ratio)
-			particles_flame.scale_amount_max = 6.0 * (0.5 + 0.5 * fuel_ratio)
-			particles_flame.initial_velocity_min = 40.0 * (0.5 + 0.5 * fuel_ratio)
-			particles_flame.initial_velocity_max = 70.0 * (0.5 + 0.5 * fuel_ratio)
-			
-		# Масштабируем спрайт огня
+			particles_flame.emitting = false
+		if is_instance_valid(particles_sparks):
+			particles_sparks.emitting = false
+		
 		var anim_sprite = get_node_or_null("AnimatedSprite2D")
 		if anim_sprite:
-			var fire_scale = 0.5 + 0.6 * fuel_ratio
-			anim_sprite.scale = Vector2(fire_scale, fire_scale)
+			anim_sprite.stop()
+			anim_sprite.visible = false
 		
-		# Показываем статус при подходе игрока (только если есть дрова в руках)
-		var players = get_tree().get_nodes_in_group("player")
-		if players.size() > 0:
-			var player = players[0]
-			var dist = global_position.distance_to(player.global_position)
-			if dist < 60.0 and player.wood_count > 0:
-				label_status.visible = true
-				if current_fuel >= max_fuel - 2.0:
-					label_status.text = "[Костер полон]"
-				else:
-					label_status.text = "[E] Подбросить дрова (%d%%)" % int(fuel_ratio * 100)
+		# Плавное затухание света
+		var tween = create_tween()
+		tween.tween_property(light_2d, "energy", 0.0, 1.5)
+		return
+		
+	current_fuel -= fuel_burn_rate * delta
+	if current_fuel < 0.0:
+		current_fuel = 0.0
+		
+	emit_signal("fuel_changed", current_fuel, max_fuel)
+	
+	# Эффект мерцания света костра
+	noise_time += delta * 15.0
+	var flicker = sin(noise_time) * 0.06 + cos(noise_time * 0.7) * 0.04
+	
+	# Размер и яркость зависят от уровня топлива
+	var fuel_ratio = current_fuel / max_fuel
+	light_2d.texture_scale = light_base_scale * (0.4 + 0.6 * fuel_ratio) + flicker
+	light_2d.energy = light_base_energy * (0.5 + 0.5 * fuel_ratio) + flicker * 0.5
+	
+	# Масштабируем частицы огня
+	if is_instance_valid(particles_flame):
+		particles_flame.amount = int(clamp(40 * fuel_ratio, 10, 50))
+		particles_flame.scale_amount_min = 3.0 * (0.5 + 0.5 * fuel_ratio)
+		particles_flame.scale_amount_max = 6.0 * (0.5 + 0.5 * fuel_ratio)
+		particles_flame.initial_velocity_min = 40.0 * (0.5 + 0.5 * fuel_ratio)
+		particles_flame.initial_velocity_max = 70.0 * (0.5 + 0.5 * fuel_ratio)
+		
+	# Масштабируем спрайт огня
+	var anim_sprite = get_node_or_null("AnimatedSprite2D")
+	if anim_sprite:
+		var fire_scale = 0.5 + 0.6 * fuel_ratio
+		anim_sprite.scale = Vector2(fire_scale, fire_scale)
+	
+	# Показываем статус при подходе игрока (только если есть дрова в руках)
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		var player = players[0]
+		var dist = global_position.distance_to(player.global_position)
+		if dist < 60.0 and player.wood_count > 0:
+			label_status.visible = true
+			if current_fuel >= max_fuel - 2.0:
+				label_status.text = "[Костер полон]"
 			else:
-				label_status.visible = false
+				label_status.text = "[E] Подбросить дрова (%d%%)" % int(fuel_ratio * 100)
+		else:
+			label_status.visible = false
 	else:
 		label_status.visible = false
 

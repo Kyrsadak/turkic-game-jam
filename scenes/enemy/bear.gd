@@ -16,14 +16,43 @@ var attack_timer: float = 0.0
 @onready var body: Node2D = $Body
 @onready var detection_area: Area2D = $DetectionArea
 
+var sprite: Sprite2D = null
+var current_anim: String = ""
+var anim_frame: float = 0.0
+var anim_speed: float = 12.0
+
+var anims = {
+	"idle": [1, 8, true],
+	"walk": [9, 16, true],
+	"death": [27, 34, false], # death 2
+	"attack": [43, 52, false] # attack 2
+}
+
 func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("bear")
 	health = max_health
-	TextureLoader.try_apply_texture(self, "res://assets/textures/bear.png", Vector2(0, -12))
+	
+	# Загружаем спрайт-лист и настраиваем его для медведя (увеличиваем масштаб и красим в бурый цвет)
+	sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/monster pack 2 free/pack 2 m1.png", Vector2(0, -24))
+	if sprite:
+		sprite.hframes = 10
+		sprite.vframes = 9
+		sprite.frame = 1
+		sprite.modulate = Color(0.65, 0.45, 0.4) # Бурый медведь
+		
+	body.scale = Vector2(1.8, 1.8)
+	play_anim("idle")
+	
+	# Эффект плавного выхода из пещеры
+	modulate.a = 0.0
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 1.0, 0.8)
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
+		play_anim("death")
+		update_sprite_animation(delta)
 		return
 		
 	if not is_on_floor():
@@ -44,18 +73,59 @@ func _physics_process(delta: float) -> void:
 		
 		if abs(dist_x) > 20.0:
 			velocity.x = sign(dist_x) * speed
-			body.scale.x = sign(dist_x)
-			
-			# Анимация бега медведя (тяжелые шаги)
-			var pulse = sin(Time.get_ticks_msec() * 0.012) * 0.06
-			body.scale.y = 1.0 + pulse
-			body.scale.x = sign(dist_x) * (1.0 - pulse)
+			body.scale.x = sign(dist_x) * 1.8
+			body.scale.y = 1.8
+			detection_area.scale.x = sign(dist_x) # Зона коллизии поворачивается в сторону движения
 		else:
 			velocity.x = 0
 			if campfire:
 				extinguish_campfire(campfire, delta)
 				
+	# Обновление анимаций движения
+	if current_anim != "attack":
+		var campfire = get_tree().get_first_node_in_group("campfire")
+		var reached_fire = campfire and abs(campfire.global_position.x - global_position.x) <= 20.0
+		if reached_fire:
+			play_anim("attack") # Медведь бьет лапой костер (анимация атаки)
+		elif abs(velocity.x) > 5.0:
+			play_anim("walk")
+		else:
+			play_anim("idle")
+			
+	update_sprite_animation(delta)
 	move_and_slide()
+
+func play_anim(anim_name: String) -> void:
+	if current_anim == anim_name:
+		return
+	current_anim = anim_name
+	var anim_info = anims.get(anim_name)
+	if anim_info:
+		anim_frame = anim_info[0]
+		if sprite:
+			sprite.frame = int(anim_frame)
+
+func update_sprite_animation(delta: float) -> void:
+	if not sprite:
+		return
+	var anim_info = anims.get(current_anim)
+	if not anim_info:
+		return
+		
+	var start_f = anim_info[0]
+	var end_f = anim_info[1]
+	var loops = anim_info[2]
+	
+	anim_frame += delta * anim_speed
+	if anim_frame > end_f + 0.99:
+		if loops:
+			anim_frame = start_f
+		else:
+			anim_frame = end_f
+			if current_anim == "attack":
+				play_anim("idle")
+				
+	sprite.frame = clamp(int(anim_frame), start_f, end_f)
 
 func get_target_to_attack() -> Node2D:
 	var overlapping = detection_area.get_overlapping_bodies()
@@ -71,7 +141,7 @@ func get_target_to_attack() -> Node2D:
 			if dist < min_dist_wall:
 				min_dist_wall = dist
 				closest_wall = ob
-		elif ob.is_in_group("spearman") or ob.is_in_group("lumberjack") or ob.is_in_group("player") or ob.is_in_group("citizen"):
+		elif ob.is_in_group("spearman") or ob.is_in_group("lumberjack") or ob.is_in_group("citizen"):
 			var dist = global_position.distance_to(ob.global_position)
 			if dist < min_dist_unit:
 				min_dist_unit = dist
@@ -83,6 +153,7 @@ func get_target_to_attack() -> Node2D:
 
 func bite_target(target: Node2D) -> void:
 	if is_instance_valid(target):
+		play_anim("attack")
 		if target.has_method("take_damage"):
 			target.take_damage(damage)
 			
@@ -96,9 +167,6 @@ func bite_target(target: Node2D) -> void:
 
 func extinguish_campfire(campfire: Node2D, delta: float) -> void:
 	campfire.current_fuel = max(0.0, campfire.current_fuel - 25.0 * delta)
-	var pulse = sin(Time.get_ticks_msec() * 0.02) * 0.05
-	body.scale.y = 1.0 + pulse
-	body.scale.x = sign(body.scale.x) * (1.0 - pulse)
 
 func take_damage(amount: float) -> void:
 	if is_dead:
@@ -107,6 +175,7 @@ func take_damage(amount: float) -> void:
 	
 	var tween = create_tween()
 	body.modulate = Color(1.0, 0.3, 0.3)
+	# Медведь должен возвращать свою бурую окраску, а не чисто белый цвет
 	tween.tween_property(body, "modulate", Color(1, 1, 1), 0.12)
 	
 	if health <= 0:
@@ -118,10 +187,11 @@ func die() -> void:
 	emit_signal("enemy_died")
 	detection_area.set_deferred("monitoring", false)
 	
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(body, "rotation", PI / 2.0 * sign(body.scale.x), 0.55)
-	tween.tween_property(body, "modulate:a", 0.0, 0.6)
+	play_anim("death")
 	
-	await get_tree().create_timer(0.6).timeout
+	var tween = create_tween()
+	tween.tween_property(body, "modulate:a", 0.0, 0.8)
+	
+	await get_tree().create_timer(0.8).timeout
 	queue_free()
+

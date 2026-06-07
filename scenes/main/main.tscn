@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bmgwymj5lbfvr"]
 
 [ext_resource type="Script" uid="uid://bibkxaqw2u657" path="res://scenes/main/main.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cok1r5g5vp7fq" path="res://assets/textures/GandalfHardcore FREE Platformer Assets/Floor Tiles2.png" id="2_ouso4"]
 [ext_resource type="PackedScene" uid="uid://cos75erspsonl" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://dr1yp21pqxvwa" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
 [ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="6_a8run"]
@@ -10,6 +11,573 @@
 [ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="9_th5th"]
 [ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="10_7smn1"]
 [ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_blune"]
+texture = ExtResource("2_ouso4")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+14:1/0 = 0
+15:1/0 = 0
+16:1/0 = 0
+17:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+16:2/0 = 0
+17:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+12:3/0 = 0
+13:3/0 = 0
+16:3/0 = 0
+17:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+9:4/0 = 0
+10:4/0 = 0
+11:4/0 = 0
+12:4/0 = 0
+13:4/0 = 0
+14:4/0 = 0
+15:4/0 = 0
+16:4/0 = 0
+17:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+9:5/0 = 0
+10:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+13:5/0 = 0
+14:5/0 = 0
+15:5/0 = 0
+16:5/0 = 0
+17:5/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+8:6/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+11:6/0 = 0
+12:6/0 = 0
+13:6/0 = 0
+14:6/0 = 0
+15:6/0 = 0
+16:6/0 = 0
+17:6/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+8:7/0 = 0
+9:7/0 = 0
+10:7/0 = 0
+11:7/0 = 0
+12:7/0 = 0
+13:7/0 = 0
+14:7/0 = 0
+15:7/0 = 0
+16:7/0 = 0
+17:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+8:8/0 = 0
+9:8/0 = 0
+10:8/0 = 0
+11:8/0 = 0
+12:8/0 = 0
+13:8/0 = 0
+14:8/0 = 0
+15:8/0 = 0
+16:8/0 = 0
+17:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+6:9/0 = 0
+7:9/0 = 0
+8:9/0 = 0
+9:9/0 = 0
+10:9/0 = 0
+11:9/0 = 0
+12:9/0 = 0
+13:9/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+5:10/0 = 0
+8:10/0 = 0
+9:10/0 = 0
+10:10/0 = 0
+11:10/0 = 0
+12:10/0 = 0
+13:10/0 = 0
+14:10/0 = 0
+15:10/0 = 0
+16:10/0 = 0
+17:10/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+8:11/0 = 0
+9:11/0 = 0
+10:11/0 = 0
+11:11/0 = 0
+12:11/0 = 0
+13:11/0 = 0
+14:11/0 = 0
+15:11/0 = 0
+16:11/0 = 0
+17:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+5:12/0 = 0
+6:12/0 = 0
+7:12/0 = 0
+8:12/0 = 0
+9:12/0 = 0
+10:12/0 = 0
+11:12/0 = 0
+12:12/0 = 0
+13:12/0 = 0
+14:12/0 = 0
+15:12/0 = 0
+16:12/0 = 0
+17:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+4:13/0 = 0
+5:13/0 = 0
+6:13/0 = 0
+7:13/0 = 0
+8:13/0 = 0
+9:13/0 = 0
+10:13/0 = 0
+11:13/0 = 0
+12:13/0 = 0
+13:13/0 = 0
+14:13/0 = 0
+15:13/0 = 0
+16:13/0 = 0
+17:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+5:14/0 = 0
+6:14/0 = 0
+7:14/0 = 0
+10:14/0 = 0
+11:14/0 = 0
+12:14/0 = 0
+13:14/0 = 0
+16:14/0 = 0
+17:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+4:15/0 = 0
+5:15/0 = 0
+6:15/0 = 0
+7:15/0 = 0
+10:15/0 = 0
+11:15/0 = 0
+12:15/0 = 0
+13:15/0 = 0
+16:15/0 = 0
+17:15/0 = 0
+0:16/0 = 0
+1:16/0 = 0
+2:16/0 = 0
+3:16/0 = 0
+4:16/0 = 0
+5:16/0 = 0
+6:16/0 = 0
+7:16/0 = 0
+8:16/0 = 0
+9:16/0 = 0
+10:16/0 = 0
+11:16/0 = 0
+12:16/0 = 0
+13:16/0 = 0
+14:16/0 = 0
+15:16/0 = 0
+16:16/0 = 0
+17:16/0 = 0
+0:17/0 = 0
+1:17/0 = 0
+2:17/0 = 0
+3:17/0 = 0
+4:17/0 = 0
+5:17/0 = 0
+6:17/0 = 0
+7:17/0 = 0
+8:17/0 = 0
+9:17/0 = 0
+10:17/0 = 0
+11:17/0 = 0
+12:17/0 = 0
+13:17/0 = 0
+14:17/0 = 0
+15:17/0 = 0
+16:17/0 = 0
+17:17/0 = 0
+2:18/0 = 0
+3:18/0 = 0
+4:18/0 = 0
+5:18/0 = 0
+8:18/0 = 0
+9:18/0 = 0
+10:18/0 = 0
+11:18/0 = 0
+12:18/0 = 0
+13:18/0 = 0
+14:18/0 = 0
+15:18/0 = 0
+16:18/0 = 0
+17:18/0 = 0
+2:19/0 = 0
+3:19/0 = 0
+4:19/0 = 0
+5:19/0 = 0
+8:19/0 = 0
+9:19/0 = 0
+10:19/0 = 0
+11:19/0 = 0
+12:19/0 = 0
+13:19/0 = 0
+14:19/0 = 0
+15:19/0 = 0
+16:19/0 = 0
+17:19/0 = 0
+0:20/0 = 0
+1:20/0 = 0
+2:20/0 = 0
+3:20/0 = 0
+4:20/0 = 0
+5:20/0 = 0
+6:20/0 = 0
+7:20/0 = 0
+8:20/0 = 0
+9:20/0 = 0
+10:20/0 = 0
+11:20/0 = 0
+12:20/0 = 0
+13:20/0 = 0
+14:20/0 = 0
+15:20/0 = 0
+16:20/0 = 0
+17:20/0 = 0
+0:21/0 = 0
+1:21/0 = 0
+2:21/0 = 0
+3:21/0 = 0
+4:21/0 = 0
+5:21/0 = 0
+6:21/0 = 0
+7:21/0 = 0
+8:21/0 = 0
+9:21/0 = 0
+10:21/0 = 0
+11:21/0 = 0
+12:21/0 = 0
+13:21/0 = 0
+2:22/0 = 0
+3:22/0 = 0
+4:22/0 = 0
+5:22/0 = 0
+8:22/0 = 0
+9:22/0 = 0
+10:22/0 = 0
+11:22/0 = 0
+12:22/0 = 0
+13:22/0 = 0
+14:22/0 = 0
+15:22/0 = 0
+16:22/0 = 0
+17:22/0 = 0
+2:23/0 = 0
+3:23/0 = 0
+4:23/0 = 0
+5:23/0 = 0
+8:23/0 = 0
+9:23/0 = 0
+10:23/0 = 0
+11:23/0 = 0
+12:23/0 = 0
+13:23/0 = 0
+14:23/0 = 0
+15:23/0 = 0
+16:23/0 = 0
+17:23/0 = 0
+0:24/0 = 0
+1:24/0 = 0
+2:24/0 = 0
+3:24/0 = 0
+4:24/0 = 0
+5:24/0 = 0
+6:24/0 = 0
+7:24/0 = 0
+8:24/0 = 0
+9:24/0 = 0
+10:24/0 = 0
+11:24/0 = 0
+12:24/0 = 0
+13:24/0 = 0
+14:24/0 = 0
+15:24/0 = 0
+16:24/0 = 0
+17:24/0 = 0
+0:25/0 = 0
+1:25/0 = 0
+2:25/0 = 0
+3:25/0 = 0
+4:25/0 = 0
+5:25/0 = 0
+6:25/0 = 0
+7:25/0 = 0
+8:25/0 = 0
+9:25/0 = 0
+10:25/0 = 0
+11:25/0 = 0
+12:25/0 = 0
+13:25/0 = 0
+14:25/0 = 0
+15:25/0 = 0
+16:25/0 = 0
+17:25/0 = 0
+0:26/0 = 0
+1:26/0 = 0
+2:26/0 = 0
+3:26/0 = 0
+4:26/0 = 0
+5:26/0 = 0
+6:26/0 = 0
+7:26/0 = 0
+10:26/0 = 0
+11:26/0 = 0
+12:26/0 = 0
+13:26/0 = 0
+16:26/0 = 0
+17:26/0 = 0
+0:27/0 = 0
+1:27/0 = 0
+2:27/0 = 0
+3:27/0 = 0
+4:27/0 = 0
+5:27/0 = 0
+6:27/0 = 0
+7:27/0 = 0
+10:27/0 = 0
+11:27/0 = 0
+12:27/0 = 0
+13:27/0 = 0
+16:27/0 = 0
+17:27/0 = 0
+0:28/0 = 0
+1:28/0 = 0
+2:28/0 = 0
+3:28/0 = 0
+4:28/0 = 0
+5:28/0 = 0
+6:28/0 = 0
+7:28/0 = 0
+8:28/0 = 0
+9:28/0 = 0
+10:28/0 = 0
+11:28/0 = 0
+12:28/0 = 0
+13:28/0 = 0
+14:28/0 = 0
+15:28/0 = 0
+16:28/0 = 0
+17:28/0 = 0
+0:29/0 = 0
+1:29/0 = 0
+2:29/0 = 0
+3:29/0 = 0
+4:29/0 = 0
+5:29/0 = 0
+6:29/0 = 0
+7:29/0 = 0
+8:29/0 = 0
+9:29/0 = 0
+10:29/0 = 0
+11:29/0 = 0
+12:29/0 = 0
+13:29/0 = 0
+14:29/0 = 0
+15:29/0 = 0
+16:29/0 = 0
+17:29/0 = 0
+2:30/0 = 0
+3:30/0 = 0
+4:30/0 = 0
+5:30/0 = 0
+8:30/0 = 0
+9:30/0 = 0
+10:30/0 = 0
+11:30/0 = 0
+12:30/0 = 0
+13:30/0 = 0
+14:30/0 = 0
+15:30/0 = 0
+16:30/0 = 0
+17:30/0 = 0
+2:31/0 = 0
+3:31/0 = 0
+4:31/0 = 0
+5:31/0 = 0
+8:31/0 = 0
+9:31/0 = 0
+10:31/0 = 0
+11:31/0 = 0
+12:31/0 = 0
+13:31/0 = 0
+14:31/0 = 0
+15:31/0 = 0
+16:31/0 = 0
+17:31/0 = 0
+0:32/0 = 0
+1:32/0 = 0
+2:32/0 = 0
+3:32/0 = 0
+4:32/0 = 0
+5:32/0 = 0
+6:32/0 = 0
+7:32/0 = 0
+8:32/0 = 0
+9:32/0 = 0
+10:32/0 = 0
+11:32/0 = 0
+12:32/0 = 0
+13:32/0 = 0
+14:32/0 = 0
+15:32/0 = 0
+16:32/0 = 0
+17:32/0 = 0
+0:33/0 = 0
+1:33/0 = 0
+2:33/0 = 0
+3:33/0 = 0
+4:33/0 = 0
+5:33/0 = 0
+6:33/0 = 0
+7:33/0 = 0
+8:33/0 = 0
+9:33/0 = 0
+10:33/0 = 0
+11:33/0 = 0
+12:33/0 = 0
+13:33/0 = 0
+2:34/0 = 0
+3:34/0 = 0
+4:34/0 = 0
+5:34/0 = 0
+8:34/0 = 0
+9:34/0 = 0
+10:34/0 = 0
+11:34/0 = 0
+12:34/0 = 0
+13:34/0 = 0
+14:34/0 = 0
+15:34/0 = 0
+16:34/0 = 0
+17:34/0 = 0
+2:35/0 = 0
+3:35/0 = 0
+4:35/0 = 0
+5:35/0 = 0
+8:35/0 = 0
+9:35/0 = 0
+10:35/0 = 0
+11:35/0 = 0
+12:35/0 = 0
+13:35/0 = 0
+14:35/0 = 0
+15:35/0 = 0
+16:35/0 = 0
+17:35/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6q06x"]
 texture = ExtResource("6_ow5a4")
@@ -91,6 +659,7 @@ texture_region_size = Vector2i(23, 16)
 
 [sub_resource type="TileSet" id="TileSet_hujxm"]
 physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_blune")
 sources/1 = SubResource("TileSetAtlasSource_6q06x")
 
 [node name="Main" type="Node2D" unique_id=1269933065]
@@ -103,11 +672,8 @@ tile_set = SubResource("TileSet_hujxm")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
 
-[node name="Tree" parent="." unique_id=253433487 instance=ExtResource("11_tree")]
-position = Vector2(-445, 21)
-
 [node name="Player" parent="." unique_id=517748356 instance=ExtResource("2_player")]
-position = Vector2(-115, -19)
+position = Vector2(-115, 23)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=406665461]
 
@@ -221,6 +787,7 @@ text = "Нажмите [R], чтобы начать заново"
 horizontal_alignment = 1
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1156262253]
+visible = false
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=727856617]
 motion_scale = Vector2(0.2, 1)
@@ -264,3 +831,126 @@ motion_mirroring = Vector2(837.315, 0)
 position = Vector2(-106.59753, -102.59638)
 scale = Vector2(0.85463107, 0.7287864)
 texture = ExtResource("10_7smn1")
+
+[node name="Node" type="Node" parent="." unique_id=1853887583]
+
+[node name="Tree" parent="Node" unique_id=253433487 instance=ExtResource("11_tree")]
+position = Vector2(-445, 21)
+
+[node name="Tree2" parent="Node" unique_id=1082396335 instance=ExtResource("11_tree")]
+position = Vector2(-661, 29)
+
+[node name="Tree3" parent="Node" unique_id=28822002 instance=ExtResource("11_tree")]
+position = Vector2(-765, 21)
+
+[node name="Tree4" parent="Node" unique_id=1179438475 instance=ExtResource("11_tree")]
+position = Vector2(-885, 23)
+
+[node name="Tree5" parent="Node" unique_id=300006722 instance=ExtResource("11_tree")]
+position = Vector2(-989, 29)
+
+[node name="Tree6" parent="Node" unique_id=1275445631 instance=ExtResource("11_tree")]
+position = Vector2(-1093, 29)
+
+[node name="Tree10" parent="Node" unique_id=1127033510 instance=ExtResource("11_tree")]
+position = Vector2(-1237, 21)
+
+[node name="Tree11" parent="Node" unique_id=1497774534 instance=ExtResource("11_tree")]
+position = Vector2(-1413, 29)
+
+[node name="Tree12" parent="Node" unique_id=1334549721 instance=ExtResource("11_tree")]
+position = Vector2(-1517, 21)
+
+[node name="Tree13" parent="Node" unique_id=844115830 instance=ExtResource("11_tree")]
+position = Vector2(-1637, 23)
+
+[node name="Tree14" parent="Node" unique_id=1925679931 instance=ExtResource("11_tree")]
+position = Vector2(-1741, 29)
+
+[node name="Tree15" parent="Node" unique_id=609466417 instance=ExtResource("11_tree")]
+position = Vector2(-1845, 29)
+
+[node name="Tree8" parent="Node" unique_id=889643249 instance=ExtResource("11_tree")]
+position = Vector2(-544, 21)
+
+[node name="Tree9" parent="Node" unique_id=807782287 instance=ExtResource("11_tree")]
+visible = false
+position = Vector2(-554, 25)
+
+[node name="Tree16" parent="Node" unique_id=17544833 instance=ExtResource("11_tree")]
+position = Vector2(1707, 21)
+
+[node name="Tree17" parent="Node" unique_id=778798170 instance=ExtResource("11_tree")]
+position = Vector2(1491, 29)
+
+[node name="Tree18" parent="Node" unique_id=1223567707 instance=ExtResource("11_tree")]
+position = Vector2(1387, 21)
+
+[node name="Tree19" parent="Node" unique_id=455849947 instance=ExtResource("11_tree")]
+position = Vector2(1267, 23)
+
+[node name="Tree20" parent="Node" unique_id=1116624214 instance=ExtResource("11_tree")]
+position = Vector2(1163, 29)
+
+[node name="Tree21" parent="Node" unique_id=1290738788 instance=ExtResource("11_tree")]
+position = Vector2(1059, 29)
+
+[node name="Tree22" parent="Node" unique_id=1928078905 instance=ExtResource("11_tree")]
+position = Vector2(903, 21)
+
+[node name="Tree23" parent="Node" unique_id=920623468 instance=ExtResource("11_tree")]
+position = Vector2(739, 29)
+
+[node name="Tree24" parent="Node" unique_id=1110568383 instance=ExtResource("11_tree")]
+position = Vector2(635, 21)
+
+[node name="Tree25" parent="Node" unique_id=1691979212 instance=ExtResource("11_tree")]
+position = Vector2(515, 23)
+
+[node name="Tree26" parent="Node" unique_id=1505390182 instance=ExtResource("11_tree")]
+position = Vector2(411, 29)
+
+[node name="Tree27" parent="Node" unique_id=12814801 instance=ExtResource("11_tree")]
+position = Vector2(307, 29)
+
+[node name="Tree28" parent="Node" unique_id=1661290865 instance=ExtResource("11_tree")]
+position = Vector2(1707, 21)
+
+[node name="Tree29" parent="Node" unique_id=723968549 instance=ExtResource("11_tree")]
+position = Vector2(1606, 21)
+
+[node name="Tree31" parent="Node" unique_id=218653027 instance=ExtResource("11_tree")]
+position = Vector2(3011, 29)
+
+[node name="Tree32" parent="Node" unique_id=1682942468 instance=ExtResource("11_tree")]
+position = Vector2(2907, 21)
+
+[node name="Tree33" parent="Node" unique_id=1497986262 instance=ExtResource("11_tree")]
+position = Vector2(2787, 23)
+
+[node name="Tree34" parent="Node" unique_id=1079114154 instance=ExtResource("11_tree")]
+position = Vector2(2683, 29)
+
+[node name="Tree35" parent="Node" unique_id=1252584527 instance=ExtResource("11_tree")]
+position = Vector2(2579, 29)
+
+[node name="Tree36" parent="Node" unique_id=695036040 instance=ExtResource("11_tree")]
+position = Vector2(2423, 21)
+
+[node name="Tree37" parent="Node" unique_id=1591565310 instance=ExtResource("11_tree")]
+position = Vector2(2259, 29)
+
+[node name="Tree38" parent="Node" unique_id=1346174436 instance=ExtResource("11_tree")]
+position = Vector2(2155, 21)
+
+[node name="Tree39" parent="Node" unique_id=577952295 instance=ExtResource("11_tree")]
+position = Vector2(2035, 23)
+
+[node name="Tree40" parent="Node" unique_id=928593628 instance=ExtResource("11_tree")]
+position = Vector2(1931, 29)
+
+[node name="Tree41" parent="Node" unique_id=1085096389 instance=ExtResource("11_tree")]
+position = Vector2(1827, 29)
+
+[node name="Tree30" parent="Node" unique_id=487969523 instance=ExtResource("11_tree")]
+position = Vector2(-1323, 25)

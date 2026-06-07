@@ -311,3 +311,32 @@ func update_animations() -> void:
 	else:
 		if anim_sprite.animation != "Idle":
 			anim_sprite.play("Idle")
+
+func take_damage(amount: float) -> void:
+	if is_hitting:
+		return
+		
+	# Игрок теряет дрова при укусе врага
+	if wood_count > 0:
+		wood_count = max(0, wood_count - 1)
+		emit_signal("wood_count_changed", wood_count)
+		update_wood_visuals()
+		
+		# Спавним бревно на земле, отлетающее в сторону
+		var wood_scene = load("res://scenes/wood/wood.tscn")
+		if wood_scene:
+			var w = wood_scene.instantiate()
+			get_parent().add_child(w)
+			w.global_position = global_position
+			var dir_x = -sign(body.scale.x) if body.scale.x != 0 else 1.0
+			var target_x = global_position.x + randf_range(30.0, 70.0) * dir_x
+			w.launch(target_x, global_position.y)
+
+	# Вспышка красного цвета
+	var tween = create_tween()
+	body.modulate = Color(1.0, 0.3, 0.3)
+	tween.tween_property(body, "modulate", Color(1, 1, 1), 0.15)
+	
+	# Небольшой импульс отскока назад
+	var knock_dir = -sign(body.scale.x) if body.scale.x != 0 else -1.0
+	velocity = Vector2(knock_dir * 120.0, -100.0)
