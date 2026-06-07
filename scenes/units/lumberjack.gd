@@ -5,7 +5,7 @@ enum State { IDLE, WALKING_TO_TREE, CHOPPING, WALKING_TO_HOUSE }
 
 @export var speed: float = 85.0
 @export var chop_damage: float = 10.0
-@export var chop_cooldown: float = 1.1
+@export var chop_cooldown: float = 2.0
 
 var gravity: float = 900.0
 var wood_count: int = 0
@@ -32,6 +32,7 @@ func _ready() -> void:
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
 	footstep_audio.volume_db = footstep_base_volume_db
+	body.position.y = 6.0
 	TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:

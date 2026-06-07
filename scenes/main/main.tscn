@@ -14,8 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="9_th5th"]
 [ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="10_7smn1"]
 [ext_resource type="PackedScene" path="res://scenes/forest/forest_biome.tscn" id="22_forest_biome"]
-
-
+[ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="23_lumberjack_house"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_blune"]
 texture = ExtResource("2_ouso4")
@@ -678,6 +677,7 @@ tile_set = SubResource("TileSet_hujxm")
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=499099648]
 
 [node name="GrassSprite" type="Sprite2D" parent="." unique_id=1028392193]
+z_index = 2
 texture_repeat = 2
 scale = Vector2(0.15, 0.15)
 texture = ExtResource("21_ground_grass")
@@ -748,6 +748,10 @@ text = "Дров у Короля: 0/5"
 
 [node name="Campfire" parent="." unique_id=1726977443 instance=ExtResource("3_campfire")]
 position = Vector2(0, 3)
+
+[node name="LumberjackHouse" parent="." unique_id=2099394939 instance=ExtResource("23_lumberjack_house")]
+position = Vector2(-170, 28)
+scale = Vector2(0.7, 0.7)
 
 [node name="GameOverScreen" type="CanvasLayer" parent="." unique_id=953841980]
 visible = false

@@ -26,6 +26,7 @@ func _ready() -> void:
 	add_to_group("builder")
 	update_wood_visuals()
 	choose_wander_target()
+	body.position.y = 6.0
 	TextureLoader.try_apply_texture(self, "res://assets/textures/builder.png", Vector2(0, -14))
 
 func _physics_process(delta: float) -> void:

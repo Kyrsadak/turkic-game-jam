@@ -112,6 +112,9 @@ func update_visuals() -> void:
 		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack_house.png", Vector2(0, -108))
 		if sprite:
 			visual_built.visible = false
+		label_status.position.y = -240.0
+	else:
+		label_status.position.y = -65.0
 
 func update_storage_visuals() -> void:
 	if not is_built:

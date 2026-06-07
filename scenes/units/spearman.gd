@@ -27,6 +27,7 @@ func _ready() -> void:
 	scale = Vector2(1.4, 1.4)
 	add_to_group("spearman")
 	footstep_audio.volume_db = footstep_base_volume_db
+	body.position.y = 6.0
 	
 	# Чередуем фланги: нечётные → правый (+1), чётные → левый (-1)
 	spearman_count += 1
