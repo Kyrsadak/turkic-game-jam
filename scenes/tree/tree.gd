@@ -3,14 +3,15 @@ const TextureLoader = preload("res://scenes/texture_loader.gd")
 
 signal tree_felled(wood_count)
 
-@export var max_health: float = 30.0
+@export var max_health: float = 10.0
 @export var regrow_time: float = 180.0
 
-var health: float = 30.0
+var health: float = 10.0
 var is_felled: bool = false
 var regrow_timer: float = 0.0
 var feller_was_lumberjack: bool = false
 const FALL_ANIMATION_DURATION: float = 1.2
+static var first_tree_tutorial_shown: bool = false
 
 @onready var visual: Node2D = $Visual
 @onready var crown: Polygon2D = $Visual/Crown
@@ -27,6 +28,8 @@ func _ready() -> void:
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0
+	visual.scale = Vector2(1.7, 1.7)
+	label_health.position.y *= 1.7
 	label_health.visible = false
 	setup_tooltip_style(label_health)
 	
@@ -49,9 +52,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_felled:
 		label_health.visible = false
-		regrow_timer -= delta
-		if regrow_timer <= 0:
-			regrow()
+		if not is_managed_by_forest():
+			regrow_timer -= delta
+			if regrow_timer <= 0:
+				regrow()
 	else:
 		# Отображаем подсказку при приближении игрока
 		var players = get_tree().get_nodes_in_group("player")
@@ -61,9 +65,12 @@ func _process(delta: float) -> void:
 			if dist < 55.0:
 				label_health.visible = true
 				if health == max_health:
-					label_health.text = "[E] Рубить дерево"
+					if not first_tree_tutorial_shown:
+						label_health.text = "[E] Рубка дерева"
+					else:
+						label_health.text = "E"
 				else:
-					label_health.text = "Срубить: %d / %d" % [int(health), int(max_health)]
+					label_health.text = "%d" % int(health)
 			else:
 				label_health.visible = false
 		else:
@@ -79,6 +86,7 @@ func hit_tree(hitter_x: float, damage: float = 1.0) -> void:
 	else:
 		feller_was_lumberjack = false
 
+	first_tree_tutorial_shown = true
 	health -= damage
 	
 	# Активация щепок
@@ -158,19 +166,13 @@ func regrow() -> void:
 	tween.tween_property(visual, "modulate:a", 1.0, 1.5)
 
 func setup_tooltip_style(label: Label) -> void:
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
-	style.content_margin_left = 8
-	style.content_margin_right = 8
-	style.content_margin_top = 4
-	style.content_margin_bottom = 4
+	var style = StyleBoxEmpty.new()
 	label.add_theme_stylebox_override("normal", style)
+
+func is_managed_by_forest() -> bool:
+	var parent = get_parent()
+	if parent and parent.name == "TreesContainer":
+		var grandparent = parent.get_parent()
+		if grandparent and grandparent.has_method("is_forest_biome"):
+			return true
+	return false

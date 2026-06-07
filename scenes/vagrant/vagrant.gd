@@ -20,6 +20,7 @@ var footstep_base_volume_db: float = -14.0
 var footstep_fadeout_speed_db: float = 36.0
 
 func _ready() -> void:
+	scale = Vector2(1.4, 1.4)
 	add_to_group("vagrant")
 	spawn_x = global_position.x
 	choose_new_wander_target()
@@ -115,21 +116,7 @@ func get_closest_player() -> Node2D:
 	return null
 
 func setup_tooltip_style(label: Label) -> void:
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
-	style.content_margin_left = 8
-	style.content_margin_right = 8
-	style.content_margin_top = 4
-	style.content_margin_bottom = 4
+	var style = StyleBoxEmpty.new()
 	label.add_theme_stylebox_override("normal", style)
 
 func update_footsteps(delta: float) -> void:

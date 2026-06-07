@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/forest/forest_biome.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/tree/tree.tscn" id="2_tree"]
+
+[node name="ForestBiome" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="TreesContainer" type="Node2D" parent="."]
+
+[node name="Tree0" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-305, 2)
+
+[node name="Tree1" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-270, -3)
+
+[node name="Tree2" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-238, 1)
+
+[node name="Tree3" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-205, -2)
+
+[node name="Tree4" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-173, 3)
+
+[node name="Tree5" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-140, -1)
+
+[node name="Tree6" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-115, 2)
+
+[node name="Tree7" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-78, -3)
+
+[node name="Tree8" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-45, 1)
+
+[node name="Tree9" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(-18, -2)
+
+[node name="Tree10" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(14, 3)
+
+[node name="Tree11" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(46, -1)
+
+[node name="Tree12" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(82, 2)
+
+[node name="Tree13" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(115, -3)
+
+[node name="Tree14" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(142, 1)
+
+[node name="Tree15" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(178, -2)
+
+[node name="Tree16" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(205, 3)
+
+[node name="Tree17" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(238, -1)
+
+[node name="Tree18" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(275, 2)
+
+[node name="Tree19" parent="TreesContainer" instance=ExtResource("2_tree")]
+position = Vector2(302, -3)
+
+[node name="LabelsContainer" type="Node2D" parent="."]

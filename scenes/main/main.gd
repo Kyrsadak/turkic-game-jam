@@ -20,6 +20,7 @@ var wolf_spawn_timer: float = 0.0
 @onready var label_day_status: Label = $HUD/MarginContainer/VBoxContainer/LabelDayStatus
 @onready var progress_fuel: ProgressBar = $HUD/MarginContainer/VBoxContainer/ProgressFuel
 @onready var label_wood: Label = $HUD/MarginContainer/VBoxContainer/LabelWood
+var inventory_ui: Control = null
 
 var vagrant_scene = preload("res://scenes/vagrant/vagrant.tscn")
 var wolf_scene = preload("res://scenes/enemy/enemy.tscn")
@@ -63,6 +64,11 @@ func _ready() -> void:
 	else:
 		progress_fuel.value = 0
 		
+	# Скрываем текстовый счетчик дерева и находим графический инвентарь на сцене
+	if is_instance_valid(label_wood):
+		label_wood.visible = false
+	inventory_ui = hud.get_node_or_null("InventoryUI")
+
 	player.connect("wood_count_changed", Callable(self, "_on_player_wood_changed"))
 	
 	if not has_node("CaveLeft") and not has_node("CaveRight"):
@@ -76,7 +82,6 @@ func _ready() -> void:
 	
 	# Настраиваем новый фон с горами
 	setup_background()
-	
 	# Настраиваем текстуру земли под ногами
 	setup_ground()
 	
@@ -97,8 +102,6 @@ func _ready() -> void:
 	label_warning.label_settings = settings
 	label_warning.visible = false
 	hud.add_child(label_warning)
-
-	
 	# (Отключено, чтобы использовать только бродяг, расставленных вручную на сцене)
 	# Спавним начальных бродяг поближе к костру на старте игры
 	# for i in range(2):
@@ -297,34 +300,7 @@ func spawn_bear() -> void:
 	bear.health = bear.max_health
 	bear.speed = 40.0 + current_day * 1.5
 
-func generate_forests() -> void:
-	# Если пользователь уже задизайнил лес в редакторе, не пересоздаем его динамически
-	if $ForestLeft.get_child_count() > 0 or $ForestRight.get_child_count() > 0:
-		return
-		
-	# Левый лес: от -7200 до -350
-	var current_x = -350.0
-	while current_x > -7200.0:
-		spawn_tree_at(current_x, $ForestLeft)
-		current_x -= randf_range(50.0, 95.0)
-		
-	# Правый лес: от 350 до 7200
-	current_x = 350.0
-	while current_x < 7200.0:
-		spawn_tree_at(current_x, $ForestRight)
-		current_x += randf_range(50.0, 95.0)
 
-func spawn_tree_at(x_pos: float, container: Node2D) -> void:
-	var tree_instance = tree_scene.instantiate()
-	container.add_child(tree_instance)
-	
-	var ground_y = 0.0
-	if is_instance_valid(campfire):
-		ground_y = campfire.global_position.y
-	elif is_instance_valid(player):
-		ground_y = player.global_position.y
-		
-	tree_instance.global_position = Vector2(x_pos, ground_y)
 
 func create_cave_at(x_pos: float, is_right_side: bool) -> void:
 	var cave_node = Node2D.new()
@@ -386,7 +362,10 @@ func _on_campfire_fuel_changed(current_fuel: float, max_fuel: float) -> void:
 	progress_fuel.value = (current_fuel / max_fuel) * 100.0
 
 func _on_player_wood_changed(count: int) -> void:
-	label_wood.text = "Дров у Короля: %d/%d" % [count, player.max_wood_carry]
+	if is_instance_valid(label_wood):
+		label_wood.text = "Дров у Короля: %d/%d" % [count, player.max_wood_carry]
+	if is_instance_valid(inventory_ui):
+		inventory_ui.update_wood(count, player.max_wood_carry)
 
 func update_hud_text() -> void:
 	var state_name = "ДЕНЬ" if is_day else "НОЧЬ"
@@ -598,38 +577,7 @@ func update_background_and_celestial(delta: float) -> void:
 			)
 			sun_sprite.modulate.a = 1.0 - transition_factor
 
-func setup_ground() -> void:
-	var ground = get_node_or_null("Ground")
-	if ground:
-		var visual = ground.get_node_or_null("Visual")
-		if visual:
-			visual.visible = false
-		var border = ground.get_node_or_null("GrassBorder")
-		if border:
-			border.visible = false
-			
-		var existing = ground.get_node_or_null("SnowyGroundSprite")
-		if existing:
-			var tex = load("res://assets/textures/ground_snowy.png")
-			if tex:
-				existing.texture = tex
-				existing.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-				existing.region_enabled = true
-				existing.region_rect = Rect2(0, 0, 15000, 128)
-				existing.centered = false
-				existing.position = Vector2(-7500, 0)
-		else:
-			var tex = load("res://assets/textures/ground_snowy.png")
-			if tex:
-				var sprite = Sprite2D.new()
-				sprite.name = "SnowyGroundSprite"
-				sprite.texture = tex
-				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-				sprite.region_enabled = true
-				sprite.region_rect = Rect2(0, 0, 15000, 128)
-				sprite.centered = false
-				sprite.position = Vector2(-7500, 0)
-				ground.add_child(sprite)
+
 
 func get_ground_x_limits() -> Vector2:
 	var tilemap = get_node_or_null("CanvasModulate/TileMapLayer")

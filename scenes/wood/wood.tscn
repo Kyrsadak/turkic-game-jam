@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://dr3lihgf374q7"]
 
 [ext_resource type="Script" uid="uid://bsb6dlx1i273k" path="res://scenes/wood/wood.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood.png" id="2_wood_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 8.0
 
 [node name="Wood" type="Area2D" unique_id=1214691241]
+scale = Vector2(0.6, 0.6)
 collision_layer = 4
 collision_mask = 6
 script = ExtResource("1_script")
@@ -20,24 +22,5 @@ offset_right = 6.0
 offset_bottom = 3.0
 color = Color(0, 0, 0, 0.4)
 
-[node name="Visual" type="ColorRect" parent="." unique_id=1099151888]
-offset_left = -7.0
-offset_top = -3.0
-offset_right = 7.0
-offset_bottom = 2.0
-color = Color(0.55, 0.35, 0.2, 1)
-
-[node name="Detail" type="ColorRect" parent="Visual" unique_id=1096201636]
-layout_mode = 0
-offset_left = 2.0
-offset_right = 12.0
-offset_bottom = 1.0
-color = Color(0.65, 0.45, 0.25, 1)
-
-[node name="Detail2" type="ColorRect" parent="Visual" unique_id=1193249635]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = 11.0
-offset_bottom = 4.0
-color = Color(0.42, 0.25, 0.12, 1)
+[node name="Visual" type="Sprite2D" parent="." unique_id=1099151888]
+texture = ExtResource("2_wood_tex")

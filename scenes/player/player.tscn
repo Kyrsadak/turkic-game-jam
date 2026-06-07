@@ -127,7 +127,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Mining",
-"speed": 7.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -184,7 +184,7 @@ stream = ExtResource("5_chop_hit")
 volume_db = -11.7
 
 [node name="HitCooldown" type="Timer" parent="." unique_id=599279598]
-wait_time = 0.25
+wait_time = 1.0
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1875691119]

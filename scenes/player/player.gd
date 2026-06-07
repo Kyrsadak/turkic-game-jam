@@ -5,6 +5,7 @@ signal wood_count_changed(count)
 
 @export var speed: float = 110.0
 @export var max_wood_carry: int = 5
+@export var chop_damage: float = 2.0
 
 var gravity: float = 900.0
 var wood_count: int = 0
@@ -24,13 +25,14 @@ var footstep_timer: float = 0.0
 var footstep_base_volume_db: float = -6.4
 var footstep_fadeout_speed_db: float = 42.0
 var chop_sound_sequence: int = 0
-var chop_hit_impact_delay_sec: float = 0.16
+var chop_hit_impact_delay_sec: float = 0.3
 var is_mining: bool = false
 
 const AXE_HITBOX_OFFSET: Vector2 = Vector2(14.0, -16.0)
 const AXE_HITBOX_SIZE: Vector2 = Vector2(24.0, 26.0)
 
 func _ready() -> void:
+	scale = Vector2(1.4, 1.4)
 	add_to_group("player")
 	update_wood_visuals()
 	footstep_audio.volume_db = footstep_base_volume_db
@@ -160,7 +162,7 @@ func start_hit_animation(tree_to_hit: Node = null) -> void:
 	else:
 		apply_camera_shake(0.2)
 			
-	hit_cooldown.start()
+	hit_cooldown.start(1.0)
 	play_chop_audio_sequence(tree_to_hit)
 	
 	# Эффект удара (маленький наклон тела, без выворачивания)
@@ -171,8 +173,8 @@ func start_hit_animation(tree_to_hit: Node = null) -> void:
 	var tween = create_tween()
 	var orig_rot = body.rotation
 	var hit_rot = 0.15 * dir_sign
-	tween.tween_property(body, "rotation", hit_rot, 0.08)
-	tween.tween_property(body, "rotation", orig_rot, 0.12)
+	tween.tween_property(body, "rotation", hit_rot, 0.3)
+	tween.tween_property(body, "rotation", orig_rot, 0.7)
 	
 	await tween.finished
 	is_hitting = false
@@ -192,7 +194,7 @@ func play_chop_audio_sequence(tree_to_hit: Node = null) -> void:
 	if current_sequence != chop_sound_sequence:
 		return
 	if is_instance_valid(tree_to_hit):
-		tree_to_hit.hit_tree(global_position.x)
+		tree_to_hit.hit_tree(global_position.x, chop_damage)
 	chop_hit_audio.play()
 
 func get_tree_in_axe_hitbox() -> Node2D:

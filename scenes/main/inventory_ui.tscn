@@ -1,0 +1,100 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/Inventory.png" id="1_inventory_bg"]
+[ext_resource type="Script" path="res://scenes/main/inventory_ui.gd" id="2_inventory_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/wood.png" id="3_wood_tex"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_count"]
+font_size = 11
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="InventoryUI" type="Control"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -128.0
+offset_right = 100.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("2_inventory_script")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_inventory_bg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotsContainer" type="Control" parent="Background"]
+layout_mode = 1
+anchor_left = 0.06
+anchor_top = 0.4
+anchor_right = 0.88
+anchor_bottom = 0.88
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/SlotsContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Slot1" type="Control" parent="Background/SlotsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="Background/SlotsContainer/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WoodIcon" type="TextureRect" parent="Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer"]
+custom_minimum_size = Vector2(24, 14)
+layout_mode = 2
+texture = ExtResource("3_wood_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CountLabel" type="Label" parent="Background/SlotsContainer/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -15.0
+offset_right = -2.0
+offset_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "0"
+label_settings = SubResource("LabelSettings_count")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Slot2" type="Control" parent="Background/SlotsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot3" type="Control" parent="Background/SlotsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
