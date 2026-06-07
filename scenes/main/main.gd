@@ -262,34 +262,7 @@ func spawn_bear() -> void:
 	bear.health = bear.max_health
 	bear.speed = 40.0 + current_day * 1.5
 
-func generate_forests() -> void:
-	# Если пользователь уже задизайнил лес в редакторе, не пересоздаем его динамически
-	if $ForestLeft.get_child_count() > 0 or $ForestRight.get_child_count() > 0:
-		return
-		
-	# Левый лес: от -7200 до -350
-	var current_x = -350.0
-	while current_x > -7200.0:
-		spawn_tree_at(current_x, $ForestLeft)
-		current_x -= randf_range(50.0, 95.0)
-		
-	# Правый лес: от 350 до 7200
-	current_x = 350.0
-	while current_x < 7200.0:
-		spawn_tree_at(current_x, $ForestRight)
-		current_x += randf_range(50.0, 95.0)
 
-func spawn_tree_at(x_pos: float, container: Node2D) -> void:
-	var tree_instance = tree_scene.instantiate()
-	container.add_child(tree_instance)
-	
-	var ground_y = 0.0
-	if is_instance_valid(campfire):
-		ground_y = campfire.global_position.y
-	elif is_instance_valid(player):
-		ground_y = player.global_position.y
-		
-	tree_instance.global_position = Vector2(x_pos, ground_y)
 
 func create_cave_at(x_pos: float, is_right_side: bool) -> void:
 	var cave_node = Node2D.new()

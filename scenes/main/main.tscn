@@ -12,7 +12,9 @@
 [ext_resource type="Texture2D" uid="uid://v0bpw3wypise" path="res://assets/textures/Горы_задний.png" id="8_blune"]
 [ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="9_th5th"]
 [ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="10_7smn1"]
-[ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
+[ext_resource type="PackedScene" path="res://scenes/forest/forest_biome.tscn" id="22_forest_biome"]
+
+
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6q06x"]
 texture = ExtResource("6_ow5a4")
@@ -115,8 +117,11 @@ region_enabled = true
 region_rect = Rect2(0, 0, 100000, 284)
 position = Vector2(-7500, -15)
 
-[node name="Tree" parent="." unique_id=253433487 instance=ExtResource("11_tree")]
-position = Vector2(-445, 21)
+[node name="ForestBiomeLeft" parent="." unique_id=253433487 instance=ExtResource("22_forest_biome")]
+position = Vector2(-750, 21)
+
+[node name="ForestBiomeRight" parent="." unique_id=253433488 instance=ExtResource("22_forest_biome")]
+position = Vector2(550, 21)
 
 [node name="Player" parent="." unique_id=517748356 instance=ExtResource("2_player")]
 position = Vector2(-115, -19)

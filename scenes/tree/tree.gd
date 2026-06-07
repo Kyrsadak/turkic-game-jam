@@ -50,9 +50,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_felled:
 		label_health.visible = false
-		regrow_timer -= delta
-		if regrow_timer <= 0:
-			regrow()
+		if not is_managed_by_forest():
+			regrow_timer -= delta
+			if regrow_timer <= 0:
+				regrow()
 	else:
 		# Отображаем подсказку при приближении игрока
 		var players = get_tree().get_nodes_in_group("player")
@@ -165,3 +166,11 @@ func regrow() -> void:
 func setup_tooltip_style(label: Label) -> void:
 	var style = StyleBoxEmpty.new()
 	label.add_theme_stylebox_override("normal", style)
+
+func is_managed_by_forest() -> bool:
+	var parent = get_parent()
+	if parent and parent.name == "TreesContainer":
+		var grandparent = parent.get_parent()
+		if grandparent and grandparent.has_method("is_forest_biome"):
+			return true
+	return false
