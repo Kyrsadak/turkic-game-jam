@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/campfire/campfire.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
 [ext_resource type="AudioStream" path="res://voice/campfire_loop/1.mp3" id="3_fire_loop"]
+[ext_resource type="AudioStream" path="res://voice/wood_pickup/1.mp3" id="4_throw_wood"]
 
 [sub_resource type="Gradient" id="Gradient_flame"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -93,6 +94,12 @@ shape = SubResource("CircleShape2D_1")
 stream = ExtResource("3_fire_loop")
 volume_db = -10.0
 autoplay = true
+max_distance = 600.0
+attenuation = 1.5
+
+[node name="ThrowAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_throw_wood")
+volume_db = -2.0
 max_distance = 600.0
 attenuation = 1.5
 

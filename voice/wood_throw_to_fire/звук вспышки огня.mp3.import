@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dxog6s5jpi1k1"
+path="res://.godot/imported/звук вспышки огня.mp3-d94f62d8c21047cba31cb8d13a0c6466.mp3str"
+
+[deps]
+
+source_file="res://voice/wood_throw_to_fire/звук вспышки огня.mp3"
+dest_files=["res://.godot/imported/звук вспышки огня.mp3-d94f62d8c21047cba31cb8d13a0c6466.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

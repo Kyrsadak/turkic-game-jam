@@ -17,6 +17,7 @@ var wolf_spawn_timer: float = 0.0
 @onready var canvas_modulate: CanvasModulate = $CanvasModulate
 @onready var hud: CanvasLayer = $HUD
 @onready var game_over_screen: CanvasLayer = $GameOverScreen
+@onready var game_over_audio: AudioStreamPlayer = $GameOverScreen/GameOverAudio
 @onready var label_day_status: Label = $HUD/MarginContainer/VBoxContainer/LabelDayStatus
 @onready var progress_fuel: ProgressBar = $HUD/MarginContainer/VBoxContainer/ProgressFuel
 @onready var label_wood: Label = $HUD/MarginContainer/VBoxContainer/LabelWood
@@ -243,6 +244,10 @@ func _on_campfire_burned_out() -> void:
 	# Показываем финальную статистику
 	var label_stats = game_over_screen.get_node("MarginContainer/VBoxContainer/LabelStats")
 	label_stats.text = "Вы прожили дней: %d" % current_day
+	
+	# Звук окончания игры
+	if game_over_audio and game_over_audio.stream:
+		game_over_audio.play()
 	
 	# Затемняем мир драматично
 	var tween = create_tween()

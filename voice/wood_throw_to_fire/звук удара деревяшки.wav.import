@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cqjjlhvr6etr6"
+path="res://.godot/imported/звук удара деревяшки.wav-301f2aa9a566036534f963fbeeb8cc74.sample"
+
+[deps]
+
+source_file="res://voice/wood_throw_to_fire/звук удара деревяшки.wav"
+dest_files=["res://.godot/imported/звук удара деревяшки.wav-301f2aa9a566036534f963fbeeb8cc74.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

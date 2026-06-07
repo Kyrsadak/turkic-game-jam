@@ -1,5 +1,6 @@
 extends StaticBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 @export var build_cost: int = 8
 
@@ -9,6 +10,7 @@ var current_construction_wood: int = 0
 @onready var label_status: Label = $LabelStatus
 @onready var visual_site: Node2D = $VisualSite
 @onready var visual_built: Node2D = $VisualBuilt
+@onready var wood_audio: AudioStreamPlayer2D = $WoodAudio
 
 var spearman_scene = preload("res://scenes/units/spearman.tscn")
 
@@ -46,6 +48,9 @@ func deposit_wood() -> bool:
 	if current_construction_wood < build_cost:
 		current_construction_wood += 1
 		update_visuals()
+		if wood_audio:
+			wood_audio.pitch_scale = randf_range(0.95, 1.08)
+			AudioUtilsScript.play_if_visible(wood_audio)
 		if current_construction_wood >= build_cost:
 			complete_construction()
 		return true

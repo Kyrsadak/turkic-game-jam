@@ -1,5 +1,6 @@
 extends CharacterBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 enum State { IDLE, WALKING_TO_TREE, CHOPPING, WALKING_TO_HOUSE }
 
@@ -136,10 +137,10 @@ func play_chop_audio_sequence(tree_to_hit: Node2D) -> void:
 	chop_hit_audio.stop()
 	chop_swing_audio.pitch_scale = randf_range(0.92, 0.98)
 	chop_hit_audio.pitch_scale = randf_range(0.95, 1.0)
-	chop_swing_audio.play()
+	AudioUtilsScript.play_if_visible(chop_swing_audio)
 	if is_instance_valid(tree_to_hit):
 		tree_to_hit.hit_tree(global_position.x, chop_damage)
-	chop_hit_audio.play()
+	AudioUtilsScript.play_if_visible(chop_hit_audio)
 
 func add_wood(amount: int = 1) -> bool:
 	if wood_count < max_wood_carry:
@@ -178,7 +179,7 @@ func update_footsteps(delta: float) -> void:
 			footstep_audio.stop()
 			footstep_audio.volume_db = footstep_base_volume_db
 			footstep_audio.pitch_scale = randf_range(0.88, 0.94)
-			footstep_audio.play()
+			AudioUtilsScript.play_if_visible(footstep_audio)
 			footstep_timer = 0.34
 	else:
 		footstep_timer = 0.0

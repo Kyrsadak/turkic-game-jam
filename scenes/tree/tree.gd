@@ -1,5 +1,6 @@
 extends StaticBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 signal tree_felled(wood_count)
 
@@ -88,7 +89,7 @@ func fell_tree(feller_x: float) -> void:
 	collision_shape.disabled = true
 	if fall_audio.playing:
 		fall_audio.stop()
-	fall_audio.play()
+	AudioUtilsScript.play_if_visible(fall_audio)
 	
 	# Направление падения (от лесоруба)
 	var fall_dir = 1.0 if feller_x < global_position.x else -1.0
@@ -129,7 +130,7 @@ func _play_wood_drop_sound_delayed(delay: float) -> void:
 	if not is_instance_valid(self) or wood_drop_audio == null:
 		return
 	wood_drop_audio.pitch_scale = randf_range(0.95, 1.05)
-	wood_drop_audio.play()
+	AudioUtilsScript.play_if_visible(wood_drop_audio)
 
 func spawn_wood(fall_dir: float) -> void:
 	var wood = wood_drop_scene.instantiate()

@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/buildings/barracks.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://voice/wood_pickup/1.mp3" id="2_wood"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(50, 20)
@@ -70,6 +71,12 @@ default_color = Color(0.4, 0.4, 0.4, 1)
 [node name="Flag" type="Polygon2D" parent="VisualBuilt"]
 color = Color(0.2, 0.45, 0.8, 1)
 polygon = PackedVector2Array(0, -56, 12, -50, 0, -44)
+
+[node name="WoodAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_wood")
+volume_db = -3.0
+max_distance = 600.0
+attenuation = 1.5
 
 [node name="LabelStatus" type="Label" parent="."]
 z_index = 5

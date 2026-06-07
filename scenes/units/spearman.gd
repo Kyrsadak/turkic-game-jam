@@ -1,5 +1,6 @@
 extends CharacterBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 enum State { WALKING_TO_POST, DEFENDING, ATTACKING }
 
@@ -143,7 +144,7 @@ func update_footsteps(delta: float) -> void:
 			footstep_audio.stop()
 			footstep_audio.volume_db = footstep_base_volume_db
 			footstep_audio.pitch_scale = randf_range(0.90, 0.96)
-			footstep_audio.play()
+			AudioUtilsScript.play_if_visible(footstep_audio)
 			footstep_timer = 0.28
 	else:
 		footstep_timer = 0.0

@@ -1,5 +1,6 @@
 extends Node2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 signal burned_out
 signal fuel_changed(current_fuel, max_fuel)
@@ -15,6 +16,7 @@ var current_fuel: float = 200.0  # Начинаем с половины
 @onready var particles_sparks: CPUParticles2D = $ParticlesSparks
 @onready var label_status: Label = $LabelStatus
 @onready var fire_audio: AudioStreamPlayer2D = $FireAudio
+@onready var throw_audio: AudioStreamPlayer2D = $ThrowAudio
 
 # Параметры громкости огня (в дБ): при максимуме топлива — fire_volume_max_db,
 # при минимуме — fire_volume_min_db. Значения интерполируются по доле топлива.
@@ -179,6 +181,12 @@ func add_wood() -> bool:
 	if current_fuel < max_fuel:
 		current_fuel = min(current_fuel + wood_fuel_value, max_fuel)
 		emit_signal("fuel_changed", current_fuel, max_fuel)
+		
+		# Звук броска дров в костёр (лёгкая вариация питча для живости).
+		# Играем только если костёр в кадре игрока — чтобы не слышать действия за экраном.
+		if throw_audio:
+			throw_audio.pitch_scale = randf_range(0.95, 1.08)
+			AudioUtilsScript.play_if_visible(throw_audio)
 		
 		# Вспышка искр
 		particles_sparks.emitting = true

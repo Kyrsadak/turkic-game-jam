@@ -1,5 +1,6 @@
 extends CharacterBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 @export var speed: float = 70.0
 @export var walk_range: float = 140.0
@@ -14,6 +15,7 @@ var spawn_x: float = 0.0
 @onready var robe: ColorRect = $Body/Robe
 @onready var label_status: Label = $LabelStatus
 @onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
+@onready var wood_audio: AudioStreamPlayer2D = $WoodAudio
 
 var footstep_timer: float = 0.0
 var footstep_base_volume_db: float = -14.0
@@ -96,6 +98,11 @@ func hire() -> bool:
 	# Меняем одежду на более чистую
 	robe.color = Color(0.6, 0.45, 0.35, 1.0)
 	
+	# Звук передачи дров бродяге (только если игрок видит сцену найма)
+	if wood_audio:
+		wood_audio.pitch_scale = randf_range(0.95, 1.08)
+		AudioUtilsScript.play_if_visible(wood_audio)
+	
 	# Эффект найма
 	var tween = create_tween()
 	tween.tween_property(body, "scale", Vector2(1.3, 0.7), 0.1)
@@ -138,7 +145,7 @@ func update_footsteps(delta: float) -> void:
 			footstep_audio.stop()
 			footstep_audio.volume_db = footstep_base_volume_db
 			footstep_audio.pitch_scale = randf_range(0.90, 0.97)
-			footstep_audio.play()
+			AudioUtilsScript.play_if_visible(footstep_audio)
 			footstep_timer = 0.4
 	else:
 		footstep_timer = 0.0

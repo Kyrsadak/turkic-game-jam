@@ -1,5 +1,6 @@
 extends StaticBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 @export var build_cost: int = 5
 @export var max_storage: int = 20
@@ -12,6 +13,7 @@ var wood_stored: int = 0
 @onready var visual_site: Node2D = $VisualSite
 @onready var visual_built: Node2D = $VisualBuilt
 @onready var storage_node: Node2D = $VisualBuilt/Storage
+@onready var wood_audio: AudioStreamPlayer2D = $WoodAudio
 
 var lumberjack_scene = preload("res://scenes/units/lumberjack.tscn")
 
@@ -51,6 +53,7 @@ func deposit_wood() -> bool:
 	if current_construction_wood < build_cost:
 		current_construction_wood += 1
 		update_visuals()
+		_play_wood_sound()
 		if current_construction_wood >= build_cost:
 			complete_construction()
 		return true
@@ -74,6 +77,7 @@ func interact(player: Node2D) -> bool:
 		if player.add_wood(1):
 			wood_stored -= 1
 			update_storage_visuals()
+			_play_wood_sound()
 			return true
 			
 	# 2. Если дров нет или у игрока полные руки, обучаем гражданина
@@ -100,8 +104,15 @@ func add_wood(amount: int = 1) -> bool:
 	if wood_stored < max_storage:
 		wood_stored = min(wood_stored + amount, max_storage)
 		update_storage_visuals()
+		_play_wood_sound()
 		return true
 	return false
+
+func _play_wood_sound() -> void:
+	if wood_audio == null:
+		return
+	wood_audio.pitch_scale = randf_range(0.95, 1.08)
+	AudioUtilsScript.play_if_visible(wood_audio)
 
 func update_visuals() -> void:
 	visual_site.visible = not is_built

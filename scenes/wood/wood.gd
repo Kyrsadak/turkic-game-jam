@@ -1,5 +1,6 @@
 extends Area2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 const PICKUP_SOUND: AudioStream = preload("res://voice/wood_pickup/1.mp3")
 
@@ -99,6 +100,9 @@ func _play_pickup_sound() -> void:
 	# при удалении этого Wood-объекта сразу после подбора.
 	var parent := get_parent()
 	if parent == null:
+		return
+	# Не озвучиваем подбор, если он происходит за пределами экрана игрока.
+	if not AudioUtilsScript.is_position_visible(self, global_position):
 		return
 	var player := AudioStreamPlayer2D.new()
 	player.stream = PICKUP_SOUND

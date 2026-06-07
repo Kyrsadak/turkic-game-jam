@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="6_lumberjack_house"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="7_barracks"]
 [ext_resource type="PackedScene" path="res://scenes/vagrant/vagrant.tscn" id="8_vagrant"]
+[ext_resource type="AudioStream" path="res://voice/game_over/1.wav" id="9_game_over"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(15000, 40)
@@ -146,6 +147,11 @@ theme_override_font_sizes/font_size = 12
 
 [node name="GameOverScreen" type="CanvasLayer" parent="."]
 visible = false
+
+[node name="GameOverAudio" type="AudioStreamPlayer" parent="GameOverScreen"]
+stream = ExtResource("9_game_over")
+volume_db = -2.0
+bus = &"Master"
 
 [node name="BackgroundDim" type="ColorRect" parent="GameOverScreen"]
 anchors_preset = 15
