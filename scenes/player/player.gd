@@ -32,6 +32,7 @@ const AXE_HITBOX_OFFSET: Vector2 = Vector2(14.0, -16.0)
 const AXE_HITBOX_SIZE: Vector2 = Vector2(24.0, 26.0)
 
 func _ready() -> void:
+	scale = Vector2(1.4, 1.4)
 	add_to_group("player")
 	update_wood_visuals()
 	footstep_audio.volume_db = footstep_base_volume_db
