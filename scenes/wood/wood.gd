@@ -66,13 +66,14 @@ func _process(delta: float) -> void:
 			is_flying_to_target = false
 			target_collector = null
 	else:
-		# Поиск ближайшего персонажа (Игрок или Лесоруб), у которого есть место под дерево
 		var players = get_tree().get_nodes_in_group("player")
 		var lumberjacks = get_tree().get_nodes_in_group("lumberjack")
+		var builders = get_tree().get_nodes_in_group("builder")
 		
 		var collectors = []
 		collectors.append_array(players)
 		collectors.append_array(lumberjacks)
+		collectors.append_array(builders)
 		
 		var closest: Node2D = null
 		var min_dist: float = 50.0 # Радиус притяжения

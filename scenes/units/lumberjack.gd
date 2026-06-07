@@ -28,7 +28,6 @@ var footstep_base_volume_db: float = -19.4
 var footstep_fadeout_speed_db: float = 38.0
 
 func _ready() -> void:
-	scale = Vector2(2.5, 2.5)
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
@@ -42,7 +41,7 @@ func _physics_process(delta: float) -> void:
 	match current_state:
 		State.IDLE:
 			velocity.x = move_toward(velocity.x, 0, speed * 0.3)
-			body.scale = Vector2(1, 1)
+			body.scale.y = 1.0
 			
 			# Если в доме лесоруба освободилось место и есть деревья — идем рубить
 			if is_instance_valid(home_house) and home_house.wood_stored < home_house.max_storage:

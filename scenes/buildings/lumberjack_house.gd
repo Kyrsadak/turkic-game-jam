@@ -97,8 +97,8 @@ func spawn_lumberjack() -> void:
 	
 	# Эффект спавна
 	var tween = create_tween()
-	lj.scale = Vector2(1.25, 3.75)  # 0.5x и 1.5x от 2.5
-	tween.tween_property(lj, "scale", Vector2(2.5, 2.5), 0.2)
+	lj.scale = Vector2(0.5, 1.5)
+	tween.tween_property(lj, "scale", Vector2(1.0, 1.0), 0.2)
 
 func add_wood(amount: int = 1) -> bool:
 	if wood_stored < max_storage:
@@ -120,9 +120,8 @@ func update_visuals() -> void:
 	update_storage_visuals()
 	
 	if is_built:
-		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack_house.png", Vector2(0, -54))
+		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack_house.png", Vector2(0, -108))
 		if sprite:
-			sprite.scale = Vector2(0.5, 0.5)
 			visual_built.visible = false
 
 func update_storage_visuals() -> void:

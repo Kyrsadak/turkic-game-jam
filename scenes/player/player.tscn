@@ -1,134 +1,206 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://cos75erspsonl"]
 
-[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
-[ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="3_footstep"]
-[ext_resource type="AudioStream" path="res://voice/player_chop_swing/1.mp3" id="4_chop_swing"]
-[ext_resource type="AudioStream" path="res://voice/player_chop_swing/2.mp3" id="5_chop_hit"]
+[ext_resource type="Script" uid="uid://ch2gm31t0ouyt" path="res://scenes/player/player.gd" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://blx374okif2ty" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="3_footstep"]
+[ext_resource type="AudioStream" uid="uid://daw05wnhud8fb" path="res://voice/player_chop_swing/1.mp3" id="4_chop_swing"]
+[ext_resource type="Texture2D" uid="uid://jxj1yc01jxnt" path="res://assets/textures/characters/player/Idle.png" id="5_0owmy"]
+[ext_resource type="AudioStream" uid="uid://brodngtnmywh8" path="res://voice/player_chop_swing/2.mp3" id="5_chop_hit"]
+[ext_resource type="Texture2D" uid="uid://b6g71wlmvoxup" path="res://assets/textures/characters/player/Attack_1.png" id="6_qek5x"]
+[ext_resource type="Texture2D" uid="uid://bwuofu7e0ykbi" path="res://assets/textures/characters/player/Walk.png" id="7_5gtgg"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 8.0
 height = 28.0
 
-[sub_resource type="LabelSettings" id="LabelSettings_instructions"]
-font_size = 9
-outline_size = 2
-outline_color = Color(0, 0, 0, 1)
+[sub_resource type="AtlasTexture" id="AtlasTexture_h17s1"]
+atlas = ExtResource("5_0owmy")
+region = Rect2(640, 0, 128, 128)
 
-[node name="Player" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 1
+[sub_resource type="AtlasTexture" id="AtlasTexture_je7p5"]
+atlas = ExtResource("5_0owmy")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fm80t"]
+atlas = ExtResource("5_0owmy")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gx1jg"]
+atlas = ExtResource("5_0owmy")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ugbui"]
+atlas = ExtResource("5_0owmy")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fcs02"]
+atlas = ExtResource("5_0owmy")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myrg7"]
+atlas = ExtResource("6_qek5x")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvlxm"]
+atlas = ExtResource("6_qek5x")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uf5tr"]
+atlas = ExtResource("6_qek5x")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgqa7"]
+atlas = ExtResource("6_qek5x")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ydkj"]
+atlas = ExtResource("6_qek5x")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0owmy"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qek5x"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gtgg"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3j4b4"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yj68g"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ioxgp"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cnsyf"]
+atlas = ExtResource("7_5gtgg")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bbmj2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h17s1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_je7p5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fm80t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gx1jg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ugbui")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fcs02")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_myrg7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvlxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uf5tr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lgqa7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ydkj")
+}],
+"loop": true,
+"name": &"Mining",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0owmy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qek5x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5gtgg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3j4b4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yj68g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ioxgp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cnsyf")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]
+
+[node name="Player" type="CharacterBody2D" unique_id=219392961]
 z_index = 1
+collision_layer = 2
 script = ExtResource("1_script")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2146440936]
 position = Vector2(0, -14)
 shape = SubResource("CapsuleShape2D_1")
 
-[node name="Body" type="Node2D" parent="."]
+[node name="Body" type="Node2D" parent="." unique_id=1388408769]
 
-[node name="LegLeft" type="ColorRect" parent="Body"]
-offset_left = -5.0
-offset_top = -6.0
-offset_right = -1.0
-color = Color(0.12, 0.12, 0.16, 1)
-
-[node name="LegRight" type="ColorRect" parent="Body"]
-offset_left = 1.0
-offset_top = -6.0
-offset_right = 5.0
-color = Color(0.12, 0.12, 0.16, 1)
-
-[node name="Torso" type="ColorRect" parent="Body"]
-offset_left = -6.0
-offset_top = -20.0
-offset_right = 6.0
-offset_bottom = -6.0
-color = Color(0.2, 0.35, 0.55, 1)
-
-[node name="Head" type="ColorRect" parent="Body"]
-offset_left = -5.0
-offset_top = -29.0
-offset_right = 5.0
-offset_bottom = -20.0
-color = Color(0.9, 0.72, 0.58, 1)
-
-[node name="Crown" type="ColorRect" parent="Body"]
-offset_left = -5.0
-offset_top = -32.0
-offset_right = 5.0
-offset_bottom = -29.0
-color = Color(0.95, 0.8, 0.1, 1)
-
-[node name="CrownSpike1" type="ColorRect" parent="Body/Crown"]
-layout_mode = 0
-offset_top = -2.0
-offset_right = 2.0
-color = Color(0.95, 0.8, 0.1, 1)
-
-[node name="CrownSpike2" type="ColorRect" parent="Body/Crown"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = -2.0
-offset_right = 6.0
-color = Color(0.95, 0.8, 0.1, 1)
-
-[node name="CrownSpike3" type="ColorRect" parent="Body/Crown"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = -2.0
-offset_right = 10.0
-color = Color(0.95, 0.8, 0.1, 1)
-
-[node name="Torch" type="Line2D" parent="Body"]
-position = Vector2(8, -13)
-points = PackedVector2Array(0, 5, 2, -3)
-width = 2.0
-default_color = Color(0.45, 0.3, 0.15, 1)
-
-[node name="TorchFlame" type="ColorRect" parent="Body/Torch"]
-offset_left = 1.0
-offset_top = -6.0
-offset_right = 4.0
-offset_bottom = -3.0
-color = Color(1, 0.45, 0.1, 1)
-
-[node name="WoodPile" type="Node2D" parent="."]
-position = Vector2(0, -32)
+[node name="WoodPile" type="Node2D" parent="." unique_id=2068364552]
 visible = false
+position = Vector2(0, -32)
 
-[node name="TorchLight" type="PointLight2D" parent="."]
-position = Vector2(10, -16)
-color = Color(1, 0.75, 0.45, 1)
-energy = 0.9
-shadow_enabled = true
-shadow_color = Color(0, 0, 0, 0.5)
-texture = ExtResource("2_light_texture")
-texture_scale = 3.2
-
-[node name="FootstepAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="FootstepAudio" type="AudioStreamPlayer2D" parent="." unique_id=2099723191]
 stream = ExtResource("3_footstep")
 volume_db = -6.4
 
-[node name="ChopSwingAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="ChopSwingAudio" type="AudioStreamPlayer2D" parent="." unique_id=1093068636]
 stream = ExtResource("4_chop_swing")
 volume_db = -3.9
 
-[node name="ChopHitAudio" type="AudioStreamPlayer2D" parent="."]
+[node name="ChopHitAudio" type="AudioStreamPlayer2D" parent="." unique_id=1838036803]
 stream = ExtResource("5_chop_hit")
 volume_db = -11.7
 
-[node name="HitCooldown" type="Timer" parent="."]
+[node name="HitCooldown" type="Timer" parent="." unique_id=599279598]
 wait_time = 0.25
 one_shot = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1875691119]
 position = Vector2(0, -80)
-zoom = Vector2(1.15, 1.15)
+zoom = Vector2(1.38, 1.38)
 limit_top = -500
 limit_bottom = 100
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1428111368]
+position = Vector2(4, -42.65625)
+scale = Vector2(0.6459961, 0.6459961)
+sprite_frames = SubResource("SpriteFrames_bbmj2")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.76660013
 
 [connection signal="timeout" from="HitCooldown" to="." method="_on_hit_cooldown_timeout"]

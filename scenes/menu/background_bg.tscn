@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://1hpdah34pj4p"]
+
+[ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="1_5v56a"]
+[ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="1_oxbuu"]
+[ext_resource type="Texture2D" uid="uid://cceghnamr76mt" path="res://assets/textures/луна.png" id="2_1xygq"]
+[ext_resource type="Texture2D" uid="uid://v0bpw3wypise" path="res://assets/textures/Горы_задний.png" id="3_32ygi"]
+[ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="4_1xygq"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" unique_id=1156262253]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=727856617]
+motion_scale = Vector2(0.2, 1)
+motion_mirroring = Vector2(1135.345, 0)
+
+[node name="Небо" type="Sprite2D" parent="ParallaxLayer" unique_id=1165158428]
+position = Vector2(579.5494, 323.75)
+scale = Vector2(1.1824627, 1.2651663)
+texture = ExtResource("1_oxbuu")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="." unique_id=74518620]
+motion_scale = Vector2(-0.2, -0.8)
+
+[node name="Луна" type="Sprite2D" parent="ParallaxLayer2" unique_id=805476035]
+position = Vector2(-63, 466)
+texture = ExtResource("2_1xygq")
+
+[node name="ParallaxLayer5" type="ParallaxLayer" parent="." unique_id=903001807]
+motion_scale = Vector2(0.33, 1)
+motion_mirroring = Vector2(1110.355, 0)
+
+[node name="ГорыЗадний" type="Sprite2D" parent="ParallaxLayer5" unique_id=1891263133]
+position = Vector2(561, 384)
+scale = Vector2(1.1930894, 1)
+texture = ExtResource("3_32ygi")
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="." unique_id=140586795]
+motion_scale = Vector2(0.4, 1)
+motion_mirroring = Vector2(1150.14, 0)
+
+[node name="Горы" type="Sprite2D" parent="ParallaxLayer3" unique_id=454246823]
+position = Vector2(576, 438.9706)
+scale = Vector2(1.171922, 1.7901362)
+texture = ExtResource("1_5v56a")
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="." unique_id=1991566954]
+motion_scale = Vector2(0.6, 1)
+motion_mirroring = Vector2(1150.14, 0)
+
+[node name="ДеревьяЗаднийфон" type="Sprite2D" parent="ParallaxLayer4" unique_id=421924940]
+position = Vector2(580.9025, 539)
+scale = Vector2(1.172677, 1)
+texture = ExtResource("4_1xygq")
