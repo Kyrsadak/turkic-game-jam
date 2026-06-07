@@ -1,5 +1,6 @@
 extends StaticBody2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
+const AudioUtilsScript = preload("res://scenes/audio_utils.gd")
 
 @export var build_cost: int = 3
 
@@ -9,6 +10,7 @@ var current_construction_wood: int = 0
 @onready var label_status: Label = $LabelStatus
 @onready var visual_site: Node2D = $VisualSite
 @onready var visual_built: Node2D = $VisualBuilt
+@onready var train_audio: AudioStreamPlayer2D = $TrainAudio
 
 var builder_scene = preload("res://scenes/units/builder.tscn")
 
@@ -80,6 +82,10 @@ func spawn_builder() -> void:
 	var tween = create_tween()
 	b.scale = Vector2(0.5, 1.5)
 	tween.tween_property(b, "scale", Vector2(1.0, 1.0), 0.2)
+
+	if train_audio:
+		train_audio.pitch_scale = randf_range(0.97, 1.03)
+		AudioUtilsScript.play_if_visible(train_audio)
 
 func update_visuals() -> void:
 	visual_site.visible = not is_built

@@ -16,6 +16,7 @@ var spawn_x: float = 0.0
 @onready var label_status: Label = $LabelStatus
 @onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
 @onready var wood_audio: AudioStreamPlayer2D = $WoodAudio
+@onready var hire_audio: AudioStreamPlayer2D = $HireAudio
 
 var footstep_timer: float = 0.0
 var footstep_base_volume_db: float = -14.0
@@ -105,6 +106,11 @@ func hire() -> bool:
 	if wood_audio:
 		wood_audio.pitch_scale = randf_range(0.95, 1.08)
 		AudioUtilsScript.play_if_visible(wood_audio)
+	
+	# Голосовой возглас "нанял NPC" поверх звука дров — подчёркивает момент найма
+	if hire_audio:
+		hire_audio.pitch_scale = randf_range(0.97, 1.04)
+		AudioUtilsScript.play_if_visible(hire_audio)
 	
 	# Эффект найма
 	var tween = create_tween()

@@ -18,6 +18,7 @@ var wood_stored: int = 0
 @onready var visual_built: Node2D = $VisualBuilt
 @onready var storage_node: Node2D = $VisualBuilt/Storage
 @onready var wood_audio: AudioStreamPlayer2D = $WoodAudio
+@onready var train_audio: AudioStreamPlayer2D = $TrainAudio
 
 var lumberjack_scene = preload("res://scenes/units/lumberjack.tscn")
 
@@ -103,6 +104,10 @@ func spawn_lumberjack() -> void:
 	var tween = create_tween()
 	lj.scale = Vector2(0.5, 1.5)
 	tween.tween_property(lj, "scale", Vector2(1.0, 1.0), 0.2)
+
+	if train_audio:
+		train_audio.pitch_scale = randf_range(0.97, 1.03)
+		AudioUtilsScript.play_if_visible(train_audio)
 
 func add_wood(amount: int = 1) -> bool:
 	if wood_stored < max_storage:

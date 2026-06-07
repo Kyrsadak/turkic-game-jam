@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://catt2a70i6117" path="res://assets/textures/characters/vagrant/Idle.png" id="3_4hpo6"]
 [ext_resource type="Texture2D" path="res://assets/textures/characters/vagrant/Walk.png" id="4_walk"]
 [ext_resource type="AudioStream" path="res://voice/wood_pickup/1.mp3" id="5_wood"]
+[ext_resource type="AudioStream" path="res://voice/ui_interact_ok/нанял_NPC.flac" id="6_hire"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
 radius = 7.0
@@ -164,6 +165,12 @@ stream = ExtResource("5_wood")
 volume_db = -3.0
 max_distance = 600.0
 attenuation = 1.5
+
+[node name="HireAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_hire")
+volume_db = -2.0
+max_distance = 700.0
+attenuation = 1.2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1318540634]
 position = Vector2(9.536743e-07, -27)

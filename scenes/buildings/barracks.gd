@@ -15,6 +15,7 @@ var current_construction_wood: int = 0
 @onready var visual_site: Node2D = $VisualSite
 @onready var visual_built: Node2D = $VisualBuilt
 @onready var wood_audio: AudioStreamPlayer2D = $WoodAudio
+@onready var train_audio: AudioStreamPlayer2D = $TrainAudio
 
 var spearman_scene = preload("res://scenes/units/spearman.tscn")
 
@@ -89,6 +90,10 @@ func spawn_spearman() -> void:
 	var tween = create_tween()
 	sm.scale = Vector2(0.5, 1.5)
 	tween.tween_property(sm, "scale", Vector2(1.0, 1.0), 0.2)
+
+	if train_audio:
+		train_audio.pitch_scale = randf_range(0.97, 1.03)
+		AudioUtilsScript.play_if_visible(train_audio)
 
 func update_visuals() -> void:
 	visual_site.visible = not is_built

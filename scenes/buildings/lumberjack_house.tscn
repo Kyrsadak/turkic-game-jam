@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/buildings/lumberjack_house.gd" id="1_script"]
 [ext_resource type="AudioStream" path="res://voice/wood_pickup/1.mp3" id="2_wood"]
+[ext_resource type="AudioStream" uid="uid://cr31els567jc4" path="res://voice/ui_interact_ok/обучил_NPC.wav" id="3_train"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(48, 20)
@@ -204,6 +205,12 @@ stream = ExtResource("2_wood")
 volume_db = -3.0
 max_distance = 600.0
 attenuation = 1.5
+
+[node name="TrainAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_train")
+volume_db = 0.0
+max_distance = 900.0
+attenuation = 1.0
 
 [node name="LabelStatus" type="Label" parent="."]
 z_index = 5
