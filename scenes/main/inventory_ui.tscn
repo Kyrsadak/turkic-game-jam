@@ -10,14 +10,17 @@ outline_color = Color(0, 0, 0, 1)
 
 [node name="InventoryUI" type="Control"]
 layout_mode = 3
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -196.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = 137.0
-grow_horizontal = 0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -128.0
+offset_right = 100.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("2_inventory_script")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -33,10 +36,10 @@ stretch_mode = 5
 
 [node name="SlotsContainer" type="Control" parent="Background"]
 layout_mode = 1
-anchor_left = 0.18
-anchor_top = 0.45
-anchor_right = 0.86
-anchor_bottom = 0.82
+anchor_left = 0.06
+anchor_top = 0.4
+anchor_right = 0.88
+anchor_bottom = 0.88
 grow_horizontal = 2
 grow_vertical = 2
 

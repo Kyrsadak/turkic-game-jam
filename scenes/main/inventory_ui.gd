@@ -16,6 +16,7 @@ func _ready() -> void:
 func update_wood(count: int, _max_carry: int) -> void:
 	if is_instance_valid(count_label):
 		count_label.text = str(count)
+		count_label.visible = count > 0
 	
 	if is_instance_valid(wood_icon):
 		# Дерево отображается, если оно есть в наличии
