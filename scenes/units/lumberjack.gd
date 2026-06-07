@@ -5,7 +5,7 @@ enum State { IDLE, WALKING_TO_TREE, CHOPPING, WALKING_TO_HOUSE }
 
 @export var speed: float = 85.0
 @export var chop_damage: float = 10.0
-@export var chop_cooldown: float = 1.1
+@export var chop_cooldown: float = 2.0
 
 var gravity: float = 900.0
 var wood_count: int = 0
