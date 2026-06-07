@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2q3ych5p4ul0"
-path="res://.godot/imported/трава-removebg-preview.png-cd6282e9339f2f4fdb7e6613fcc258dd.ctex"
+uid="uid://cq6lhv4uh00w6"
+path="res://.godot/imported/Walk.png-2c61e8d999ddd71c76d199b7b9417397.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test/трава-removebg-preview.png"
-dest_files=["res://.godot/imported/трава-removebg-preview.png-cd6282e9339f2f4fdb7e6613fcc258dd.ctex"]
+source_file="res://assets/textures/characters/lumberjack/Walk.png"
+dest_files=["res://.godot/imported/Walk.png-2c61e8d999ddd71c76d199b7b9417397.ctex"]
 
 [params]
 

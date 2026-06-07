@@ -33,7 +33,7 @@ func _ready() -> void:
 	current_state = State.WALKING_TO_TREE
 	footstep_audio.volume_db = footstep_base_volume_db
 	body.position.y = 6.0
-	TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
+	setup_animated_sprite()
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -117,14 +117,20 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	update_footsteps(delta)
+	update_animations()
 
 func chop_tree() -> void:
 	if is_instance_valid(target_tree):
-		# Анимация взмаха топора
-		var tween = create_tween()
-		axe.rotation = -0.5
-		tween.tween_property(axe, "rotation", 1.1, 0.12)
-		tween.tween_property(axe, "rotation", 0.0, 0.18)
+		var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+		if anim_sprite:
+			anim_sprite.play("Attack_1")
+		elif is_instance_valid(axe):
+			# Анимация взмаха топора для стоковой векторной графики
+			var tween = create_tween()
+			axe.rotation = -0.5
+			tween.tween_property(axe, "rotation", 1.1, 0.12)
+			tween.tween_property(axe, "rotation", 0.0, 0.18)
+			
 		play_chop_audio_sequence(target_tree)
 		
 		# Эффект покачивания лесоруба при ударе
@@ -188,3 +194,76 @@ func update_footsteps(delta: float) -> void:
 			if footstep_audio.volume_db <= -39.0:
 				footstep_audio.stop()
 				footstep_audio.volume_db = footstep_base_volume_db
+
+func setup_animated_sprite() -> void:
+	if not FileAccess.file_exists("res://assets/textures/characters/lumberjack/Idle.png"):
+		# Резервный вариант, если новые анимации не найдены
+		TextureLoader.try_apply_texture(self, "res://assets/textures/lumberjack.png", Vector2(0, -14))
+		return
+		
+	var sf = SpriteFrames.new()
+	
+	# 1. Анимация Idle (покой)
+	sf.add_animation("Idle")
+	sf.set_animation_speed("Idle", 6.0)
+	sf.set_animation_loop("Idle", true)
+	var idle_tex = load("res://assets/textures/characters/lumberjack/Idle.png")
+	if idle_tex:
+		for i in range(4):
+			var atlas = AtlasTexture.new()
+			atlas.atlas = idle_tex
+			atlas.region = Rect2(i * 128, 0, 128, 128)
+			sf.add_frame("Idle", atlas)
+			
+	# 2. Анимация Walk (ходьба)
+	sf.add_animation("Walk")
+	sf.set_animation_speed("Walk", 8.0)
+	sf.set_animation_loop("Walk", true)
+	var walk_tex = load("res://assets/textures/characters/lumberjack/Walk.png")
+	if walk_tex:
+		for i in range(4):
+			var atlas = AtlasTexture.new()
+			atlas.atlas = walk_tex
+			atlas.region = Rect2(i * 128, 0, 128, 128)
+			sf.add_frame("Walk", atlas)
+			
+	# 3. Анимация Attack_1 (рубка)
+	sf.add_animation("Attack_1")
+	sf.set_animation_speed("Attack_1", 3.0) # Замедленная анимация под медленный удар
+	sf.set_animation_loop("Attack_1", false)
+	var attack_tex = load("res://assets/textures/characters/lumberjack/Attack_1.png")
+	if attack_tex:
+		for i in range(6):
+			var atlas = AtlasTexture.new()
+			atlas.atlas = attack_tex
+			atlas.region = Rect2(i * 128, 0, 128, 128)
+			sf.add_frame("Attack_1", atlas)
+			
+	var anim_sprite = AnimatedSprite2D.new()
+	anim_sprite.name = "AnimatedSprite2D"
+	anim_sprite.sprite_frames = sf
+	anim_sprite.position = Vector2(4, -42.65)
+	anim_sprite.scale = Vector2(0.646, 0.646)
+	anim_sprite.autoplay = "Idle"
+	
+	body.add_child(anim_sprite)
+	
+	# Скрываем все оригинальные векторные элементы внутри Body (Legs, Shirt, Head, Hair, Axe)
+	for child in body.get_children():
+		if child != anim_sprite:
+			if child is CanvasItem:
+				child.visible = false
+
+func update_animations() -> void:
+	var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+	if not anim_sprite:
+		return
+		
+	# Если сейчас проигрывается атака и она ещё не закончилась — не перебиваем её
+	if anim_sprite.animation == "Attack_1" and anim_sprite.is_playing():
+		return
+		
+	if abs(velocity.x) > 5.0:
+		anim_sprite.play("Walk")
+	else:
+		anim_sprite.play("Idle")
