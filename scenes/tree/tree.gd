@@ -28,6 +28,8 @@ func _ready() -> void:
 	add_to_group("tree")
 	health = max_health
 	visual.modulate.a = 1.0
+	visual.scale = Vector2(1.3, 1.3)
+	label_health.position.y *= 1.3
 	label_health.visible = false
 	setup_tooltip_style(label_health)
 	
