@@ -18,6 +18,7 @@ const FALL_ANIMATION_DURATION: float = 1.2
 @onready var particles: CPUParticles2D = $Particles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var fall_audio: AudioStreamPlayer2D = $FallAudio
+@onready var wood_drop_audio: AudioStreamPlayer2D = $WoodDropAudio
 
 var wood_drop_scene = preload("res://scenes/wood/wood.tscn")
 
@@ -115,9 +116,20 @@ func fell_tree(feller_x: float) -> void:
 	for i in range(drop_count):
 		# Откладываем спавн, чтобы избежать конфликтов в дереве сцен
 		call_deferred("spawn_wood", fall_dir)
+	
+	# Звук падения дров проигрывается в момент их приземления (~0.55 сек после спавна,
+	# что соответствует среднему времени полёта + начала отскока в wood.gd)
+	_play_wood_drop_sound_delayed(0.55)
 		
 	regrow_timer = regrow_time
 	emit_signal("tree_felled", drop_count)
+
+func _play_wood_drop_sound_delayed(delay: float) -> void:
+	await get_tree().create_timer(delay).timeout
+	if not is_instance_valid(self) or wood_drop_audio == null:
+		return
+	wood_drop_audio.pitch_scale = randf_range(0.95, 1.05)
+	wood_drop_audio.play()
 
 func spawn_wood(fall_dir: float) -> void:
 	var wood = wood_drop_scene.instantiate()

@@ -1,6 +1,8 @@
 extends Area2D
 const TextureLoader = preload("res://scenes/texture_loader.gd")
 
+const PICKUP_SOUND: AudioStream = preload("res://voice/wood_pickup/1.mp3")
+
 var is_on_ground: bool = false
 var is_flying_to_target: bool = false
 var target_collector: Node2D = null
@@ -53,6 +55,7 @@ func _process(delta: float) -> void:
 			
 			if global_position.distance_to(target_pos) < 10.0:
 				if target_collector.has_method("add_wood") and target_collector.add_wood(1):
+					_play_pickup_sound()
 					queue_free()
 				else:
 					# Если коллектор уже заполнен, падаем обратно на землю
@@ -90,3 +93,18 @@ func _process(delta: float) -> void:
 		if closest:
 			target_collector = closest
 			is_flying_to_target = true
+
+func _play_pickup_sound() -> void:
+	# Создаём временный аудио-узел на родителе, чтобы звук не оборвался
+	# при удалении этого Wood-объекта сразу после подбора.
+	var parent := get_parent()
+	if parent == null:
+		return
+	var player := AudioStreamPlayer2D.new()
+	player.stream = PICKUP_SOUND
+	player.global_position = global_position
+	player.volume_db = -4.0
+	player.pitch_scale = randf_range(0.95, 1.08)
+	parent.add_child(player)
+	player.finished.connect(player.queue_free)
+	player.play()

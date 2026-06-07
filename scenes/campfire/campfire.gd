@@ -14,6 +14,12 @@ var current_fuel: float = 200.0  # Начинаем с половины
 @onready var particles_flame: CPUParticles2D = $ParticlesFlame
 @onready var particles_sparks: CPUParticles2D = $ParticlesSparks
 @onready var label_status: Label = $LabelStatus
+@onready var fire_audio: AudioStreamPlayer2D = $FireAudio
+
+# Параметры громкости огня (в дБ): при максимуме топлива — fire_volume_max_db,
+# при минимуме — fire_volume_min_db. Значения интерполируются по доле топлива.
+@export var fire_volume_max_db: float = -2.0
+@export var fire_volume_min_db: float = -28.0
 
 var light_base_scale: float = 6.0
 var light_base_energy: float = 1.2
@@ -32,6 +38,18 @@ func _ready() -> void:
 	emit_signal("fuel_changed", current_fuel, max_fuel)
 	label_status.visible = false
 	setup_tooltip_style(label_status)
+
+	# Включаем бесконечный луп для звука костра и запускаем его.
+	# Дублируем поток, чтобы свойство loop не утекало в общий ресурс.
+	if fire_audio and fire_audio.stream:
+		fire_audio.stream = fire_audio.stream.duplicate()
+		if fire_audio.stream is AudioStreamMP3:
+			fire_audio.stream.loop = true
+		elif "loop" in fire_audio.stream:
+			fire_audio.stream.loop = true
+		fire_audio.volume_db = fire_volume_min_db
+		if not fire_audio.playing:
+			fire_audio.play()
 	
 	# Загружаем анимированные кадры (campfire1.png - campfire6.png) из отдельной директории
 	for i in range(1, 7):
@@ -90,6 +108,12 @@ func _process(delta: float) -> void:
 			# Плавное затухание света
 			var tween = create_tween()
 			tween.tween_property(light_2d, "energy", 0.0, 1.5)
+
+			# Плавно глушим звук костра и останавливаем после затухания
+			if fire_audio:
+				var audio_tween = create_tween()
+				audio_tween.tween_property(fire_audio, "volume_db", -80.0, 1.5)
+				audio_tween.tween_callback(Callable(fire_audio, "stop"))
 			return
 
 		emit_signal("fuel_changed", current_fuel, max_fuel)
@@ -122,6 +146,15 @@ func _process(delta: float) -> void:
 		particles_flame.scale_amount_max = 6.0 * (0.5 + 0.5 * fuel_ratio)
 		particles_flame.initial_velocity_min = 40.0 * (0.5 + 0.5 * fuel_ratio)
 		particles_flame.initial_velocity_max = 70.0 * (0.5 + 0.5 * fuel_ratio)
+
+		# Громкость огня: больше дров — громче, меньше дров — тише.
+		# Лёгкое мерцание добавляет живости звуку.
+		if fire_audio:
+			var target_db = lerp(fire_volume_min_db, fire_volume_max_db, fuel_ratio)
+			target_db += flicker * 4.0
+			fire_audio.volume_db = lerp(fire_audio.volume_db, target_db, clamp(delta * 4.0, 0.0, 1.0))
+			if not fire_audio.playing:
+				fire_audio.play()
 		
 		# Показываем статус при подходе игрока (только если есть дрова в руках)
 		var players = get_tree().get_nodes_in_group("player")

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/tree/tree.gd" id="1_script"]
 [ext_resource type="Shader" path="res://assets/shaders/wind_sway.gdshader" id="2_shader"]
 [ext_resource type="AudioStream" path="res://voice/tree_fall/1.mp3" id="3_tree_fall"]
+[ext_resource type="AudioStream" path="res://voice/wood_drop_spawn/wood-drop-2x4_gkfl7hvo.mp3" id="4_wood_drop"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sway"]
 shader = ExtResource("2_shader")
@@ -80,3 +81,7 @@ vertical_alignment = 1
 [node name="FallAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_tree_fall")
 volume_db = -2.5
+
+[node name="WoodDropAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_wood_drop")
+volume_db = -4.0

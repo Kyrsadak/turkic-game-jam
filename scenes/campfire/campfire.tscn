@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scenes/campfire/campfire.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/light_texture.tres" id="2_light_texture"]
+[ext_resource type="AudioStream" path="res://voice/campfire_loop/1.mp3" id="3_fire_loop"]
 
 [sub_resource type="Gradient" id="Gradient_flame"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -87,6 +88,13 @@ collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 shape = SubResource("CircleShape2D_1")
+
+[node name="FireAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_fire_loop")
+volume_db = -10.0
+autoplay = true
+max_distance = 600.0
+attenuation = 1.5
 
 [node name="LabelStatus" type="Label" parent="."]
 z_index = 5
