@@ -686,7 +686,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 100000, 284)
 position = Vector2(-7500, -15)
 
-[node name="ForestBiomeLeft" parent="." unique_id=253433487 instance=ExtResource("22_forest_biome")]
+[node name="ForestBiomeLeft" parent="." unique_id=253433400 instance=ExtResource("22_forest_biome")]
 position = Vector2(-900, 21)
 
 [node name="ForestBiomeRight" parent="." unique_id=253433488 instance=ExtResource("22_forest_biome")]

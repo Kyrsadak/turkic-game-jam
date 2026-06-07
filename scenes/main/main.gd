@@ -82,8 +82,6 @@ func _ready() -> void:
 	
 	# Настраиваем новый фон с горами
 	setup_background()
-	# Настраиваем текстуру земли под ногами
-	setup_ground()
 	
 	# Создаем предупреждающую надпись
 	label_warning = Label.new()
