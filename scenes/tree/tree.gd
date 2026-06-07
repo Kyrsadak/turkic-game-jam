@@ -63,7 +63,7 @@ func _process(delta: float) -> void:
 				if health == max_health:
 					label_health.text = "E"
 				else:
-					label_health.text = "Срубить: %d / %d" % [int(health), int(max_health)]
+					label_health.text = "Срубить: %d" % int(health)
 			else:
 				label_health.visible = false
 		else:
@@ -158,19 +158,5 @@ func regrow() -> void:
 	tween.tween_property(visual, "modulate:a", 1.0, 1.5)
 
 func setup_tooltip_style(label: Label) -> void:
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
-	style.content_margin_left = 8
-	style.content_margin_right = 8
-	style.content_margin_top = 4
-	style.content_margin_bottom = 4
+	var style = StyleBoxEmpty.new()
 	label.add_theme_stylebox_override("normal", style)

@@ -106,19 +106,5 @@ func get_builders_count() -> int:
 	return get_tree().get_nodes_in_group("builder").size()
 
 func setup_tooltip_style(label: Label) -> void:
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.08, 0.08, 0.1, 0.85)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.border_color = Color(0.4, 0.45, 0.55, 0.85)
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
-	style.content_margin_left = 8
-	style.content_margin_right = 8
-	style.content_margin_top = 4
-	style.content_margin_bottom = 4
+	var style = StyleBoxEmpty.new()
 	label.add_theme_stylebox_override("normal", style)
