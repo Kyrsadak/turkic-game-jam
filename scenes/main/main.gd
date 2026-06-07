@@ -369,9 +369,9 @@ func setup_background() -> void:
 	if not is_instance_valid(parallax_bg):
 		return
 	
-	# Убедимся, что ParallaxBackground на правильном слое (-100) и поднят на 20px
+	# Убедимся, что ParallaxBackground на правильном слое (-100) и поднят на 50px
 	parallax_bg.layer = -100
-	parallax_bg.offset = Vector2(0, -20)
+	parallax_bg.offset = Vector2(0, -120)
 	parallax_bg.visible = true
 	
 	# Игнорируем зум камеры, чтобы фон рендерился 1:1 по размерам экрана (как в меню)
