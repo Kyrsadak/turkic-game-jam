@@ -27,6 +27,7 @@ var footstep_base_volume_db: float = -19.4
 var footstep_fadeout_speed_db: float = 38.0
 
 func _ready() -> void:
+	scale = Vector2(1.4, 1.4)
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE

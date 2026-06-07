@@ -20,6 +20,7 @@ var footstep_base_volume_db: float = -14.0
 var footstep_fadeout_speed_db: float = 36.0
 
 func _ready() -> void:
+	scale = Vector2(1.4, 1.4)
 	add_to_group("vagrant")
 	spawn_x = global_position.x
 	choose_new_wander_target()

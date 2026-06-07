@@ -22,6 +22,7 @@ var wander_target_x: float = 0.0
 @onready var wood_pile: Node2D = $WoodPile
 
 func _ready() -> void:
+	scale = Vector2(1.4, 1.4)
 	add_to_group("builder")
 	update_wood_visuals()
 	choose_wander_target()
