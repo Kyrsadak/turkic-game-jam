@@ -1,7 +1,7 @@
 extends Control
 
 @onready var slot1: Control = $Background/SlotsContainer/HBoxContainer/Slot1
-@onready var wood_icon: Control = $Background/SlotsContainer/HBoxContainer/Slot1/CenterContainer/WoodIcon
+@onready var wood_icon: Control = $Background/SlotsContainer/HBoxContainer/Slot1/WoodIcon
 @onready var count_label: Label = $Background/SlotsContainer/HBoxContainer/Slot1/CountLabel
 
 var last_count: int = 0
