@@ -34,7 +34,7 @@ func _ready() -> void:
 	flank = 1.0 if (spearman_count % 2 == 1) else -1.0
 	
 	choose_post_position()
-	TextureLoader.try_apply_texture(self, "res://assets/textures/spearman.png", Vector2(0, -14))
+	setup_animated_sprite()
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -85,6 +85,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	update_footsteps(delta)
+	update_animations()
 
 func choose_post_position() -> void:
 	var walls = get_tree().get_nodes_in_group("wall")
@@ -112,12 +113,16 @@ func stab_enemy() -> void:
 		if target_enemy.has_method("take_damage"):
 			target_enemy.take_damage(damage)
 			
-		# Анимация выпада копья
-		var tween = create_tween()
-		var orig_pos = spear.position
-		var target_pos = orig_pos + Vector2(14.0, 0)
-		tween.tween_property(spear, "position", target_pos, 0.07)
-		tween.tween_property(spear, "position", orig_pos, 0.12)
+		var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+		if anim_sprite and anim_sprite.sprite_frames.has_animation("Attack"):
+			anim_sprite.play("Attack")
+		else:
+			# Анимация выпада копья (для векторной графики)
+			var tween = create_tween()
+			var orig_pos = spear.position
+			var target_pos = orig_pos + Vector2(14.0, 0)
+			tween.tween_property(spear, "position", target_pos, 0.07)
+			tween.tween_property(spear, "position", orig_pos, 0.12)
 
 func find_closest_enemy(max_dist: float) -> Node2D:
 	var enemies = get_tree().get_nodes_in_group("enemy")
@@ -174,4 +179,61 @@ func take_damage(amount: float) -> void:
 			tween.tween_property(v_body, "modulate", Color(1, 1, 1), 0.15)
 		
 	queue_free()
+
+func setup_animated_sprite() -> void:
+	if not FileAccess.file_exists("res://assets/textures/characters/spearman/Idle.png"):
+		# Резервный вариант: если текстуры не найдены, используем оригинальный векторный вид
+		return
+		
+	var sf = SpriteFrames.new()
+	
+	# 1. Анимация Idle (покой)
+	sf.add_animation("Idle")
+	sf.set_animation_speed("Idle", 6.0)
+	sf.set_animation_loop("Idle", true)
+	var idle_tex = load("res://assets/textures/characters/spearman/Idle.png")
+	if idle_tex:
+		for i in range(4):
+			var atlas = AtlasTexture.new()
+			atlas.atlas = idle_tex
+			atlas.region = Rect2(i * 128, 0, 128, 128)
+			sf.add_frame("Idle", atlas)
+			
+	# 2. Анимация Attack (удар)
+	sf.add_animation("Attack")
+	sf.set_animation_speed("Attack", 6.5)
+	sf.set_animation_loop("Attack", false)
+	var attack_tex = load("res://assets/textures/characters/spearman/Attack.png")
+	if attack_tex:
+		for i in range(5):
+			var atlas = AtlasTexture.new()
+			atlas.atlas = attack_tex
+			atlas.region = Rect2(i * 128, 0, 128, 128)
+			sf.add_frame("Attack", atlas)
+			
+	var anim_sprite = AnimatedSprite2D.new()
+	anim_sprite.name = "AnimatedSprite2D"
+	anim_sprite.sprite_frames = sf
+	anim_sprite.position = Vector2(4, -42.65)
+	anim_sprite.scale = Vector2(0.646, 0.646)
+	anim_sprite.autoplay = "Idle"
+	
+	body.add_child(anim_sprite)
+	
+	# Скрываем все оригинальные векторные элементы внутри Body (Legs, Armor, Cape, Head, Helmet, Spear)
+	for child in body.get_children():
+		if child != anim_sprite:
+			if child is CanvasItem:
+				child.visible = false
+
+func update_animations() -> void:
+	var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+	if not anim_sprite:
+		return
+		
+	if anim_sprite.animation == "Attack" and anim_sprite.is_playing():
+		return
+		
+	anim_sprite.play("Idle")
+
 
