@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="10_7smn1"]
 [ext_resource type="PackedScene" path="res://scenes/forest/forest_biome.tscn" id="22_forest_biome"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="23_lumberjack_house"]
+[ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_blune"]
 texture = ExtResource("2_ouso4")
