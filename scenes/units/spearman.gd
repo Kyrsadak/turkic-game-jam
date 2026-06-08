@@ -24,7 +24,7 @@ var footstep_base_volume_db: float = -14.0
 var footstep_fadeout_speed_db: float = 38.0
 
 func _ready() -> void:
-	scale = Vector2(1.4, 1.4)
+	scale = Vector2(1.75, 1.75)
 	add_to_group("spearman")
 	footstep_audio.volume_db = footstep_base_volume_db
 	body.position.y = 6.0
