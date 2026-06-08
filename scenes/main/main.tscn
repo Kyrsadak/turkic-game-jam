@@ -759,9 +759,11 @@ scale = Vector2(0.7, 0.7)
 
 [node name="LeftWall" parent="." unique_id=148126131 instance=ExtResource("25_wall")]
 position = Vector2(-400, 28)
+scale = Vector2(1.4, 1.4)
 
 [node name="RightWall" parent="." unique_id=148126132 instance=ExtResource("25_wall")]
 position = Vector2(400, 28)
+scale = Vector2(1.4, 1.4)
 
 [node name="Barracks" parent="." unique_id=148126133 instance=ExtResource("24_barracks")]
 position = Vector2(180, 28)
