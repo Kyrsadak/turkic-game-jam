@@ -2,20 +2,19 @@
 
 [ext_resource type="Script" uid="uid://bibkxaqw2u657" path="res://scenes/main/main.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cok1r5g5vp7fq" path="res://assets/textures/GandalfHardcore FREE Platformer Assets/Floor Tiles2.png" id="2_ouso4"]
-[ext_resource type="PackedScene" uid="uid://cos75erspsonl" path="res://scenes/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" uid="uid://dr1yp21pqxvwa" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
-[ext_resource type="PackedScene" path="res://scenes/main/inventory_ui.tscn" id="20_inventory_ui"]
-[ext_resource type="Texture2D" path="res://assets/textures/ground_grass.png" id="21_ground_grass"]
-[ext_resource type="Texture2D" uid="uid://kfm36xylyfol" path="res://assets/textures/Inventory.png" id="5_ouso4"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/campfire/campfire.tscn" id="3_campfire"]
 [ext_resource type="Texture2D" uid="uid://bfe5f8i21qi15" path="res://assets/textures/небо.png" id="6_a8run"]
 [ext_resource type="Texture2D" uid="uid://cbtcdgvrxpkm1" path="res://assets/textures/Снег_земля.png" id="6_ow5a4"]
 [ext_resource type="Texture2D" uid="uid://cceghnamr76mt" path="res://assets/textures/луна.png" id="7_ouso4"]
 [ext_resource type="Texture2D" uid="uid://v0bpw3wypise" path="res://assets/textures/Горы_задний.png" id="8_blune"]
 [ext_resource type="Texture2D" uid="uid://c3fxwggx5b0qb" path="res://assets/textures/Горы.png" id="9_th5th"]
 [ext_resource type="Texture2D" uid="uid://ketlen8ymuxq" path="res://assets/textures/Деревья_заднийфон.png" id="10_7smn1"]
+[ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
+[ext_resource type="PackedScene" path="res://scenes/main/inventory_ui.tscn" id="20_inventory_ui"]
+[ext_resource type="Texture2D" uid="uid://cpl4jj70k7ser" path="res://assets/textures/ground_grass.png" id="21_ground_grass"]
 [ext_resource type="PackedScene" path="res://scenes/forest/forest_biome.tscn" id="22_forest_biome"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="23_lumberjack_house"]
-[ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="24_barracks"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/wall.tscn" id="25_wall"]
 
@@ -682,25 +681,25 @@ tile_set = SubResource("TileSet_hujxm")
 [node name="GrassSprite" type="Sprite2D" parent="." unique_id=1028392193]
 z_index = 2
 texture_repeat = 2
+position = Vector2(-7500, -15)
 scale = Vector2(0.15, 0.15)
 texture = ExtResource("21_ground_grass")
 centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 100000, 284)
-position = Vector2(-7500, -15)
 
 [node name="ForestBiomeLeft" parent="." unique_id=253433489 instance=ExtResource("22_forest_biome")]
 position = Vector2(-900, 21)
 
 [node name="ForestBiomeRight" parent="." unique_id=253433488 instance=ExtResource("22_forest_biome")]
-position = Vector2(660, 21)
+position = Vector2(804, 19)
 
 [node name="Player" parent="." unique_id=517748356 instance=ExtResource("2_player")]
 position = Vector2(-115, 23)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=406665461]
 
-[node name="InventoryUI" parent="HUD" instance=ExtResource("20_inventory_ui")]
+[node name="InventoryUI" parent="HUD" unique_id=1293994590 instance=ExtResource("20_inventory_ui")]
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=2018199963]
 anchors_preset = 10
@@ -762,14 +761,12 @@ position = Vector2(-400, 28)
 scale = Vector2(1.4, 1.4)
 
 [node name="RightWall" parent="." unique_id=148126132 instance=ExtResource("25_wall")]
-position = Vector2(400, 28)
+position = Vector2(389, 29)
 scale = Vector2(1.4, 1.4)
 
 [node name="Barracks" parent="." unique_id=148126133 instance=ExtResource("24_barracks")]
 position = Vector2(180, 28)
 scale = Vector2(1.5, 1.5)
-
-
 
 [node name="GameOverScreen" type="CanvasLayer" parent="." unique_id=953841980]
 visible = false
@@ -951,10 +948,10 @@ position = Vector2(635, 21)
 position = Vector2(515, 23)
 
 [node name="Tree26" parent="Node" unique_id=1505390182 instance=ExtResource("11_tree")]
-position = Vector2(411, 29)
+position = Vector2(559, 20)
 
 [node name="Tree27" parent="Node" unique_id=12814801 instance=ExtResource("11_tree")]
-position = Vector2(307, 29)
+position = Vector2(476, 23)
 
 [node name="Tree28" parent="Node" unique_id=1661290865 instance=ExtResource("11_tree")]
 position = Vector2(1707, 21)

@@ -11,7 +11,7 @@ var wander_timer: float = 0.0
 var spawn_x: float = 0.0
 
 @onready var body: Node2D = $Body
-@onready var robe: ColorRect = $Body/Robe
+@onready var robe: ColorRect = get_node_or_null("Body/Robe")
 @onready var label_status: Label = $LabelStatus
 @onready var footstep_audio: AudioStreamPlayer2D = $FootstepAudio
 

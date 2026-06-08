@@ -130,7 +130,7 @@ func get_target_to_attack() -> Node2D:
 			if dist < min_dist_wall:
 				min_dist_wall = dist
 				closest_wall = ob
-		elif ob.is_in_group("spearman") or ob.is_in_group("lumberjack") or ob.is_in_group("citizen"):
+		elif ob.is_in_group("spearman") or ob.is_in_group("lumberjack") or ob.is_in_group("citizen") or ob.is_in_group("player"):
 			var dist = global_position.distance_to(ob.global_position)
 			if dist < min_dist_unit:
 				min_dist_unit = dist

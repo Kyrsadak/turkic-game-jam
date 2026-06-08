@@ -72,9 +72,8 @@ func _ready() -> void:
 	player.connect("wood_count_changed", Callable(self, "_on_player_wood_changed"))
 	
 	if not has_node("CaveLeft") and not has_node("CaveRight"):
-		var limits = get_ground_x_limits()
-		create_cave_at(limits.x + 80.0, false)
-		create_cave_at(limits.y - 80.0, true)
+		create_cave_at(-1200.0, false)
+		create_cave_at(1200.0, true)
 	
 	# Начальные значения интерфейса
 	_on_player_wood_changed(player.wood_count)

@@ -95,7 +95,7 @@ func choose_post_position() -> void:
 	var campfire_x = campfire.global_position.x if campfire else 0.0
 	
 	for wall in walls:
-		if is_instance_valid(wall) and wall.level > 0:
+		if is_instance_valid(wall):
 			var wall_is_right = wall.global_position.x > campfire_x
 			if (flank == 1.0 and wall_is_right) or (flank == -1.0 and not wall_is_right):
 				flank_wall = wall
