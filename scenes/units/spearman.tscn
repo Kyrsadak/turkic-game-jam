@@ -4,8 +4,8 @@
 [ext_resource type="AudioStream" path="res://voice/player_footstep_grass/шаги по снегу/2.mp3" id="2_footstep"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 7.0
-height = 24.0
+radius = 8.0
+height = 28.0
 
 [node name="Spearman" type="CharacterBody2D"]
 collision_layer = 8
@@ -14,7 +14,7 @@ z_index = 1
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -12)
+position = Vector2(0, -14)
 shape = SubResource("CapsuleShape2D_1")
 
 [node name="Body" type="Node2D" parent="."]
