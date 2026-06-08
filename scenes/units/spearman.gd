@@ -40,20 +40,28 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Поиск врагов поблизости
-	target_enemy = find_closest_enemy(90.0)
+	# Поиск врагов
+	if not is_instance_valid(target_enemy) or target_enemy.is_dead:
+		target_enemy = find_closest_enemy(350.0)
+	else:
+		if global_position.distance_to(target_enemy.global_position) > 400.0:
+			target_enemy = find_closest_enemy(350.0)
 
 	match current_state:
 		State.WALKING_TO_POST:
-			choose_post_position()
-			var dist_x = target_post_x - global_position.x
-			if abs(dist_x) > 15.0:
-				velocity.x = sign(dist_x) * speed
-				body.scale.x = sign(dist_x)
-				animate_walk()
+			if target_enemy:
+				current_state = State.ATTACKING
+				attack_timer = 0.1
 			else:
-				velocity.x = 0
-				current_state = State.DEFENDING
+				choose_post_position()
+				var dist_x = target_post_x - global_position.x
+				if abs(dist_x) > 15.0:
+					velocity.x = sign(dist_x) * speed
+					body.scale.x = sign(dist_x)
+					animate_walk()
+				else:
+					velocity.x = 0
+					current_state = State.DEFENDING
 				
 		State.DEFENDING:
 			velocity.x = 0
@@ -68,20 +76,49 @@ func _physics_process(delta: float) -> void:
 					current_state = State.WALKING_TO_POST
 
 		State.ATTACKING:
-			if not is_instance_valid(target_enemy) or global_position.distance_to(target_enemy.global_position) > 110.0:
+			if not is_instance_valid(target_enemy) or target_enemy.is_dead:
 				current_state = State.DEFENDING
 			else:
-				# Поворачиваемся к врагу
-				var dist_x = target_enemy.global_position.x - global_position.x
-				if dist_x != 0:
+				var enemy_pos_x = target_enemy.global_position.x
+				
+				# Проверяем наличие стены на нашем фланге
+				var campfire = get_tree().get_first_node_in_group("campfire")
+				var campfire_x = campfire.global_position.x if campfire else 0.0
+				var walls = get_tree().get_nodes_in_group("wall")
+				var flank_wall: Node2D = null
+				for wall in walls:
+					if is_instance_valid(wall):
+						var wall_is_right = wall.global_position.x > campfire_x
+						if (flank == 1.0 and wall_is_right) or (flank == -1.0 and not wall_is_right):
+							flank_wall = wall
+							break
+				
+				# Если есть стена, мы не должны заходить за неё
+				var target_x = enemy_pos_x
+				if flank_wall:
+					if flank == 1.0:
+						target_x = min(target_x, flank_wall.global_position.x - 16.0)
+					else:
+						target_x = max(target_x, flank_wall.global_position.x + 16.0)
+						
+				var dist_x = target_x - global_position.x
+				
+				# Если мы еще не подошли на дистанцию удара к нашей цели (target_x)
+				if abs(dist_x) > 20.0:
+					velocity.x = sign(dist_x) * speed
 					body.scale.x = sign(dist_x)
-				
-				velocity.x = 0
-				
-				attack_timer -= delta
-				if attack_timer <= 0:
-					stab_enemy()
-					attack_timer = attack_cooldown
+					animate_walk()
+				else:
+					velocity.x = 0
+					# Поворачиваемся лицом к фактическому врагу
+					var actual_dist_x = target_enemy.global_position.x - global_position.x
+					if actual_dist_x != 0:
+						body.scale.x = sign(actual_dist_x)
+					
+					attack_timer -= delta
+					if attack_timer <= 0:
+						stab_enemy()
+						attack_timer = attack_cooldown
 
 	move_and_slide()
 	update_footsteps(delta)
@@ -110,19 +147,20 @@ func choose_post_position() -> void:
 
 func stab_enemy() -> void:
 	if is_instance_valid(target_enemy):
-		if target_enemy.has_method("take_damage"):
-			target_enemy.take_damage(damage)
-			
-		var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
-		if anim_sprite and anim_sprite.sprite_frames.has_animation("Attack"):
-			anim_sprite.play("Attack")
-		else:
-			# Анимация выпада копья (для векторной графики)
-			var tween = create_tween()
-			var orig_pos = spear.position
-			var target_pos = orig_pos + Vector2(14.0, 0)
-			tween.tween_property(spear, "position", target_pos, 0.07)
-			tween.tween_property(spear, "position", orig_pos, 0.12)
+		if global_position.distance_to(target_enemy.global_position) <= 110.0:
+			if target_enemy.has_method("take_damage"):
+				target_enemy.take_damage(damage)
+				
+			var anim_sprite = body.get_node_or_null("AnimatedSprite2D")
+			if anim_sprite and anim_sprite.sprite_frames.has_animation("Attack"):
+				anim_sprite.play("Attack")
+			else:
+				# Анимация выпада копья (для векторной графики)
+				var tween = create_tween()
+				var orig_pos = spear.position
+				var target_pos = orig_pos + Vector2(14.0, 0)
+				tween.tween_property(spear, "position", target_pos, 0.07)
+				tween.tween_property(spear, "position", orig_pos, 0.12)
 
 func find_closest_enemy(max_dist: float) -> Node2D:
 	var enemies = get_tree().get_nodes_in_group("enemy")
