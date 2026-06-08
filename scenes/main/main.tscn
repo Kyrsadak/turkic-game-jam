@@ -767,6 +767,8 @@ scale = Vector2(1.4, 1.4)
 
 [node name="Barracks" parent="." unique_id=148126133 instance=ExtResource("24_barracks")]
 position = Vector2(180, 28)
+scale = Vector2(1.5, 1.5)
+
 
 
 [node name="GameOverScreen" type="CanvasLayer" parent="." unique_id=953841980]
