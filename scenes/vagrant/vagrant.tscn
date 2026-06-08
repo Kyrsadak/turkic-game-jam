@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" path="res://assets/textures/characters/vagrant/Walk.png" id="4_walk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 7.0
-height = 24.0
+radius = 8.0
+height = 28.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_status"]
 font_size = 9
@@ -131,7 +131,7 @@ collision_layer = 8
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=706859168]
-position = Vector2(0, -12)
+position = Vector2(0, -14)
 shape = SubResource("CapsuleShape2D_1")
 
 [node name="Body" type="Node2D" parent="." unique_id=1452005039]
@@ -144,9 +144,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -76.0
-offset_top = -48.0
+offset_top = -90.0
 offset_right = 84.0
-offset_bottom = -28.0
+offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Нанять за 1 дерево"
@@ -159,8 +159,8 @@ stream = ExtResource("2_footstep")
 volume_db = -40.897
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1318540634]
-position = Vector2(9.536743e-07, -27)
-scale = Vector2(0.4375, 0.4375)
+position = Vector2(4, -42.65625)
+scale = Vector2(0.6459961, 0.6459961)
 sprite_frames = SubResource("SpriteFrames_qgnk2")
 animation = &"Idle"
 autoplay = "Idle"
