@@ -86,7 +86,7 @@ func update_visuals() -> void:
 	visual_built.visible = is_built
 	
 	if is_built:
-		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/barracks.png", Vector2(0, -35))
+		var sprite = TextureLoader.try_apply_texture(self, "res://assets/textures/barracks.png", Vector2(0, -45))
 		if sprite:
 			visual_built.visible = false
 
