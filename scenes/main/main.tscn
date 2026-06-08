@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" path="res://scenes/forest/forest_biome.tscn" id="22_forest_biome"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/lumberjack_house.tscn" id="23_lumberjack_house"]
 [ext_resource type="PackedScene" uid="uid://bi400nj0205hv" path="res://scenes/tree/tree.tscn" id="11_tree"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/barracks.tscn" id="24_barracks"]
+[ext_resource type="PackedScene" path="res://scenes/buildings/wall.tscn" id="25_wall"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_blune"]
 texture = ExtResource("2_ouso4")
@@ -754,6 +756,16 @@ position = Vector2(0, 3)
 [node name="LumberjackHouse" parent="." unique_id=2099394939 instance=ExtResource("23_lumberjack_house")]
 position = Vector2(-170, 28)
 scale = Vector2(0.7, 0.7)
+
+[node name="LeftWall" parent="." unique_id=148126131 instance=ExtResource("25_wall")]
+position = Vector2(-400, 28)
+
+[node name="RightWall" parent="." unique_id=148126132 instance=ExtResource("25_wall")]
+position = Vector2(400, 28)
+
+[node name="Barracks" parent="." unique_id=148126133 instance=ExtResource("24_barracks")]
+position = Vector2(180, 28)
+
 
 [node name="GameOverScreen" type="CanvasLayer" parent="." unique_id=953841980]
 visible = false
