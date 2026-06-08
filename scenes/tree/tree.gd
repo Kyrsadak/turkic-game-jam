@@ -51,30 +51,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if is_felled:
-		label_health.visible = false
 		if not is_managed_by_forest():
 			regrow_timer -= delta
 			if regrow_timer <= 0:
 				regrow()
-	else:
-		# Отображаем подсказку при приближении игрока
-		var players = get_tree().get_nodes_in_group("player")
-		if players.size() > 0:
-			var player = players[0]
-			var dist = global_position.distance_to(player.global_position)
-			if dist < 55.0:
-				label_health.visible = true
-				if health == max_health:
-					if not first_tree_tutorial_shown:
-						label_health.text = "[E] Рубка дерева"
-					else:
-						label_health.text = "E"
-				else:
-					label_health.text = "%d" % int(health)
-			else:
-				label_health.visible = false
-		else:
-			label_health.visible = false
 
 func hit_tree(hitter_x: float, damage: float = 1.0) -> void:
 	if is_felled:

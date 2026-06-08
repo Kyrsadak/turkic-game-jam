@@ -203,47 +203,46 @@ func setup_animated_sprite() -> void:
 		
 	var sf = SpriteFrames.new()
 	
-	# 1. Анимация Idle (покой) — 8 кадров размером 64x128
+	# 1. Анимация Idle (покой) — 4 кадра размером 128x128
 	sf.add_animation("Idle")
-	sf.set_animation_speed("Idle", 8.0)
+	sf.set_animation_speed("Idle", 6.0)
 	sf.set_animation_loop("Idle", true)
 	var idle_tex = load("res://assets/textures/characters/lumberjack/Idle.png")
 	if idle_tex:
-		for i in range(8):
+		for i in range(4):
 			var atlas = AtlasTexture.new()
 			atlas.atlas = idle_tex
-			atlas.region = Rect2(i * 64, 0, 64, 128)
+			atlas.region = Rect2(i * 128, 0, 128, 128)
 			sf.add_frame("Idle", atlas)
 			
-	# 2. Анимация Walk (ходьба) — 8 кадров размером 64x128
+	# 2. Анимация Walk (ходьба) — 4 кадра размером 128x128
 	sf.add_animation("Walk")
-	sf.set_animation_speed("Walk", 10.0)
+	sf.set_animation_speed("Walk", 8.0)
 	sf.set_animation_loop("Walk", true)
 	var walk_tex = load("res://assets/textures/characters/lumberjack/Walk.png")
 	if walk_tex:
-		for i in range(8):
+		for i in range(4):
 			var atlas = AtlasTexture.new()
 			atlas.atlas = walk_tex
-			atlas.region = Rect2(i * 64, 0, 64, 128)
+			atlas.region = Rect2(i * 128, 0, 128, 128)
 			sf.add_frame("Walk", atlas)
 			
-	# 3. Анимация Attack_1 (рубка) — 8 кадров размером 64x128 с точным выравниванием по центру
+	# 3. Анимация Attack_1 (рубка) — 6 кадров размером 128x128 (дубликаты вырезаны из текстуры)
 	sf.add_animation("Attack_1")
-	sf.set_animation_speed("Attack_1", 4.0) # Замедленная анимация под медленный удар
+	sf.set_animation_speed("Attack_1", 3.0) # Замедленная анимация под медленный удар
 	sf.set_animation_loop("Attack_1", false)
 	var attack_tex = load("res://assets/textures/characters/lumberjack/Attack_1.png")
 	if attack_tex:
-		var attack_offsets = [32, 160, 256, 320, 384, 448, 544, 672]
-		for offset in attack_offsets:
+		for i in range(6):
 			var atlas = AtlasTexture.new()
 			atlas.atlas = attack_tex
-			atlas.region = Rect2(offset, 0, 64, 128)
+			atlas.region = Rect2(i * 128, 0, 128, 128)
 			sf.add_frame("Attack_1", atlas)
 			
 	var anim_sprite = AnimatedSprite2D.new()
 	anim_sprite.name = "AnimatedSprite2D"
 	anim_sprite.sprite_frames = sf
-	anim_sprite.position = Vector2(25.0, -42.65) # Сдвигаем по X на 21px вправо из-за сужения кадра со 128 до 64
+	anim_sprite.position = Vector2(4, -42.65) # Возвращаем оригинальное смещение для 128x128
 	anim_sprite.scale = Vector2(0.646, 0.646)
 	anim_sprite.autoplay = "Idle"
 	
