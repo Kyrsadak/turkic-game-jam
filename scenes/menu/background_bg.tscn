@@ -29,7 +29,7 @@ motion_scale = Vector2(0.33, 1)
 motion_mirroring = Vector2(1110.355, 0)
 
 [node name="ГорыЗадний" type="Sprite2D" parent="ParallaxLayer5" unique_id=1891263133]
-position = Vector2(561, 384)
+position = Vector2(561, 424)
 scale = Vector2(1.1930894, 1)
 texture = ExtResource("3_32ygi")
 

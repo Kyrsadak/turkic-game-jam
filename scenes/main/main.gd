@@ -30,6 +30,8 @@ var builder_house_scene = preload("res://scenes/buildings/builder_house.tscn")
 var archer_tower_scene = preload("res://scenes/buildings/archer_tower.tscn")
 
 var bear_spawn_queue: int = 0
+var label_warning: Label = null
+
 
 # Цвета для дня и ночи
 var day_color = Color(1.0, 1.0, 1.0, 1.0)
@@ -81,6 +83,26 @@ func _ready() -> void:
 	# Настраиваем новый фон с горами
 	setup_background()
 	
+	# Настраиваем текстуру земли под ногами
+	setup_ground()
+	
+	# Создаем предупреждающую надпись
+	label_warning = Label.new()
+	label_warning.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label_warning.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label_warning.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label_warning.position = Vector2(0, 180)
+	label_warning.size = Vector2(1152, 60)
+	
+	var settings = LabelSettings.new()
+	settings.font_size = 20
+	settings.font = load("res://assets/Cinzel.ttf")
+	settings.font_color = Color(1.0, 0.2, 0.2)
+	settings.outline_size = 4
+	settings.outline_color = Color(0, 0, 0, 1)
+	label_warning.label_settings = settings
+	label_warning.visible = false
+	hud.add_child(label_warning)
 	# (Отключено, чтобы использовать только бродяг, расставленных вручную на сцене)
 	# Спавним начальных бродяг поближе к костру на старте игры
 	# for i in range(2):
@@ -165,19 +187,36 @@ func start_night() -> void:
 	if current_day == 1:
 		wolf_spawn_queue = 2
 		bear_spawn_queue = 0
+		show_warning("Первая ночь... Волки выходят из пещер!")
 	elif current_day == 2:
 		wolf_spawn_queue = 3
 		bear_spawn_queue = 0
+		show_warning("Вторая ночь... Волки атакуют активнее!")
 	elif current_day == 3:
 		wolf_spawn_queue = 4
 		bear_spawn_queue = 1
+		show_warning("Третья ночь... Опасайтесь медведей!")
 	elif current_day == 4:
 		wolf_spawn_queue = 5
 		bear_spawn_queue = 2
+		show_warning("Четвертая ночь... Большая волна монстров!")
 	else:
 		wolf_spawn_queue = int(current_day * 1.5 + 1)
 		bear_spawn_queue = int(current_day - 2)
+		show_warning("Ночь %d... Орда наступает!" % current_day)
 	wolf_spawn_timer = 4.0 # Небольшая задержка перед первой атакой
+
+func show_warning(text: String) -> void:
+	if is_instance_valid(label_warning):
+		label_warning.text = text
+		label_warning.visible = true
+		label_warning.modulate.a = 1.0
+		
+		# Flash and fade out
+		var tween = create_tween()
+		tween.tween_interval(3.0)
+		tween.tween_property(label_warning, "modulate:a", 0.0, 1.5)
+
 
 func spawn_vagrant_if_needed() -> void:
 	var total_vagrants = get_tree().get_nodes_in_group("vagrant").size()
@@ -348,9 +387,9 @@ func setup_background() -> void:
 	if not is_instance_valid(parallax_bg):
 		return
 	
-	# Убедимся, что ParallaxBackground на правильном слое (-100) и поднят на 20px
+	# Убедимся, что ParallaxBackground на правильном слое (-100) и поднят на 50px
 	parallax_bg.layer = -100
-	parallax_bg.offset = Vector2(0, -20)
+	parallax_bg.offset = Vector2(0, -120)
 	parallax_bg.visible = true
 	
 	# Игнорируем зум камеры, чтобы фон рендерился 1:1 по размерам экрана (как в меню)
@@ -393,7 +432,7 @@ func setup_background() -> void:
 		bg_mountains_far = layer_mountains_far.get_node_or_null("ГорыЗадний")
 		if bg_mountains_far:
 			bg_mountains_far.region_enabled = false
-			bg_mountains_far.position = Vector2(561, 384)        # ТОЧНО как в меню
+			bg_mountains_far.position = Vector2(561, 424)        # Опущено на 40px по просьбе пользователя
 			bg_mountains_far.scale = Vector2(1.1930894, 1.0)     # ТОЧНО как в меню
 	
 	# 3. Горы — ТОЧНЫЕ значения из меню
@@ -434,7 +473,10 @@ func setup_background() -> void:
 			sun.name = "SunSprite"
 			sun.texture = load("res://assets/textures/sun.png")
 			sun.position = moon.position if moon else Vector2.ZERO
+			sun.scale = Vector2(1.2, 1.2) # Увеличено на 20%
 			moon_layer.add_child(sun)
+		else:
+			sun.scale = Vector2(1.2, 1.2)
 		sun_sprite = sun
 
 func update_background_and_celestial(delta: float) -> void:

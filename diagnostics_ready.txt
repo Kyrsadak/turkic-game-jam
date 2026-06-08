@@ -1,0 +1,83 @@
+=== DIAGNOSTICS (ready) ===
+Viewport size: (1152.0, 648.0)
+Player position: (-113.0, -9.0)
+Camera position: (0.0, -80.0)
+Camera global position: (-113.0, -89.0)
+Camera zoom: (1.38, 1.38)
+Camera screen center: (-113.0, -134.7826)
+ParallaxBackground visible: true
+ParallaxBackground scroll_offset: (0.0, 0.0)
+ParallaxBackground scroll_base_offset: (0.0, 0.0)
+ParallaxBackground scroll_base_scale: (1.0, 1.0)
+Layer ParallaxLayer (ParallaxLayer):
+  visible: true
+  position: (-448.0, -575.0)
+  motion_scale: (0.2, 1.0)
+  motion_offset: (0.0, 0.0)
+  motion_mirroring: (1135.345, 0.0)
+    Sprite Небо:
+      visible: true
+      position: (579.5494, 323.75)
+      scale: (1.182463, 1.265166)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/небо.png
+    Sprite SkyDay:
+      visible: true
+      position: (579.5494, 323.75)
+      scale: (1.108735, 1.265166)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/небо_день.png
+Layer ParallaxLayer2 (ParallaxLayer):
+  visible: true
+  position: (0.0, 0.0)
+  motion_scale: (0.0, 1.0)
+  motion_offset: (0.0, 0.0)
+  motion_mirroring: (0.0, 0.0)
+    Sprite Луна:
+      visible: true
+      position: (-63.0, 466.0)
+      scale: (1.0, 1.0)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/луна.png
+    Sprite SunSprite:
+      visible: true
+      position: (-63.0, 466.0)
+      scale: (1.0, 1.0)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/sun.png
+Layer ParallaxLayer5 (ParallaxLayer):
+  visible: true
+  position: (-448.0, -575.0)
+  motion_scale: (0.33, 1.0)
+  motion_offset: (0.0, 0.0)
+  motion_mirroring: (1110.355, 0.0)
+    Sprite ГорыЗадний:
+      visible: true
+      position: (561.0, 384.0)
+      scale: (1.193089, 1.0)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/Горы_задний.png
+Layer ParallaxLayer3 (ParallaxLayer):
+  visible: true
+  position: (-448.0, -575.0)
+  motion_scale: (0.4, 1.0)
+  motion_offset: (0.0, 0.0)
+  motion_mirroring: (1150.14, 0.0)
+    Sprite Горы:
+      visible: true
+      position: (576.0, 438.9706)
+      scale: (1.171922, 1.790136)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/Горы.png
+Layer ParallaxLayer4 (ParallaxLayer):
+  visible: true
+  position: (-448.0, -575.0)
+  motion_scale: (0.6, 1.0)
+  motion_offset: (0.0, 0.0)
+  motion_mirroring: (1150.14, 0.0)
+    Sprite ДеревьяЗаднийфон:
+      visible: true
+      position: (580.9025, 539.0)
+      scale: (1.172677, 1.0)
+      modulate: (1.0, 1.0, 1.0, 1.0)
+      texture: res://assets/textures/Деревья_заднийфон.png
