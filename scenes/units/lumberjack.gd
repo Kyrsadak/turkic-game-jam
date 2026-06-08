@@ -27,7 +27,7 @@ var footstep_base_volume_db: float = -19.4
 var footstep_fadeout_speed_db: float = 38.0
 
 func _ready() -> void:
-	scale = Vector2(1.4, 1.4)
+	scale = Vector2(1.12, 1.12)
 	add_to_group("lumberjack")
 	update_wood_visuals()
 	current_state = State.WALKING_TO_TREE
@@ -158,7 +158,7 @@ func add_wood(amount: int = 1) -> bool:
 func update_wood_visuals() -> void:
 	var children = wood_pile.get_children()
 	for i in range(children.size()):
-		children[i].visible = i < wood_count
+		children[i].visible = false
 
 func find_closest_tree() -> Node2D:
 	var trees = get_tree().get_nodes_in_group("tree")

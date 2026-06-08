@@ -93,8 +93,8 @@ func spawn_lumberjack() -> void:
 	
 	# Эффект спавна
 	var tween = create_tween()
-	lj.scale = Vector2(0.5, 1.5) * 1.4
-	tween.tween_property(lj, "scale", Vector2(1.4, 1.4), 0.2)
+	lj.scale = Vector2(0.5, 1.5) * 1.12
+	tween.tween_property(lj, "scale", Vector2(1.12, 1.12), 0.2)
 
 func add_wood(amount: int = 1) -> bool:
 	if wood_stored < max_storage:
